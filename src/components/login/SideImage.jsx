@@ -1,5 +1,5 @@
-import React from 'react'
-import sideImage from "../../assets/sideImage";
+import React from "react";
+import sideImage from "../../assets/sideImage.jpg";
 
 const sideImg = () => {
     return (
