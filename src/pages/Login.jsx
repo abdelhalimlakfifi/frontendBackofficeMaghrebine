@@ -14,6 +14,17 @@ export default function Login() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const onChangeUsername = (e) => {
+        const username = e.target.value;
+        setUsername(username);
+      };
+
+      const onChangePassword= (e) => {
+        const password = e.target.value;
+        setPassword(password);
+      };
+
     const handleLoginEvent = (e) => {
         e.preventDefault();
         let userCredentials = {
@@ -37,7 +48,7 @@ export default function Login() {
                 type="text" 
                 required
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={onChangeUsername}
             />
             <br />
             <label htmlFor="">Password</label>
@@ -45,7 +56,7 @@ export default function Login() {
                 type="password" 
                 required 
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={onChangePassword}
             />
             <br />
 
