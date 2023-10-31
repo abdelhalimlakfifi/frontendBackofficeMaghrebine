@@ -1,16 +1,14 @@
 import React from "react";
 import sideImage from "../../assets/sideImage.jpg";
 
-const sideImg = () => {
+const sideImg = ({className}) => {
     return (
       <>
-       <div className="" style={{ width: "30%" }}>
-            <img
-              src={sideImage}
-              className="w-full h-full filter contrast-75"
-              alt="Login"
-            />
-          </div>
+        <img
+          src={sideImage}
+          className={className}
+          alt="Login"
+        />
       </>
     )
   }
