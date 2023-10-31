@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
-export default function Login() {
+export default function LoginForm() {
   // react states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
