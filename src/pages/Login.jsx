@@ -15,6 +15,16 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const required = (value) => {
+        if (!value) {
+          return (
+            <div >
+              This field is required!
+            </div>
+          );
+        }
+      };
+
     const onChangeUsername = (e) => {
         const username = e.target.value;
         setUsername(username);
@@ -46,7 +56,7 @@ export default function Login() {
             <label htmlFor="">E-mail</label>
             <input 
                 type="text" 
-                required
+                validations={[required]}
                 value={username}
                 onChange={onChangeUsername}
             />
@@ -54,7 +64,7 @@ export default function Login() {
             <label htmlFor="">Password</label>
             <input 
                 type="password" 
-                required 
+                validations={[required]} 
                 value={password}
                 onChange={onChangePassword}
             />
