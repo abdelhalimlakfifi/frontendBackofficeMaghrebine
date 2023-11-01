@@ -5,6 +5,7 @@ import './index.css'
 import { Provider } from 'react-redux'
 import { PrimeReactProvider } from "primereact/api";
 import store from './store/index.js'
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <PrimeReactProvider value={{ unstyled: true, pt: {}  }}>
