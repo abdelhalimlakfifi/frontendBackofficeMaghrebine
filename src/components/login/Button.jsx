@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "primereact/button";
 
-// import { ProgressSpinner } from "primereact/progressspinner";
 import 'primeicons/primeicons.css';
 
 export default function Botton() {
