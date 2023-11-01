@@ -1,21 +1,22 @@
 import React from "react";
 import LoginForm from "../components/login/loginForm";
 import SideImg from "../components/login/sideImage";
+import Logo from "../components/login/logo"
 
 
 function Login() {
   return (
     <>
-      <div className="h-screen w-screen flex">
+      {/* <div className="h-screen w-full  flex">
         <div
-          className="flex justify-center items-center m-24"
-          style={{ width: "70%" }}
-        >
-          <div className="w-full p-6 m-auto bg-white lg:max-w-xl">
+          className="flex flex-col justify-center items-center ">
+          <Logo/>
+          <div className="w-full m-auto bg-white lg:max-w-xl">
+            
             <LoginForm />
 
-            <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-              <div className="absolute px-5 bg-white">Or</div>
+            <div className="relative flex items-center justify-center w-full border border-t">
+              <div className="absolute mt-[30px] px-5  py-5 bg-white">Or</div>
             </div>
 
             <p className="mt-8 text-xs font-light text-center text-gray-700">
@@ -30,9 +31,24 @@ function Login() {
           </div>
         </div>
 
-        <SideImg/>
 
-      </div>
+      </div> */}
+
+        <div className="w-full flex ">
+            <div className=" w-full items-center flex">
+                <div id="form" className=" mx-60 w-full">
+                    <Logo/>
+                    <LoginForm />
+                </div>
+
+              
+
+            </div>
+
+            <div className="w-[48%]">
+                <SideImg className="h-screen w-full"/>
+            </div>
+        </div>
     </>
   );
 }
