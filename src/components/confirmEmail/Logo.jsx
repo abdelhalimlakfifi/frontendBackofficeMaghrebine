@@ -8,7 +8,7 @@ const Logo = () => {
                 <img
                      src={logoImg}
                      className=" w-72"
-                     alt="Login" 
+                     alt="Maghrebin" 
                 />
             </div>
 
