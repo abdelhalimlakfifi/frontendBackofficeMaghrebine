@@ -2,21 +2,16 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/UserSlice";
 import { useNavigate } from "react-router-dom";
-import { Button } from "primereact/button";
+
 import facebook from "../../assets/facebook.png"
 
-
-
-
-
-//import styles
+//import primeReact styles
 import { InputText } from "primereact/inputtext";
+
 
 //import components
 import Botton from "./Button";
-
-
-
+// import ErrorMessage from "./Message";
 
 const LoginForm = () => {
   // react states
@@ -86,39 +81,22 @@ const LoginForm = () => {
           </label>
         </span>
       </div>
+     
+      {/* <ErrorMessage/> */}
 
-        {/* <Botton/> */}
+      <Botton />
 
       <div className="w-full my-2 flex">
-        <a
-          href="#"
-          className="text-xs text-custom-purple hover:underline"
-        >
+        <a href="#" className="text-xs text-custom-purple hover:underline">
           Forget Password?
         </a>
-      </div> 
+      </div>
       <div className="w-full flex text-xs text-custom-purple hover:underline">
         You do not have an account?
-        <a
-          href="#"
-          className="text-xs text-red-500 hover:underline"
-        >
+        <a href="#" className="text-xs text-red-500 hover:underline">
           Create One.
         </a>
-      </div> 
-
-      {/* {error && <div>{error}</div>} */}
-      
-     <Divider/>
-
-        
-     <div className="w-full  px-4 py-2 my-2 flex justify-center tracking-wide text-custom-purple  bg-white rounded-md  border-2 focus:outline-none">
-        <div className="flex items-center ">
-          <Button label="Google" className="text-xl" />
-
-        </div>
       </div>
-      
 
     </form>
   );
