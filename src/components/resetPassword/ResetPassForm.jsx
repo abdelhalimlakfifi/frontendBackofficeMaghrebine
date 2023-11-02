@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 //import primeReact styles
 import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
 
 //import components
 import Botton from "./Button";
@@ -32,16 +33,23 @@ const ResetPassForm = () => {
     <form className="" onSubmit={handleResetEvent}>
       <div className="">
         <span className="p-float-label  text-gray-500">
-          <InputText
+          {/* <InputText
             id="newPassword"
             required
             value={newPassword}
             onChange={onChangeNewPassword}
             className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
-          />
-          <label htmlFor="newPassword" className="">
+          /> */}
+              <Password 
+                id="password" 
+                value={newPassword} 
+                onChange={onChangeNewPassword}
+                className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
+              />
+              <label htmlFor="password">Password</label>
+          {/* <label htmlFor="newPassword" className="">
             New password
-          </label>
+          </label> */}
         </span>
       </div>
 
