@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { validateOTP } from '../../store/ValidateOtpSlice'
 
 import emailImage from "../../assets/emailSent.svg"
 import OtpInputFields from "./OtpInputFields";
@@ -8,14 +10,24 @@ import Botton from "./Button";
 // import ErrorMessage from "./Message";
 
 
-const SetOtpCode = () => {
+const SetOtpForm = () => {
 
-  
-   
+  const dispatch = useDispatch();
 
+  const { loading, success, error } = useSelector((state) => state.otp);
+
+  const handleOtpSubmit = () => {
+    // Trigger the validation action
+    dispatch(validateOTP(stringCode));
+  };
+
+  const handleResendOTP = () => {
+    // Trigger the validation action again for resending OTP
+    dispatch(validateOTP(stringCode));
+  };
   
   return (
-    <form className="" >
+    <form className="" onSubmit={handleOtpSubmit}>
       <div className="">
       <img 
         src={emailImage}
@@ -38,9 +50,9 @@ const SetOtpCode = () => {
 
       <div className="w-full flex text-xs text-custom-purple">
         You have not received one?
-        <a href="#" className="text-xs mx-1 text-red-500 hover:underline">
-          Resend OTP.
-        </a>
+        <button className="text-xs mx-1 text-red-500 hover:underline" onClick={handleResendOTP}>
+          Resend OTP
+        </button>
       </div>
       
 
@@ -48,4 +60,4 @@ const SetOtpCode = () => {
   );
 };
 
-export default SetOtpCode;
+export default SetOtpForm;
