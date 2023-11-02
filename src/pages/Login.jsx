@@ -1,8 +1,7 @@
 import React from "react";
 import LoginForm from "../components/login/loginForm";
-import SideImg from "../components/login/sideImage";
-import Logo from "../components/login/logo"
-
+import Logo from "../components/general/Logo";
+import SideImg  from "../components/general/SideImage";
 
 function Login() {
   return (
