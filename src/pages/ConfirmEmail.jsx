@@ -1,9 +1,9 @@
 import React from "react";
 
 //import components
-import Logo from "../components/confirmEmail/Logo";
+import Logo from "../components/general/Logo";
+import SideImg  from "../components/general/SideImage";
 import SetEmailForm from "../components/confirmEmail/SetEmailForm";
-import SideImg  from "../components/confirmEmail/SideImage";
 
 
 function confirmEmail() {
