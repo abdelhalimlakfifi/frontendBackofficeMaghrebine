@@ -9,7 +9,7 @@ export default function Botton() {
     <>
       <div className="w-full  px-4 py-2 my-2 flex justify-center tracking-wide text-white transition-colors duration-200 transform bg-custom-purple rounded-md hover:bg-custom-purple focus:outline-none focus:bg-custom-purple">
         <div className="flex items-center ">
-        <Link to="/InsertCode">
+        <Link to="/InsertOtp">
             <Button label="Request Password Reset" className="text-xm" />
         </Link>        
         </div>
