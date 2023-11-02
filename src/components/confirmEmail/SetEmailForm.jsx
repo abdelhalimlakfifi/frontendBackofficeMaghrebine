@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import {forgotPassword} from "../../store/ForgotPasswordSlice"
+import { useDispatch, useSelector } from "react-redux";
 
 import emailImage from "../../assets/email.svg"
 
@@ -13,6 +14,7 @@ import { InputText } from "primereact/inputtext";
 const SetEmailForm = () => {
 
   const [email, setEmail] = useState("");
+  const { loading, success, error } = useSelector((state) => state.otp);
 
   const dispatch = useDispatch();
 
@@ -20,6 +22,8 @@ const SetEmailForm = () => {
     const email = e.target.value;
     setEmail(email);
   };
+
+
 
   
   const handleSubmit = (e) => {
