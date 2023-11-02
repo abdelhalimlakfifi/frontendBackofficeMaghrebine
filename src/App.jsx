@@ -6,6 +6,7 @@ import ConfirmEmail from './pages/ConfirmEmail'
 import Profile from './pages/Profile'
 import ProtectedRoute from './utils/ProtectedRoutes';
 import InsertOtp from './pages/InsertOtp'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
                     <Route path='/login' element={<Login />} />
                     <Route path='/ConfirmEmail' element={<ConfirmEmail />} />
                     <Route path='/InsertOtp' element={<InsertOtp />} />
+                    <Route path='/ResetPassword' element={<ResetPassword />} />
                     <Route path='/profile' element={
                         <ProtectedRoute>
                             <Profile/>
