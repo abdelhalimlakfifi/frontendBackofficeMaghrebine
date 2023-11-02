@@ -94,7 +94,7 @@ const LoginForm = () => {
       </div>
       <div className="w-full flex text-xs text-custom-purple">
         You do not have an account?
-        <a href="#" className="text-xs text-red-500 hover:underline">
+        <a href="#" className="text-xs mx-1 text-red-500 hover:underline">
           Create One.
         </a>
       </div>
