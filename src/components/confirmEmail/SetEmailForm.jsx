@@ -63,7 +63,9 @@ const SetEmailForm = () => {
 
       {error && <p className="text-red-900">{error}</p>}
 
-      <Botton disabled={loading} />
+      {success && <p>OTP Sent Successfuly </p>}
+
+      <Botton  type="submit" disabled={loading} />
 
       
 
