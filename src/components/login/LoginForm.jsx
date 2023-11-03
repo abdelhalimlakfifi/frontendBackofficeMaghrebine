@@ -42,13 +42,17 @@ const LoginForm = () => {
       password,
     };
 
-    dispatch(loginUser(userCredentials)).then((result) => {
-      console.log(result);
-      if (result.payload) {
+    dispatch(loginUser(userCredentials))
+    .then((result) => {
+        if (result.payload) {
         setUsername("");
         setPassword("");
         navigate("/");
       }
+    })
+    .catch((error) => {
+
+      console.error("Login error:", error);
     });
   };
   return (
@@ -83,9 +87,11 @@ const LoginForm = () => {
         </span>
       </div>
      
-      {/* <ErrorMessage/> */}
 
-      <Botton />
+      <Botton type="submit" disabled={loading} />
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-900">{error}</p>}
 
       <div className="w-full my-2 flex">
         <Link to="/ConfirmEmail" className="text-xs text-custom-purple hover:underline">
@@ -94,9 +100,9 @@ const LoginForm = () => {
       </div>
       <div className="w-full flex text-xs text-custom-purple">
         You do not have an account?
-        <a href="#" className="text-xs mx-1 text-red-500 hover:underline">
+        <Link to="/Register" className="text-xs mx-1 text-red-500 hover:underline">
           Create One.
-        </a>
+        </Link>
       </div>
 
     </form>
