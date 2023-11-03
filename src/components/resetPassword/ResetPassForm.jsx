@@ -99,7 +99,8 @@ const ResetPassForm = () => {
 
       {resetError && <p>{resetError}</p>}
 
-      <ResetButton loading={loading} />
+      <ResetButton type="submit" disabled={loading} />
+
     </form>
   );
 };
