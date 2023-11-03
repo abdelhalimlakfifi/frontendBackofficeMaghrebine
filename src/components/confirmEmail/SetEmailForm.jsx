@@ -28,8 +28,10 @@ const SetEmailForm = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!loading) { // Check if not loading to prevent multiple submissions
     dispatch(forgotPassword(email));
     localStorage.setItem('userEmail', email); // Save the email to local storage to retreive it in the InsertOtp page
+    }
   };
   
    
@@ -56,9 +58,12 @@ const SetEmailForm = () => {
       </span>
 
       
-      {/* <ErrorMessage/> */}
 
-      <Botton />
+      {loading && <p>Loading...</p>}
+
+      {error && <p className="text-red-900">{error}</p>}
+
+      <Botton disabled={loading} />
 
       
 
