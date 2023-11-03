@@ -29,6 +29,7 @@ const SetEmailForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(forgotPassword(email));
+    localStorage.setItem('userEmail', email); // Save the email to local storage to retreive it in the InsertOtp page
   };
   
    
