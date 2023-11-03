@@ -11,9 +11,12 @@ import Botton from "./Button";
 // import ErrorMessage from "./Message";
 
 const SetOtpForm = () => {
-  const { loading, success, error } = useSelector((state) => state.otp);
 
   const dispatch = useDispatch()
+
+  const { loading, success, error } = useSelector((state) => state.otp);
+  const { resendLoading, resendSuccess, resendError } = useSelector((state) => state.forgotPassword);
+
   
   const handleOtpSubmit = () => {
     // Trigger the validation action
@@ -22,10 +25,12 @@ const SetOtpForm = () => {
 
   const storedEmail = localStorage.getItem('userEmail');
 
-
-  const handleResendOtp = () => {
+  const handleResendOtp = async() => {
+    if (!resendLoading) {
     dispatch(resendOtp(storedEmail)); // Pass the user's email as a parameter
+    }
   };
+
 
   return (
     <form className="" onSubmit={handleOtpSubmit}>
@@ -42,16 +47,26 @@ const SetOtpForm = () => {
         <OtpInputFields className="" />
       </div>
 
-      {/* <ErrorMessage/> */}
+      <Botton type="submit"  disabled={loading}/>
 
-      <Botton />
+      {success && <p>OTP Validation Successful </p>}
+
+      {error && <ErrorMessage message={error} />}
+
+
 
       <div className="w-full flex text-xs text-custom-purple">
         You have not received one?
-        <button className="text-xs mx-1 text-red-500 hover:underline" onClick={handleResendOtp}>
+        <button className="text-xs mx-1 text-red-500 hover:underline" onClick={handleResendOtp} disabled={resendLoading}>
           Resend OTP
         </button>
       </div>
+
+      {resendSuccess && <p>Resend OTP success message</p>}
+
+      {resendError && <ErrorMessage message={resendError} />}
+
+
     </form>
   );
 };
