@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../../store/ResetPasswordSlice";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //import primeReact sty les
 import { InputText } from "primereact/inputtext";
 
 //import components
 import ResetButton from "./ResetButton";
-// import ErrorMessage from "./Message";
 
 const ResetPassForm = () => {
   // react states
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [passwordMismatchError, setPasswordMismatchError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
   const [resetError, setResetError] = useState(null);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch()
+  useEffect(() => {
+    if (resetSuccess) {
+      navigate("/Login"); // Automatically navigate to the login page on reset success
+    }
+  }, [resetSuccess, history]);
 
   const onChangeNewPassword = (e) => {
     const newPassword = e.target.value;
@@ -35,17 +41,23 @@ const ResetPassForm = () => {
     e.preventDefault();
     if (newPassword === confirmNewPassword) {
       setPasswordMismatchError(null);
-      dispatch( resetPassword({ email: localStorage.getItem("userEmail"), newPassword })
-    ) .then(() => {
-      setResetSuccess(true);
-      setResetError(null);
-    })
-    .catch((error) => {
-      setResetSuccess(false);
-      setResetError(error.message || "An error occurred during the reset.");
-    });
+      setLoading(true);
 
+      try {
+        dispatch(
+          resetPassword({
+            email: localStorage.getItem("userEmail"),
+            newPassword,
+          })
+        );
+        setResetSuccess(true);
+        setResetError(null);
+      } catch (error) {
+        setResetSuccess(false);
+        setResetError(error.message || "An error occurred during the reset.");
+      }
     } else {
+      setLoading(false);
       setPasswordMismatchError("Passwords do not match. Please try again.");
     }
   };
@@ -83,17 +95,11 @@ const ResetPassForm = () => {
         <p className="text-red-900">{passwordMismatchError}</p>
       )}
 
-      {resetError && (<p>{resetError}</p>)}
+      {loading && <p>Loading ...</p>}
 
-      {resetSuccess ? (
-        <p>Password reset was successful. <Link to="/Login"><ResetButton /></Link></p>
-      ) : (
-        <Link to="">
-          <ResetButton />
-        </Link>
-      )}
+      {resetError && <p>{resetError}</p>}
 
-      
+      <ResetButton loading={loading} />
     </form>
   );
 };
