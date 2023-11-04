@@ -72,7 +72,7 @@ const ResetPassForm = () => {
             required
             value={newPassword}
             onChange={onChangeNewPassword}
-            className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
+            className=" block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
           />
           <label htmlFor="newPassword">New Password</label>
         </span>
@@ -85,7 +85,7 @@ const ResetPassForm = () => {
             id="confirmNewPassword"
             value={confirmNewPassword}
             onChange={onChangeConfirmNewPassword}
-            className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
+            className=" block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
           />
           <label htmlFor="confirmNewPassword">Confirm new password</label>
         </span>
