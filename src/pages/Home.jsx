@@ -1,21 +1,27 @@
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+//import components
+import Navbar from "../components/general/navbar"
 
 export default function Home() {
-
-  const {loading, error, user} = useSelector((state) => state.user)
+  const { loading, error, user } = useSelector((state) => state.user);
 
   return (
-    <div>
+    <>
 
-      {user !== null ? (
-        <div>
-          <Link to="/profile" >Profile</Link>
-        </div>
-      ):(
-        <Link to="/login">Login</Link>
-      )}
-    </div>
-  )
+      <Navbar/>
+
+      <div className="">
+        {user !== null ? (
+          <div>
+            <Link to="/profile">Profile</Link>
+          </div>
+        ) : (
+          <Link to="/login">Login</Link>
+        )}
+      </div>
+    </>
+  );
 }
