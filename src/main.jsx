@@ -13,7 +13,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
   
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <PrimeReactProvider value={{ unstyled: true, pt: {}  }}>
+  <PrimeReactProvider value={{ unstyled: false, pt: {}  }}>
     <Provider store={store}>
       <App />
     </Provider>
