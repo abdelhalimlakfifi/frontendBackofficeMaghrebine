@@ -98,12 +98,7 @@ const LoginForm = () => {
           Forget Password?
         </Link>
       </div>
-      <div className="w-full flex text-xs text-custom-purple">
-        You do not have an account?
-        <Link to="/Register" className="text-xs mx-1 text-red-500 hover:underline">
-          Create One.
-        </Link>
-      </div>
+      
 
     </form>
   );

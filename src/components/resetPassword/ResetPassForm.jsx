@@ -1,108 +1,112 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { resetPassword } from "../../store/ResetPasswordSlice";
-import { useNavigate } from "react-router-dom";
-
-//import primeReact sty les
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
-
-//import components
 import ResetButton from "./ResetButton";
+import axios from "axios";
+
 
 const ResetPassForm = () => {
   // react states
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [passwordMismatchError, setPasswordMismatchError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [resetSuccess, setResetSuccess] = useState(false);
-  const [resetError, setResetError] = useState(null);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state;
+    if(state)
+    {
+        const formRef = useRef()
+        const [error, setError] = useState();
+        const navigate = useNavigate()
+        const handleSubmit = async (e) => {
+            e.preventDefault();
 
-  useEffect(() => {
-    if (resetSuccess) {
-      navigate("/Login"); // Automatically navigate to the login page on reset success
-    }
-  }, [resetSuccess, history]);
+            if(formRef.current.password.value !== formRef.current.confirmationPassword.value)
+            {
+                setError("passwords Mismatch")
+                return
+            }
+            const token = localStorage.getItem('resetPasswordToken');
+            if(token)
+            {
+                const response = await axios.put('http://localhost:3000/api/forgotpassword/change-password',{
+                    password: formRef.current.password.value,
+                    confirmation_password: formRef.current.confirmationPassword.value
+                },{
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-  const onChangeNewPassword = (e) => {
-    const newPassword = e.target.value;
-    setNewPassword(newPassword);
-  };
+                console.log(response);
+                if(response.status == 200)
+                {
+                    localStorage.removeItem('resetPasswordToken');
+                    navigate('/login');
+                }
+            }
+        }
 
-  const onChangeConfirmNewPassword = (e) => {
-    const confirmNewPassword = e.target.value;
-    setConfirmNewPassword(confirmNewPassword);
-  };
+        return (
+            <form className="" onSubmit={handleSubmit} ref={formRef}>
+                <div className="">
+                    <span className="p-float-label text-gray-500">
+                    <InputText
+                        type="password"
+                        id="newPassword"
+                        required
+                        name="password"
+                        className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
+                    />
+                    <label htmlFor="newPassword">New Password</label>
+                    </span>
+                </div>
+    
+                <div className="">
+                    <span className="p-float-label text-gray-500">
+                    <InputText
+                        type="password"
+                        id="confirmNewPassword"
+                        name="confirmationPassword"
+                        className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
+                    />
+                    <label htmlFor="confirmNewPassword">Confirm new password</label>
+                    </span>
+                </div>
+    
 
-  const handleResetEvent = (e) => {
-    e.preventDefault();
-    if (newPassword === confirmNewPassword) {
-      setPasswordMismatchError(null);
-      setLoading(true);
-
-      try {
-        dispatch(
-          resetPassword({
-            email: localStorage.getItem("userEmail"),
-            newPassword,
-          })
+                {error ?? error}
+                {/* // {passwordMismatchError && ( */}
+                {/* //     <p className="text-red-900">{passwordMismatchError}</p> */}
+                {/* // )} */}
+    
+                {/* // {loading && <p>Loading ...</p>} */}
+    
+                {/* // {resetError && <p>{resetError}</p>} */}
+    
+                <ResetButton type="submit" />
+    
+            </form>
         );
-        setResetSuccess(true);
-        setResetError(null);
-      } catch (error) {
-        setResetSuccess(false);
-        setResetError(error.message || "An error occurred during the reset.");
-      }
-    } else {
-      setLoading(false);
-      setPasswordMismatchError("Passwords do not match. Please try again.");
     }
-  };
 
-  return (
-    <form className="" onSubmit={handleResetEvent}>
-      <div className="">
-        <span className="p-float-label text-gray-500">
-          <InputText
-            type="password"
-            id="newPassword"
-            required
-            value={newPassword}
-            onChange={onChangeNewPassword}
-            className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
-          />
-          <label htmlFor="newPassword">New Password</label>
-        </span>
-      </div>
 
-      <div className="">
-        <span className="p-float-label text-gray-500">
-          <InputText
-            type="password"
-            id="confirmNewPassword"
-            value={confirmNewPassword}
-            onChange={onChangeConfirmNewPassword}
-            className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
-          />
-          <label htmlFor="confirmNewPassword">Confirm new password</label>
-        </span>
-      </div>
+    return (
+        <div className="flex items-center justify-center h-screen bg-gray-100">
+            <div className="text-center">
+                <h1 className="text-6xl font-bold text-custom-color">404</h1>
+                <p className="text-xl text-gray-500">Page not found</p>
+                <div className="mt-4">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-24 w-24 text-custom-color"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
 
-      {passwordMismatchError && (
-        <p className="text-red-900">{passwordMismatchError}</p>
-      )}
-
-      {loading && <p>Loading ...</p>}
-
-      {resetError && <p>{resetError}</p>}
-
-      <ResetButton type="submit" disabled={loading} />
-
-    </form>
-  );
+                    </svg>
+                </div>
+            </div>
+        </div>
+    )
 };
 
 export default ResetPassForm;
