@@ -1,8 +1,7 @@
 import React, { useState,useRef  } from "react";
 import {forgotPassword} from "../../store/ForgotPasswordSlice"
 import { useDispatch, useSelector } from "react-redux";
-import { Toast } from 'primereact/toast';
-
+import { useNavigate } from "react-router-dom";
 import emailImage from "../../assets/email.svg"
 
 
@@ -16,8 +15,7 @@ import { useEffect } from "react";
 const SetEmailForm = () => {
 
     const selectForgotPasswordState = (state) => state.forgotPassword;
-
-    const toast = useRef(null);
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [errorMessage, setErrorMesasge] = useState('')
     const { loading, success, error } = useSelector(selectForgotPasswordState);
@@ -34,11 +32,6 @@ const SetEmailForm = () => {
         e.preventDefault();
         if (!loading) { // Check if not loading to prevent multiple submissions
             const response = await dispatch(forgotPassword(email));
-            // if(response.payload.status != 200)
-            // {
-            //     console.log(loading, success, error)
-            // }
-            // localStorage.setItem('userEmail', email); // Save the email to local storage to retreive it in the InsertOtp page
         }
     };
 
@@ -53,7 +46,8 @@ const SetEmailForm = () => {
                 setErrorMesasge(error.payload.data.error ? error.payload.data.error : "500 Internal server Error")
             }
             if (success) {
-                console.log("success");
+                localStorage.setItem('userEmail', email)
+                navigate('/InsertOtp', {state: { email: email}})
             }
         }
     }, [loading, success, error])
@@ -74,7 +68,7 @@ const SetEmailForm = () => {
             </div>
 
             <span className="p-float-label text-gray-500">
-                <InputText id="email" value={email} onChange={onChangeEmail} className="p-invalid block w-full px-4 py-2 my-5 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40" />
+                <InputText id="email" value={email} type="email" onChange={onChangeEmail} className="p-invalid block w-full px-4 py-2 my-5 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40" />
                 <label htmlFor="email">Insert Your Email</label>
             </span>
 
