@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useRef  } from "react";
 import {forgotPassword} from "../../store/ForgotPasswordSlice"
 import { useDispatch, useSelector } from "react-redux";
+import { Toast } from 'primereact/toast';
 
 import emailImage from "../../assets/email.svg"
 
@@ -9,30 +10,56 @@ import emailImage from "../../assets/email.svg"
 import Botton from "./Button";
 // import ErrorMessage from "./Message";
 import { InputText } from "primereact/inputtext";
+import { useEffect } from "react";
 
 
 const SetEmailForm = () => {
 
+    const selectForgotPasswordState = (state) => state.forgotPassword;
+
+    const toast = useRef(null);
     const [email, setEmail] = useState("");
-    const { loading, success, error } = useSelector((state) => state.otp);
+    const [errorMessage, setErrorMesasge] = useState('')
+    const { loading, success, error } = useSelector(selectForgotPasswordState);
 
     const dispatch = useDispatch();
 
+    
     const onChangeEmail = (e) => {
         const email = e.target.value;
         setEmail(email);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async  (e) => {
         e.preventDefault();
         if (!loading) { // Check if not loading to prevent multiple submissions
-            dispatch(forgotPassword(email));
-            localStorage.setItem('userEmail', email); // Save the email to local storage to retreive it in the InsertOtp page
+            const response = await dispatch(forgotPassword(email));
+            // if(response.payload.status != 200)
+            // {
+            //     console.log(loading, success, error)
+            // }
+            // localStorage.setItem('userEmail', email); // Save the email to local storage to retreive it in the InsertOtp page
         }
     };
 
+    useEffect(() => {
+        console.log(loading, success, error);
+
+        if(!loading)
+        {
+            if(error)
+            {
+
+                setErrorMesasge(error.payload.data.error ? error.payload.data.error : "500 Internal server Error")
+            }
+            if (success) {
+                console.log("success");
+            }
+        }
+    }, [loading, success, error])
     return (
         <form className="" onSubmit={handleSubmit}>
+
             <div className="">
                 <img 
                     src={emailImage}
@@ -52,7 +79,7 @@ const SetEmailForm = () => {
             </span>
 
             {loading && <p>Loading...</p>}
-            {error && <p className="text-red-900">{error}</p>}
+            {error && <p className="text-red-900">{errorMessage}</p>}
             {success && <p>OTP Sent Successfuly </p>}
             <Botton  type="submit" disabled={loading} />
 
