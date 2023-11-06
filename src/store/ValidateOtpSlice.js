@@ -13,7 +13,6 @@ export const validateOTP = createAsyncThunk('otp/validate', async ({email, strin
 },{
     serializeError: (error) => {
         if (error.message) {
-            
             return error.message; // Return a message for network errors
         } else {
             return error; // Return the serialized error response data

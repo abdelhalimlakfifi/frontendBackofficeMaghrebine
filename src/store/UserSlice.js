@@ -3,15 +3,18 @@ import axios from "axios";
 
 export const loginUser=createAsyncThunk(
     'user/login',
-    async(userCridentials) => {
-        const request = await axios.post('http://localhost:3000/api/login', userCridentials);
-        const reponse = await request.data;
+    async(userCridentials, {rejectWithValue}) => {
 
-        console.log("Response =");
-        console.log(request.data);
-        localStorage.setItem('user', JSON.stringify(reponse));
+        try {
+            const request = await axios.post('http://localhost:3000/api/login', userCridentials);
+            const reponse = await request.data;
+            localStorage.setItem('user', JSON.stringify(reponse));
 
-        return reponse
+            return {status: request.status, reponse}
+        } catch (error) {
+            return rejectWithValue({ data: error.response.data, status: error.response.status} ); // Return the response data from the error
+            throw error;
+        }
     }
 );
 const userSlice = createSlice({
@@ -38,8 +41,7 @@ const userSlice = createSlice({
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.user = null;
-                console.log(action.error.message);
-                state.error = action.error.message
+                state.error = action
             })
     }
 });
