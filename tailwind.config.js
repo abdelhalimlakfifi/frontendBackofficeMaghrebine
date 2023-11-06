@@ -11,13 +11,16 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
+    extend: { 
+      fontFamily: {
+        'plusjakarta': ['Plus Jakarta Sans', 'sans'], // Define the 'Plus Jakarta Sans' font family
+      },
       colors: {
         "custom-purple": "#655445",
+        "gold": "#DBCAA0",
+        "gray": "#5A6A85"
       },
     },
   },
   plugins: [],
 };
-
-
