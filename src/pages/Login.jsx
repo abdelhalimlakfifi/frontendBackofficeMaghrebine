@@ -6,9 +6,8 @@ import SideImg  from "../components/general/SideImage";
 function Login() {
   return (
     <>
-      
         <div className="w-full flex ">
-            <div className=" w-full items-center flex">
+            <div className="w-full items-center flex">
                 <div id="form" className=" mx-60 w-full">
                     <Logo/>
                     <LoginForm />
@@ -16,7 +15,7 @@ function Login() {
             </div>
 
             <div className="w-[48%]">
-                <SideImg className="h-screen w-full"/>
+                <SideImg className="h-screen w-full object-cover"/>
             </div>
         </div>
     </>

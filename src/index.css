@@ -12,6 +12,8 @@
 
 
 @layer components {
-  
+  .p-password-input{
+    width: 100%;
+  }
 }
 
