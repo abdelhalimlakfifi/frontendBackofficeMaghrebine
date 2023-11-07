@@ -6,7 +6,7 @@ const NavbarLogo = () => {
       <>
         <img
           src={NavLogo}
-          className="h-8"
+          className="h-8 md:h-10"
           alt="notification"
         />
       </>
