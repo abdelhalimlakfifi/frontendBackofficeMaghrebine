@@ -6,7 +6,7 @@ const ProfileIcon = () => {
       <>
         <img
           src={profilicon}
-          className=" "
+          className="h-8 md:h-10"
           alt="Profile"
         />
       </>
