@@ -1,6 +1,9 @@
 
+@font-face {
+  font-family: 'Plus Jakarta Sans', 'sans-serif';
+  src: url('./assets/fonts/PlusJakartaSans-ExtraLight.ttf') format("truetype");
+}
 @layer tailwind-base, primereact, tailwind-utilities;
-
 @layer tailwind-base {
   @tailwind base;
 }
@@ -14,4 +17,3 @@
 @layer components {
   
 }
-
