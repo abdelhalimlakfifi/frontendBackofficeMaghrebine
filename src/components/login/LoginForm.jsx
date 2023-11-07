@@ -9,16 +9,13 @@ import Botton from "./Button"; //import components
 import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { classNames } from 'primereact/utils';
-import { Password } from "primereact/password";
-import { useEffect } from "react";
 import { Toast } from 'primereact/toast';
 
 
 const LoginForm = () => {
     // react states
     const toast = useRef(null);
-    const formRef = useRef();
-    const [formError,  setFormError] = useState({})
+    
     // redux state
     const { loading, error } = useSelector((state) => state.user);
 
@@ -111,20 +108,6 @@ const LoginForm = () => {
                                 className={classNames({ 'p-invalid': fieldState.error })}
                                 
                             />
-                            {/* <div className="w-full">
-                                <span className="p-float-label">
-                                    <Password 
-
-                                        name="password"
-                                        className={'w-full'}
-                                        feedback={false} 
-                                        toggleMask
-                                        id={field.name}
-                                        {...field}
-                                    />
-                                    <label htmlFor="password">Password</label>
-                                </span>
-                            </div> */}
                             {getFormErrorMessage(field.name)}
                         </>
                     )}

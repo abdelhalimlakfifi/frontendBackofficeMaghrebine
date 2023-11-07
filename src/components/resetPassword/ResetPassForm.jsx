@@ -3,32 +3,46 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import ResetButton from "./ResetButton";
 import axios from "axios";
-
+import { Controller, useForm } from "react-hook-form";
+import { Password } from 'primereact/password';
+import { Toast } from 'primereact/toast';
 
 const ResetPassForm = () => {
   // react states
-
+    const defaultValues = { password: '', password_confirmation: '' };
+    const form = useForm({ defaultValues });
+    const errors = form.formState.errors
     const location = useLocation();
+    const toast = useRef(null);
+
+
     const state = location.state;
+
     if(state)
     {
         const formRef = useRef()
-        const [error, setError] = useState();
-        const navigate = useNavigate()
-        const handleSubmit = async (e) => {
-            e.preventDefault();
+        // const [error, setError] = useState();
+        const navigate = useNavigate();
+        const showError = (message) => {
+            toast.current.show({severity:'error', summary: 'Error', detail:message});
+        }
+        
+        const getFormErrorMessage = (name) => {
+            return errors[name] ? <small className="p-error">({errors[name].message})</small> : <small className="p-error">&nbsp;</small>;
+        };
+        const handleSubmit = async (data) => {
 
-            if(formRef.current.password.value !== formRef.current.confirmationPassword.value)
+            if(data.password !== data.password_confirmation)
             {
-                setError("passwords Mismatch")
+                showError("passwords Mismatch")
                 return
             }
             const token = localStorage.getItem('resetPasswordToken');
             if(token)
             {
                 const response = await axios.put('http://localhost:3000/api/forgotpassword/change-password',{
-                    password: formRef.current.password.value,
-                    confirmation_password: formRef.current.confirmationPassword.value
+                    password: data.password,
+                    confirmation_password: data.password_confirmation
                 },{
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -45,34 +59,77 @@ const ResetPassForm = () => {
         }
 
         return (
-            <form className="" onSubmit={handleSubmit} ref={formRef}>
-                <div className="">
-                    <span className="p-float-label text-gray-500">
-                    <InputText
-                        type="password"
-                        id="newPassword"
-                        required
+            <form className="" onSubmit={form.handleSubmit(handleSubmit)} ref={formRef}>
+                <Toast ref={toast} position="top-left" />
+                <div className=" my-2">
+                    <Controller
                         name="password"
-                        className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
+                        control={form.control}
+                        rules={{ 
+                            required: 'Password is required.',
+                            minLength: {
+                                value: 8,
+                                message: 'Password must be at least 8 characters long.',
+                            },
+                        }}
+                        render={({ field, fieldState }) => (
+                            <>
+                                 <div className="w-full">
+                                    <span className="p-float-label">
+                                        <Password 
+
+                                            name={field.name}
+                                            className={' w-full'}
+                                            feedback={false} 
+                                            toggleMask 
+                                            id={field.name}
+                                            {...field}
+                                        />
+                                        <label htmlFor="password">
+                                            Password {getFormErrorMessage(field.name)}
+                                        </label>
+                                    </span>
+                                </div>
+                            </>
+                        )}
                     />
-                    <label htmlFor="newPassword">New Password</label>
-                    </span>
                 </div>
-    
-                <div className="">
-                    <span className="p-float-label text-gray-500">
-                    <InputText
-                        type="password"
-                        id="confirmNewPassword"
-                        name="confirmationPassword"
-                        className="p-invalid block w-full px-4 my-[2rem] py-2 text-custom-purple bg-white border-2 rounded-md focus:border-custom-purple focus:ring-custom-purple focus:outline-none focus:ring focus:ring-opacity-40"
+                <div className=" my-8">
+                    <Controller
+                        name="password_confirmation"
+                        control={form.control}
+                        rules={{ 
+                            required: 'Password Confirmation is required.',
+                            minLength: {
+                                value: 8,
+                                message: 'Password Confirmation must be at least 8 characters long.',
+                            },
+                        }}
+                        render={({ field, fieldState }) => (
+                            <>
+                                 <div className="w-full mt-4">
+                                    <span className="p-float-label">
+                                        <Password 
+                                            name={field.name}
+                                            className={' w-full'}
+                                            feedback={false} 
+                                            toggleMask 
+                                            id={field.name}
+                                            {...field}
+                                        />
+                                        <label htmlFor="password">
+                                            Password confirmation {getFormErrorMessage(field.name)}
+                                        </label>
+                                    </span>
+                                </div>
+                                
+                            </>
+                        )}
                     />
-                    <label htmlFor="confirmNewPassword">Confirm new password</label>
-                    </span>
                 </div>
     
 
-                {error ?? error}
+                {/* {error ?? error} */}
                 {/* // {passwordMismatchError && ( */}
                 {/* //     <p className="text-red-900">{passwordMismatchError}</p> */}
                 {/* // )} */}

@@ -10,9 +10,13 @@ import { useNavigate } from "react-router-dom";
 import Botton from "./Button";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useRef } from "react";
 // import ErrorMessage from "./Message";
+import { Toast } from 'primereact/toast';
 
 const SetOtpForm = () => {
+    const toast = useRef(null);
+
     const location = useLocation();
     const state = location.state;
     const [stringCode,  setStringCode] = useState('');
@@ -27,13 +31,20 @@ const SetOtpForm = () => {
         const { loading, success, error } = useSelector((state) => state.otp);
         const { resendLoading, resendSuccess, resendError } = useSelector((state) => state.forgotPassword);
 
-
+        const showError = (message) => {
+            toast.current.show({severity:'error', summary: 'Error', detail:message, sticky: true});
+        }
 
         const handleOtpSubmit = async (e) => {
             e.preventDefault();
 
-            
-            dispatch(validateOTP({email, stringCode}));
+            console.log(stringCode.length);
+            console.log();
+            if(stringCode.length !== 6){
+                showError("Invalid OTP");
+            }else{
+                dispatch(validateOTP({email, stringCode}));
+            }
         };
 
         useEffect(() => {
@@ -43,7 +54,8 @@ const SetOtpForm = () => {
             if(!loading)
             {
                 if(error){
-                    console.log(error.payload.data.error);
+                    // console.log(error.payload.data.error);
+                    showError(error.payload.data.error)
                 }
                 if(success){
                     localStorage.setItem('resetPasswordToken', success.token);
@@ -56,6 +68,7 @@ const SetOtpForm = () => {
 
         return (
             <form className="" onSubmit={handleOtpSubmit}>
+                <Toast ref={toast} position="top-left" />
                 <div className="">
                     <img src={emailImage} className="w-full h-52 py-5 my-10" alt="Email" />
                 </div>
