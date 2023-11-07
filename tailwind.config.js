@@ -13,7 +13,7 @@ export default {
   theme: {
     extend: { 
       fontFamily: {
-        'plusjakarta': ['Plus Jakarta Sans', 'sans'], // Define the 'Plus Jakarta Sans' font family
+        'plusjakarta': ['Plus Jakarta Sans', 'sans-serif'], // Define the 'Plus Jakarta Sans' font family
       },
       colors: {
         "custom-purple": "#655445",
