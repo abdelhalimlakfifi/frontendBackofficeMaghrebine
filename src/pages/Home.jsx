@@ -9,26 +9,19 @@ import sidebarData from "../components/Sidebar/SidebarData";
 
 export default function Home() {
   const { loading, error, user } = useSelector((state) => state.user);
-
   return (
     <>
-      
-      <div className="flex">
-        <Sidebar sidebarData={sidebarData} />
-        <div className="flex flex-col flex-grow">
-           <Navbar/>
-        </div>
-        
-        {/* <div className="">
-          {user !== null ? (
-            <div>
-              <Link to="/profile">Profile</Link>
+        <div className="w-screen">
+            <Sidebar sidebarData={sidebarData} />
+            <div className="">
+                <div className="">
+                    <Navbar />
+                    <div className=" pt-[4.5rem] ml-[4.5rem]" id="content">
+                        <p className="font-plusjakarta">Hello Am the lwa3er lore</p>
+                    </div>
+                </div>
             </div>
-          ) : (
-            <Link to="/login">Login</Link>
-          )}
-        </div> */}
-      </div>
+        </div>
     </>
   );
 }
