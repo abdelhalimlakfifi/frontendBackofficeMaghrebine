@@ -37,9 +37,6 @@ const SetOtpForm = () => {
 
         const handleOtpSubmit = async (e) => {
             e.preventDefault();
-
-            console.log(stringCode.length);
-            console.log();
             if(stringCode.length !== 6){
                 showError("Invalid OTP");
             }else{
@@ -48,13 +45,9 @@ const SetOtpForm = () => {
         };
 
         useEffect(() => {
-
-            console.log(loading, success, error)
-
             if(!loading)
             {
                 if(error){
-                    // console.log(error.payload.data.error);
                     showError(error.payload.data.error)
                 }
                 if(success){

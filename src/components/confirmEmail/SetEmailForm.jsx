@@ -50,15 +50,10 @@ const SetEmailForm = () => {
         {
             if(error)
             {
-                console.log(error);
                 setErrorMesasge(error.payload.data.error ? error.payload.data.error : "500 Internal server Error")
-
-                console.log(errorMessage);
                 if(errorMessage) showError(errorMessage)
             }
             if (success) {
-
-                console.log(email);
                 localStorage.setItem('userEmail', email)
                 navigate('/InsertOtp', {state: { email: email}})
             }

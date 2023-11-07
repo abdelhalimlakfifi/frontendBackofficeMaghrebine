@@ -25,16 +25,12 @@ const ProtectedRoute = ({ children }) => {
     
                 if(response.status === 200 && response.data.authenticated)
                 {
-                    console.log("from true");
                     setIsAuthenticated(true)
                 }else{
-    
-                    console.log("from false");
                     setIsAuthenticated(false)
                 }
                 
             } catch (error) {
-                console.error("Error checking authentication:", error);
                 setIsAuthenticated(false);
             } finally {
                 setIsLoading(false); // Set loading to false after the request is completed
@@ -51,8 +47,6 @@ const ProtectedRoute = ({ children }) => {
     }
 
     if (!isAuthenticated) {
-        console.log("===================================");
-        console.log(isAuthenticated);
         return <Navigate to="/login" />;
     }
 
