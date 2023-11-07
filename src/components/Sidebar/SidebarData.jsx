@@ -3,7 +3,7 @@ import { CustomersIcon, HomeOutlinedIcon, Permissions, ShoppingCartIcon, Statist
 const sidebarData = [
     {
       title: 'Dashboard',
-      items: ['Example'],
+      items: '/dashboard',
       icon: <HomeOutlinedIcon/>
     },
     {
