@@ -12,8 +12,8 @@ export default function Sidebar({ sidebarData }) {
     <>
       <div
         className={`${
-          open ? "w-[100%] md:w-[20%]" : "w-[15%] md:w-[5%]"
-        } duration-300 h-screen rounded-md shadow-xl py-3 px-1`}
+          open ? "w-[22rem] md:w-[20%]" : "w-[4.5rem] md:w-[5%]"
+        } duration-300 h-screen rounded-md shadow-xl py-3 px-1 fixed bg-white !mt-0`}
       >
         <div className="flex  w-full ">
           <div className="w-[80%]  flex justify-center">
