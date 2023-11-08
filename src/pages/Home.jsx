@@ -12,8 +12,8 @@ export default function Home() {
   return (
     <div className="flex flex-raw md:flex-col h-screen">
       <div className="flex w-full ">
-        <div className="bg-red-400 lg:w-1/5 hidden lg:block h-screen">
-          <Sidebar />
+        <div className="shadow lg:w-1/5 hidden lg:block h-screen">
+          <Sidebar/>
         </div>
         <div className="flex flex-col w-full lg:w-4/5 ">
 
