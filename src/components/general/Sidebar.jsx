@@ -1,8 +1,12 @@
 import React from "react";
 
-export default function Sidebar () {
+import LogoIcon from "../../assets/Icons/Logo.svg";
+
+export default function Sidebar ({isOpen}) {
     return(
         <>
+            <img src={LogoIcon} alt="Logo" className="" />
+
         </>
     )
 }
