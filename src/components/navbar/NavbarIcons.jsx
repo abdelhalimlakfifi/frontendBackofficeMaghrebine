@@ -1,22 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 //import Icons
-import Calendar from "../../assets/Icons/calendar.svg"
-import Dashboard from "../../assets/Icons/dashboard.svg"
-import Logo from "../../assets/Icons/Logo.svg"
-import Menu from "../../assets/Icons/menu.svg"
-import Notification from "../../assets/Icons/notification.svg"
-import Profile from "../../assets/Icons/ProfileIcon.svg"
-import Search from "../../assets/Icons/Search.svg"
-import ShoppingBag from "../../assets/Icons/ShoppingBag.svg"
+import CalendarIcon from "../../assets/Icons/calendar.svg";
+import DashboardIcon from "../../assets/Icons/dashboard.svg";
+import LogoIcon from "../../assets/Icons/Logo.svg";
+import NotificationIcon from "../../assets/Icons/notification.svg";
+import ProfileIcon from "../../assets/Icons/ProfileIcon.svg";
 
-//export icon components
-export const Calendar = () => {<img src={Calendar} alt="Calendar" className=""/>}
-export const Dashboard = () => {<img src={Dashboard} alt="Dashboard" className=""/>}
-export const Logo = () => {<img src={Logo} alt="Logo" className=""/>}
-export const Menu = () => {<img src={Menu} alt="Menu" className=""/>}
-export const Notification = () => {<img src={Notification} alt="Notification" className=""/>}
-export const Profile = () => {<img src={Profile} alt="Profile" className=""/>}
-export const Search = () => {<img src={Search} alt="Search" className=""/>}
-export const ShoppingBag = () => {<img src={ShoppingBag} alt="ShoppingBag" className=""/>}
+// Create reusable Icon component
+const Icon = ({ src, alt }) => {
+  return <img src={src} alt={alt} className="" />;
+};
 
+// Create the NavbarIcons component
+const NavbarIcons = () => {
+  const [isLargeScreen, setIsLargeScreen] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <>
+      
+      <div className="flex items-center w-[90%]  justify-center cursor-pointer md:hidden">
+        <Icon src={LogoIcon} alt="Logo" className="" />
+      </div>
+
+      <div className="flex ">
+      <div className="flex mx-4 w-9 cursor-pointer">
+        {isLargeScreen && (
+          <Icon src={CalendarIcon} alt="Calendar" className="" />
+        )}
+      </div>
+
+      <div className="flex justify-center  mx-4 w-9 cursor-pointer">
+        {isLargeScreen && (
+          <Icon src={DashboardIcon} alt="Dashboard" className="" />
+        )}
+      </div>
+        <div className="w-6 flex justify-center mx-4 cursor-pointer">
+          <Icon src={NotificationIcon} alt="Notification" className="" />
+        </div>
+        <div className="flex w-9 cursor-pointer">
+          <Icon src={ProfileIcon} alt="Profile" className="" />
+        </div>
+
+       
+      </div>
+    </>
+  );
+};
+
+export default NavbarIcons;
