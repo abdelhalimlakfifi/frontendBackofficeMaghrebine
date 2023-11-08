@@ -7,7 +7,7 @@ import Profile from './pages/Profile'
 import ProtectedRoute from './utils/ProtectedRoutes';
 import InsertOtp from './pages/InsertOtp'
 import ResetPassword from './pages/ResetPassword'
-
+import GuestRoutes from './utils/GuestRoutes'
 function App() {
 
     return (
@@ -15,15 +15,53 @@ function App() {
             <Router>
                 <Routes>
                     <Route exact path='/' element={<Home />} />
-                    <Route path='/login' element={<Login />} />
-                    <Route path='/ConfirmEmail' element={<ConfirmEmail />} />
-                    <Route path='/InsertOtp' element={<InsertOtp />} />
-                    <Route path='/ResetPassword' element={<ResetPassword />} />
+
+                    {/* session-expired */}
+                    
+                    <Route path='/session-expired' element={
+                        <GuestRoutes>
+                            <h1>Hello from session Expired</h1>
+                        </GuestRoutes>} 
+                    />
+
+
+                    <Route path='/unauthorized' element={
+                            <GuestRoutes>
+                                <h1>Hello from Unauthorized</h1>
+                            </GuestRoutes>
+                        } 
+                    />
+                    <Route path='/login' element={
+                        <GuestRoutes>
+                            <Login />
+                        </GuestRoutes>
+                        } 
+                    />
+
+                    <Route path='/ConfirmEmail' element={
+                        <ConfirmEmail />
+                        } 
+                    />
+                    <Route path='/InsertOtp' element={
+                        <GuestRoutes>
+                            <InsertOtp />
+                        </GuestRoutes>
+                        } 
+                    />
+                    <Route path='/ResetPassword' element={
+
+                        <GuestRoutes>
+                            <ResetPassword />
+                        </GuestRoutes>
+                    } />
+                    
+                    {/* authenticated */}
                     <Route path='/profile' element={
                         <ProtectedRoute>
                             <Profile/>
                         </ProtectedRoute>
                     } />
+                    {/* authenticated */}
                 </Routes>
             </Router>
         </>
