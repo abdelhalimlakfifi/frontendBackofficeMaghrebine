@@ -3,9 +3,9 @@ import { SidebarData } from "../sidebar/SidebarData";
 import SidebarSection from "../Sidebar/SidebarSection";
 import LogoIcon from "../../assets/Icons/Logo.svg";
 
-export default function Sidebar() {
+export default function Sidebar({isOpen}) {
   return (
-    <div className="flex flex-col justify-between h-full">
+    <div className={` ${isOpen ? "block" : "hidden"}flex flex-col justify-between h-full`}>
       <div>
         <div className="flex justify-center w-">
           <img src={LogoIcon} alt="Logo" className="lg:my-5" />
