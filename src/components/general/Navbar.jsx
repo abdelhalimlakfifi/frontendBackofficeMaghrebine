@@ -13,11 +13,10 @@ import LogoIcon from "../../assets/Icons/Logo.svg";
 
 export default function Navbar() {
   
-  // const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleMenuClick = (e) => {
-    e.preventDefault();
-  
+  const handleMenuClick = () => {
+    setIsOpen(!isOpen)
   }
 
 
@@ -33,7 +32,6 @@ export default function Navbar() {
         alt="Menu"
         className="w-8 h-auto lg:hidden cursor-pointer"
         onClick={handleMenuClick}
-    
 
       />
       <div className="w-full absolute h-full flex items-center justify-center lg:hidden cursor-pointer">
