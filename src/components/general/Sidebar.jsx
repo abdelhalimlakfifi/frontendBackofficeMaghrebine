@@ -1,9 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import { SidebarData } from "../sidebar/SidebarData";
 import SidebarSection from "../Sidebar/SidebarSection";
 import LogoIcon from "../../assets/Icons/Logo.svg";
-import Navbar from "./Navbar";
-import { Button } from "primereact/button";
 
 export default function Sidebar({isOpen}) {
   return (

@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import Sidebar from "../components/general/Sidebar";
 import Navbar from "../components/general/Navbar";
 import SearchBar from "../components/navbar/Search";
-import { Button } from "primereact/button";
 
 export default function Home() {
   let [isOpen, setIsOpen] = useState(false);
