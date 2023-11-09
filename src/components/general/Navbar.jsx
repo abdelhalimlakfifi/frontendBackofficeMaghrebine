@@ -1,14 +1,12 @@
-import React, {useState} from "react";
+import React from "react";
 
 import SearchBar from "../navbar/Search";
 import Menu from "../../assets/Icons/Menu.svg";
 
 //import Icons
-
 import ProfileIcon from "../../assets/Icons/ProfileIcon.svg";
 import LogoIcon from "../../assets/Icons/Logo.svg";
 
-import { Button } from 'primereact/button';
         
 
 export default function Navbar({handleMenuClick}) {
@@ -38,9 +36,6 @@ export default function Navbar({handleMenuClick}) {
       <i className="pi pi-calendar hidden lg:block cursor-pointer hover:text-light-gold" alt="Dashboard"></i>
       <i className="pi pi-th-large hidden lg:block cursor-pointer hover:text-light-gold" alt="Calendar"></i>
       <i className="pi pi-bell cursor-pointer hover:text-light-gold " alt="Notification"></i>
-        {/* <img src={DashboardIcon} alt="Dashboard" className="hidden lg:block cursor-pointer " />
-        <img src={CalendarIcon} alt="Calendar" className="hidden lg:block cursor-pointer" />
-        <img src={NotificationIcon} alt="Notification" className="cursor-pointer" /> */}
         <img src={ProfileIcon} alt="Profile" className="cursor-pointer " />
       </div>
     </nav>
