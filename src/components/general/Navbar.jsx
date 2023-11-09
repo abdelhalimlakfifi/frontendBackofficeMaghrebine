@@ -1,7 +1,6 @@
 import React from "react";
 
 import SearchBar from "../navbar/Search";
-import Menu from "../../assets/Icons/Menu.svg";
 
 //import Icons
 import ProfileIcon from "../../assets/Icons/ProfileIcon.svg";
@@ -20,12 +19,11 @@ export default function Navbar({handleMenuClick}) {
             
 
       <button onClick={handleMenuClick} >
-        <img
-          src={Menu}
+        <i
           alt="Menu"
-          className="w-8 h-auto lg:hidden "
+          className="pi pi-bars w-8 h-auto lg:hidden text-figma-gray  hover:text-light-gold "
           
-        />
+        ></i>
       </button>
 
       <div className="w-full h-full flex items-center justify-center lg:hidden cursor-pointer">
