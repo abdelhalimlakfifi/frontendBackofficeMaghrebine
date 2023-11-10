@@ -7,6 +7,8 @@ import Sidebar from "../components/general/Sidebar";
 import Navbar from "../components/general/Navbar";
 import SearchBar from "../components/navbar/Search";
 
+import Users from "./Users";
+
 export default function Home() {
   let [isOpen, setIsOpen] = useState(false);
 
@@ -32,12 +34,17 @@ export default function Home() {
           <div className="z-10">
             <Navbar handleMenuClick={handleMenuClick} />
 
-          <div className=" h-[92%] justify-end mx-3 my-3">
+          <div className="  justify-end mx-3 my-3">
             <div className="lg:hidden">
               <SearchBar/>
             </div>
 
-            <p>This is a component</p>
+            <div className="w-full">
+
+            <Users />
+
+            </div>
+             
           </div>
           </div>
         </div>
