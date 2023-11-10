@@ -8,6 +8,7 @@ import ProtectedRoute from './utils/ProtectedRoutes';
 import InsertOtp from './pages/InsertOtp'
 import ResetPassword from './pages/ResetPassword'
 import GuestRoutes from './utils/GuestRoutes'
+import Users from './pages/Users'
 function App() {
 
     return (
@@ -15,6 +16,8 @@ function App() {
             <Router>
                 <Routes>
                     <Route exact path='/' element={<Home />} />
+
+                    <Route path='/Users' element={<Users/>}/>
 
                     {/* session-expired */}
                     
