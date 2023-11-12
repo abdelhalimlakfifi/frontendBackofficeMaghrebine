@@ -1,17 +1,18 @@
 import React from "react";
 
-import Logo from "../components/general/Logo";
-import SideImg  from "../components/general/SideImage"; 
-import ResetPassForm from "../components/resetPassword/ResetPassForm"
+import SetOtpCode from "../../components/InsertOtp/SetOtpCode";
+import Logo from "../../components/general/Logo";
+import SideImg  from "../../components/general/SideImage"; 
 
-function ResetPassword() {
+
+function confirmEmail() {
     return (
         <>
             <div className="w-full flex flex-col-reverse lg:flex-row">
                 <div className="w-full items-center flex h-[75vh] lg:h-[100vh]">
                     <div id="form" className=" lg:mx-[20%] w-full mx-6">
                         <Logo/>
-                        <ResetPassForm/>
+                        <SetOtpCode />
                     </div>
                 </div>
 
@@ -22,4 +23,4 @@ function ResetPassword() {
         </>
     );
 }
-export default ResetPassword
+export default confirmEmail

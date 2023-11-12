@@ -7,10 +7,11 @@ export const SidebarData = [
       items: [],
     },
     {
-      title: 'Organization',
-      link: '/Organization',
+      title: 'Categories',
+      link: '/categories-subcategories',
       icon: "pi pi-lock flex justify-center",
-      items: [{title:'Roles and Permissions', link:'/Roles-Permissions'}, {title:'Actions Log', link:'/Actions-Log'}],
+      // items: [{title:'Roles and Permissions', link:'/Roles-Permissions'}, {title:'Actions Log', link:'/Actions-Log'}],
+      items: [],
     },
     {
       title: 'Orders',

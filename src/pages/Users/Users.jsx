@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { ProductService } from "../components/Users/Usersdata"
+import { ProductService } from "../../components/Users/Usersdata"
 
 function Users() {
   const [products, setProducts] = useState([]);

@@ -1,33 +1,27 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
-import Login from './pages/Login'
-import ConfirmEmail from './pages/ConfirmEmail'
+import Login from './pages/Auth/Login'
+import ConfirmEmail from './pages/Auth/ConfirmEmail'
 import Profile from './pages/Profile'
 import ProtectedRoute from './utils/ProtectedRoutes';
-import InsertOtp from './pages/InsertOtp'
-import ResetPassword from './pages/ResetPassword'
+import InsertOtp from './pages/Auth/InsertOtp'
+import ResetPassword from './pages/Auth/ResetPassword'
 import GuestRoutes from './utils/GuestRoutes'
-import Users from './pages/Users'
+import Users from './pages/users/Users'
+import CategoriesAndSubCategories from './pages/CategoriesAndSubCategories/CategoriesAndSubCategories'
 function App() {
 
     return (
         <>
             <Router>
                 <Routes>
-                    <Route exact path='/' element={<Home />} />
-
-                    <Route path='/Users' element={<Users/>}/>
-
                     {/* session-expired */}
-                    
                     <Route path='/session-expired' element={
                         <GuestRoutes>
                             <h1>Hello from session Expired</h1>
                         </GuestRoutes>} 
                     />
-
-
                     <Route path='/unauthorized' element={
                             <GuestRoutes>
                                 <h1>Hello from Unauthorized</h1>
@@ -40,7 +34,6 @@ function App() {
                         </GuestRoutes>
                         } 
                     />
-
                     <Route path='/ConfirmEmail' element={
                         <ConfirmEmail />
                         } 
@@ -58,7 +51,26 @@ function App() {
                         </GuestRoutes>
                     } />
                     
+
+
                     {/* authenticated */}
+                    <Route exact path='/' element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    } />
+                    <Route path='/users' element={
+                        <ProtectedRoute>
+                            <Users/>
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path='/categories-subcategories' element={
+                        <ProtectedRoute>
+                            <CategoriesAndSubCategories />
+                        </ProtectedRoute>
+                    } />
+
                     <Route path='/profile' element={
                         <ProtectedRoute>
                             <Profile/>
