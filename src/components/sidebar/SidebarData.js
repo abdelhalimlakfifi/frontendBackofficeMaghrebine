@@ -14,10 +14,10 @@ export const SidebarData = [
       items: [],
     },
     {
-      title: 'Orders',
-      link: '/Orders',
+      title: 'Types',
+      link: '/types',
       icon: "pi pi-shopping-bag  flex justify-center",
-      items: [{title:'Orders List', link:'/Orders-List'}, {title:'Order Tracking', link:'/Order-Tracking'}],
+      items: [],
     },
     {
       title: 'Customers',
