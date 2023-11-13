@@ -9,7 +9,9 @@ import InsertOtp from './pages/Auth/InsertOtp'
 import ResetPassword from './pages/Auth/ResetPassword'
 import GuestRoutes from './utils/GuestRoutes'
 import Users from './pages/users/Users'
-import CategoriesAndSubCategories from './pages/CategoriesAndSubCategories/CategoriesAndSubCategories'
+import Categories from './pages/CategoriesAndSubCategories/Categories'
+import Types from './pages/types/Types'
+
 function App() {
 
     return (
@@ -67,7 +69,13 @@ function App() {
 
                     <Route path='/categories-subcategories' element={
                         <ProtectedRoute>
-                            <CategoriesAndSubCategories />
+                            <Categories />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path='/types' element={
+                        <ProtectedRoute>
+                            <Types />
                         </ProtectedRoute>
                     } />
 
