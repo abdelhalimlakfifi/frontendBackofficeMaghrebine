@@ -2,15 +2,16 @@ import React from "react";
 import { SidebarData } from "../sidebar/SidebarData";
 import SidebarSection from "../Sidebar/SidebarSection";
 import LogoIcon from "../../assets/Icons/Logo.svg";
+import { Button } from 'primereact/button';
 
 export default function Sidebar({isOpen}) {
   return (
 
-    <div className={`${isOpen ? "translate-x-0 duration-500" : "-translate-x-full duration-500"} lg:translate-x-0 shadow w-3/5 md:w-2/5 lg:w-1/5  h-full min-h-screen bg-white z-50`}>
+    <div className={`${isOpen ? "translate-x-0 duration-500" : "-translate-x-full duration-500"} fixed lg:static lg:translate-x-0 shadow w-3/5 md:w-2/5 lg:w-1/5  h-full min-h-screen bg-white z-50`}>
       <div className="flex flex-col justify-between h-full">
         <div>
           <div className="flex justify-center">
-            <img src={LogoIcon} alt="Logo" className="my-6" />
+            <img src={LogoIcon} alt="Logo" className="my-6 lg:w-48" />
           </div>
 
           {SidebarData.map((section, index) => (

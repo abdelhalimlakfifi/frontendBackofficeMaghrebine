@@ -23,10 +23,10 @@ export default function Layout({children}) {
         <div className="flex flex-raw md:flex-col h-screen">
             <div className="flex w-full  ">
                 <Sidebar isOpen={isOpen} />
-                <div className="flex flex-col w-full fixed lg:static lg:w-4/5 ">
+                <div className="flex flex-col w-full lg:w-4/5 ">
 
                     {isOpen && (
-                        <div className="w-full h-screen absolute bg-black opacity-80 z-50 duration-500 ease-in-out" onClick={closeSidebar}>
+                        <div className="w-full h-screen absolute bg-black opacity-80 z-40 duration-500 ease-in-out" onClick={closeSidebar}>
                         
                         </div>
                     )}
