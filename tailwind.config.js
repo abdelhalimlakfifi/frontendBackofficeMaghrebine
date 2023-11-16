@@ -16,7 +16,7 @@ export default {
         "custom-purple": "#655445",
         "gray-search-text" : "#9D9FA1",
         "gray-search-outline" : "#EAECF0",
-        "light-gold" : '#DBCAA0',
+        "light-gold" : '#bbab83',
         "figma-gray" : '#5A6A85',
         "brown-main" : '#655445'
         
