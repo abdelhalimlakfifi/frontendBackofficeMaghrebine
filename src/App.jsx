@@ -11,7 +11,7 @@ import GuestRoutes from './utils/GuestRoutes'
 import Users from './pages/users/Users'
 import Categories from './pages/CategoriesAndSubCategories/Categories'
 import Types from './pages/types/Types'
-
+import ProductStore from './pages/products/ProductStore'
 function App() {
 
     return (
@@ -77,6 +77,10 @@ function App() {
                         <ProtectedRoute>
                             <Types />
                         </ProtectedRoute>
+                    } />
+
+                    <Route path='/product-store' element={
+                        <ProductStore />
                     } />
 
                     <Route path='/profile' element={
