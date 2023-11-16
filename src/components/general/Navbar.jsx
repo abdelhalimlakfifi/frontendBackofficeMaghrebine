@@ -11,7 +11,7 @@ import LogoIcon from "../../assets/Icons/Logo.svg";
 export default function Navbar({handleMenuClick}) {
 
   return (
-    <nav className="flex items-center justify-between w-full px-2.5 relative lg:px-6 shadow py-2 md:py-3">
+    <nav className="flex items-center justify-between w-full px-2.5 lg:relative lg:px-6 shadow py-2 md:py-3">
 
       <div className="hidden lg:block w-full">
         <SearchBar />
