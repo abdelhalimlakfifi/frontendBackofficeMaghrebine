@@ -29,6 +29,11 @@ tailwind-utilities;
     .p-steps-number, .p-steps-title{
         color: #bbab83;
     }
+    .p-button{
+        background-color: #bbab83;
+        color: #fff !important;
+        border: 0 ;
+    }
 
 }
 
