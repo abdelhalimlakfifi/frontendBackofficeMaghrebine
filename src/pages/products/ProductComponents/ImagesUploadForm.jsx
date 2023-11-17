@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 
 import { FileUpload } from 'primereact/fileupload';
 
-export default function ImagesForm() {
+export default function ImagesUploadForm() {
     const [selectedCities, setSelectedCities] = useState(null);
     const cities = [
         { name: 'New York', code: 'NY' },
