@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../../layouts/layouts';
 import { Steps } from 'primereact/steps';
 import InformationsForm from './ProductComponents/InformationsForm';
-import ImagesForm from './ProductComponents/ImagesForm';
+import ImagesUploadForm from './ProductComponents/ImagesUploadForm';
 import FiltersStoreForm from './ProductComponents/FiltersStoreForm';
+import ImageFilters from './ProductComponents/ImageFilters';
 import { Button } from 'primereact/button';
 
 export default function ProductStore() {
@@ -11,9 +12,9 @@ export default function ProductStore() {
 
     const items = [
         { label: 'Information', command: () => {} },
-        { label: 'images', command: () => {} },
-        { label: 'Colors', command: () => {} },
-        { label: 'Filters', command: () => {} },
+        { label: 'images upload', command: () => {} },
+        { label: 'Image filters', command: () => {} },
+        { label: 'Size-Category-Type', command: () => {} },
     ];
 
     const handlePrevious = () => setActiveIndex(activeIndex - 1);
@@ -31,7 +32,7 @@ export default function ProductStore() {
         console.log(activeIndex);
     }, [activeIndex]);
 
-    const stepComponents = [InformationsForm, ImagesForm, FiltersStoreForm];
+    const stepComponents = [InformationsForm, ImagesUploadForm, ImageFilters, FiltersStoreForm];
 
     return (
         <Layout>
