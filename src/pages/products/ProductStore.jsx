@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../../layouts/layouts';
 import { Steps } from 'primereact/steps';
 import InformationsForm from './ProductComponents/InformationsForm';
-import ColorsAndImageForm from './ProductComponents/ColorsAndImageForm';
+import ImagesForm from './ProductComponents/ImagesForm';
 import FiltersStoreForm from './ProductComponents/FiltersStoreForm';
 import { Button } from 'primereact/button';
 
@@ -11,7 +11,8 @@ export default function ProductStore() {
 
     const items = [
         { label: 'Information', command: () => {} },
-        { label: 'Colors&images', command: () => {} },
+        { label: 'images', command: () => {} },
+        { label: 'Colors', command: () => {} },
         { label: 'Filters', command: () => {} },
     ];
 
@@ -30,7 +31,7 @@ export default function ProductStore() {
         console.log(activeIndex);
     }, [activeIndex]);
 
-    const stepComponents = [InformationsForm, ColorsAndImageForm, FiltersStoreForm];
+    const stepComponents = [InformationsForm, ImagesForm, FiltersStoreForm];
 
     return (
         <Layout>
