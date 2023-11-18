@@ -13,7 +13,6 @@ export default function ImagesUploadForm() {
     ];
     return (
 
-        
         <div className=' mt-12'>
             <div className=' flex flex-col md:flex-row w-full md:space-x-8'>
                 {/* Main image */}
