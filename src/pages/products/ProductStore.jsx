@@ -4,7 +4,7 @@ import { Steps } from 'primereact/steps';
 import InformationsForm from './ProductComponents/InformationsForm';
 import ImagesUploadForm from './ProductComponents/ImagesUploadForm';
 import FiltersStoreForm from './ProductComponents/FiltersStoreForm';
-import ImageFilters from './ProductComponents/ImageFilters';
+import ImageColorsFilters from './ProductComponents/ImageColorsFilters';
 import { Button } from 'primereact/button';
 
 export default function ProductStore() {
@@ -13,7 +13,7 @@ export default function ProductStore() {
     const items = [
         { label: 'Information', command: () => {} },
         { label: 'images upload', command: () => {} },
-        { label: 'Image filters', command: () => {} },
+        { label: 'Image/Colors filters', command: () => {} },
         { label: 'Size-Category-Type', command: () => {} },
     ];
 
@@ -32,7 +32,7 @@ export default function ProductStore() {
         console.log(activeIndex);
     }, [activeIndex]);
 
-    const stepComponents = [InformationsForm, ImagesUploadForm, ImageFilters, FiltersStoreForm];
+    const stepComponents = [InformationsForm, ImagesUploadForm, ImageColorsFilters, FiltersStoreForm];
 
     return (
         <Layout>
