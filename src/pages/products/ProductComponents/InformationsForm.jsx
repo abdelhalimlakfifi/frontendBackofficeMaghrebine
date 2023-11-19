@@ -6,6 +6,7 @@ import { Editor } from 'primereact/editor';
 
 export default function InformationsForm() {
     const [price, setPrice] = useState(0)
+    
     return (
         <div className=' my-2 flex flex-col space-y-6'>
             <div className='flex flex-col md:flex-row md:space-x-5'>
@@ -41,9 +42,6 @@ export default function InformationsForm() {
             <div>
                 <label htmlFor="title" className='font-bold block mb-2 '>Long Description</label>
                 <Editor style={{ height: '200px' }} className='w-full' />
-                <small id="title-help">
-                    Max is 255
-                </small>
             </div>
 
         </div>
