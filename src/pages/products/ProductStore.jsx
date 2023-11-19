@@ -11,7 +11,9 @@ export default function ProductStore() {
     const [data, setData] = useState();
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const childRef = useRef()
+    const nullRef = useRef();
+    const childRef = useRef();
+    
     const items = [
         { label: 'Information', command: () => {} },
         { label: 'images upload', command: () => {} },
@@ -49,7 +51,7 @@ export default function ProductStore() {
                     <div>
                         {stepComponents.map((FormComponent, index) => (
                             <div key={index} style={{ display: index === activeIndex ? 'block' : 'none' }}>
-                                <FormComponent ref={childRef} />
+                                <FormComponent ref={index === activeIndex ? childRef : nullRef} />
                             </div>
                         ))}
                     </div>

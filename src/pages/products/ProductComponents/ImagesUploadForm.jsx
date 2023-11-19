@@ -13,7 +13,7 @@ const ImagesUploadForm = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => ({
         getAlert() {
-            alert('getAlert from Child');
+            alert('getAlert from 2');
         },
     }));
 

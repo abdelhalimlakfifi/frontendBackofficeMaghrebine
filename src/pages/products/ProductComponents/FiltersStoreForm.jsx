@@ -19,7 +19,7 @@ const FiltersStoreForm = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => ({
         getAlert() {
-            alert('getAlert from Child');
+            alert('getAlert from 4');
         },
     }));
 
