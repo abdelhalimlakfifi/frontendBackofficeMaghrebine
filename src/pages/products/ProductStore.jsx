@@ -28,10 +28,6 @@ export default function ProductStore() {
         activeStep: { className: 'font-bold' },
     };
 
-    useEffect(() => {
-        console.log(activeIndex);
-    }, [activeIndex]);
-
     const stepComponents = [InformationsForm, ImagesUploadForm, ImageColorsFilters, FiltersStoreForm];
 
     return (
