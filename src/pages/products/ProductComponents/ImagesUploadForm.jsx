@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react'
-
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { FileUpload } from 'primereact/fileupload';
 
-export default function ImagesUploadForm() {
+const ImagesUploadForm = forwardRef((props, ref) => {
     const [selectedCities, setSelectedCities] = useState(null);
     const cities = [
         { name: 'New York', code: 'NY' },
@@ -11,8 +10,14 @@ export default function ImagesUploadForm() {
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
     ];
-    return (
 
+    useImperativeHandle(ref, () => ({
+        getAlert() {
+            alert('getAlert from Child');
+        },
+    }));
+
+    return (
         <div className=' mt-12'>
             <div className=' flex flex-col md:flex-row w-full md:space-x-8'>
                 {/* Main image */}
@@ -27,8 +32,6 @@ export default function ImagesUploadForm() {
                 </div>
             </div>
 
-
-
             <div className='card mt-4'>
                 <label htmlFor="filesUpload">Other images</label>
                 <FileUpload 
@@ -38,11 +41,11 @@ export default function ImagesUploadForm() {
                     multiple
                     accept="image/*"
                     maxFileSize={1000000}
-                    emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} 
+                    emptyTemplate={<p className="m-0">Drag and drop files here to upload.</p>} 
                 />
             </div>
-
         </div>
+    );
+});
 
-    )
-}
+export default ImagesUploadForm;

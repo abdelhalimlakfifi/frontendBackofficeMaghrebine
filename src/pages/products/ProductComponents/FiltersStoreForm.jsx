@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
-import { InputText } from "primereact/inputtext";
+import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
-import Marquee from "react-fast-marquee";
+import Marquee from 'react-fast-marquee';
 
-
-export default function FiltersStoreForm() {
-    const [price, setPrice] = useState(189)
+const FiltersStoreForm = forwardRef((props, ref) => {
+    const [price, setPrice] = useState(189);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedCities, setSelectedCities] = useState(null);
     const cities = [
@@ -17,6 +16,12 @@ export default function FiltersStoreForm() {
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
     ];
+
+    useImperativeHandle(ref, () => ({
+        getAlert() {
+            alert('getAlert from Child');
+        },
+    }));
 
     return (
         <div className=' flex flex-col space-y-6 my-12'>
@@ -103,4 +108,6 @@ export default function FiltersStoreForm() {
             </div>
         </div>
     )
-}
+});
+
+export default FiltersStoreForm;

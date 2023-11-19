@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Layout from '../../layouts/layouts';
 import { Steps } from 'primereact/steps';
 import InformationsForm from './ProductComponents/InformationsForm';
@@ -8,8 +8,10 @@ import ImageColorsFilters from './ProductComponents/ImageColorsFilters';
 import { Button } from 'primereact/button';
 
 export default function ProductStore() {
+    const [data, setData] = useState();
     const [activeIndex, setActiveIndex] = useState(0);
 
+    const childRef = useRef()
     const items = [
         { label: 'Information', command: () => {} },
         { label: 'images upload', command: () => {} },
@@ -18,7 +20,10 @@ export default function ProductStore() {
     ];
 
     const handlePrevious = () => setActiveIndex(activeIndex - 1);
-    const handleNext = () => setActiveIndex(activeIndex + 1);
+    const handleNext = () => {
+        childRef.current.getAlert()
+        setActiveIndex(activeIndex + 1)
+    };
 
     const isPreviousDisabled = activeIndex === 0;
     const isNextDisabled = activeIndex === items.length - 1;
@@ -38,15 +43,13 @@ export default function ProductStore() {
                     <Steps
                         model={items}
                         activeIndex={activeIndex}
-                        onSelect={(e) => setActiveIndex(e.index)}
-                        readOnly={false}
                         pt={stepStyles}
                     />
 
                     <div>
                         {stepComponents.map((FormComponent, index) => (
                             <div key={index} style={{ display: index === activeIndex ? 'block' : 'none' }}>
-                                <FormComponent />
+                                <FormComponent ref={childRef} />
                             </div>
                         ))}
                     </div>
