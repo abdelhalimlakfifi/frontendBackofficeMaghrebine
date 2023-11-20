@@ -17,11 +17,12 @@ import { InputSwitch } from "primereact/inputswitch";
 import {
   openNew,
   hideDialog,
-//   saveType,
-//   typeDialogFooter,
+  //   saveType,
+  //   typeDialogFooter,
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
+  handleFileChange,
   // chooseOptions,
   // uploadOptions,
   // cancelOptions,
@@ -36,11 +37,11 @@ import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 
 const CategoriesTable = () => {
+  const [showDataTable, setShowDataTable] = useState(false);
+
   const [imageName, setImageName] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const imageRef = useRef(null);
-
-  const [showDataTable, setShowDataTable] = useState(false);
 
   const toast = useRef(null);
   const dt = useRef(null);
@@ -70,7 +71,7 @@ const CategoriesTable = () => {
   const clearForm = () => {
     setFormData({
       name: "",
-      typeId: [], 
+      typeId: [],
       image: "",
       createdBy: null,
       updatedBy: null,
@@ -150,21 +151,6 @@ const CategoriesTable = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-
-    // Extract the file name
-    const fileName = file.name;
-
-    setImageName(fileName);
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImagePreview(event.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
   const typeIdOptions = formData.typeId.map((type, index) => ({
     label: type,
     value: type,
@@ -193,7 +179,7 @@ const CategoriesTable = () => {
           dataKey="_id"
           paginator
           rows={10}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10]}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
           selectionMode="checkbox"
@@ -228,7 +214,7 @@ const CategoriesTable = () => {
             accept="image/jpeg, image/png, image/gif"
             className="hidden"
             ref={imageRef}
-            onChange={handleFileChange}
+            onChange={(e) => handleFileChange(e, setImagePreview, setImageName)}
           />
 
           <label
@@ -417,7 +403,7 @@ const CategoriesTable = () => {
               id="createdAt"
               name="createdAt"
               // value={formData.createdAt}
-              value={new Date(formData.createdAt)}           
+              value={new Date(formData.createdAt)}
               showTime
               hourFormat="24"
               onChange={(e) =>
@@ -506,4 +492,3 @@ const CategoriesTable = () => {
 };
 
 export default CategoriesTable;
-
