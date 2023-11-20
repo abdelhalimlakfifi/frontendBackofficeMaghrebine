@@ -1,4 +1,3 @@
-// TypesTable.jsx
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
@@ -14,7 +13,7 @@ import { InputText } from "primereact/inputtext";
 import { FileUpload } from "primereact/fileupload";
 import { InputSwitch } from "primereact/inputswitch";
 
-// TypesTable.jsx
+// TableUtils.jsx
 import {
   openNew,
   hideDialog,

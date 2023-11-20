@@ -14,7 +14,7 @@ import { InputText } from "primereact/inputtext";
 import { FileUpload } from "primereact/fileupload";
 import { InputSwitch } from "primereact/inputswitch";
 
-// TypesTable.jsx
+// TableUtils.jsx
 import {
   openNew,
   hideDialog,
