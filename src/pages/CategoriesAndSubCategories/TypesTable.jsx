@@ -183,7 +183,7 @@ const TypesTable = () => {
           ref={dt}
           value={data}
           selection={selectedTypes}
-          onChange={(e) => setSelectedTypes(e.value)}
+          onSelectionChange={(e) => setSelectedTypes(e.value)}
           dataKey="_id"
           paginator
           rows={10}
@@ -477,5 +477,3 @@ const TypesTable = () => {
 };
 
 export default TypesTable;
-
-
