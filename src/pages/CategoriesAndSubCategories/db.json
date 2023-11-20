@@ -1,0 +1,305 @@
+{
+    "types": [
+      {
+        "id": "d1e9749b-7c66-4b8e-9360-11d8e431d742",
+        "_id": "ac9a1eaf-fce5-4d8b-80ac-d36ac871eced",
+        "name": "men",
+        "active": false,
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null
+      },
+      {
+        "id": "929f7434-d18a-43b2-afca-ecb7ac08c858",
+        "_id": "c71bc2a3-08f8-4bf7-9df3-c9a70d21033c",
+        "name": "sc",
+        "active": false,
+        "image": "Screenshot 2023-11-09 220633.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null
+      }
+    ],
+    "categories": [
+      {
+        "id": "42b88df3-12bb-4034-b90d-2c791f282cc2",
+        "_id": "fc3296f2-978c-463e-8277-e34e4828c3f3",
+        "name": "men",
+        "typeId": [
+          "123654789",
+          "125478963"
+        ],
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null
+      }
+    ],
+    "subCategories": [
+      {
+        "_id": "6542cc01d6408fcdd4d10369",
+        "name": "Rbati",
+        "typeId": [
+          "Array Element 1"
+        ],
+        "categorieId": [
+          "Array Element 1",
+          "Array Element 2"
+        ],
+        "active": true,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": "2023-11-01T22:06:57.214+00:00",
+        "updatedAt": "2023-11-01T22:26:17.494+00:00"
+      },
+      {
+        "_id": "7f3a9e05b9a817d62e9405d2",
+        "name": "Mojave",
+        "typeId": [
+          "Array Element 3"
+        ],
+        "categorieId": [
+          "Array Element 2"
+        ],
+        "active": true,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": "2023-11-03T14:45:22.789+00:00",
+        "updatedAt": "2023-11-03T15:12:33.221+00:00"
+      },
+      {
+        "_id": "a8e4fc2a7d8efcd52b1f6b12",
+        "name": "Azure",
+        "typeId": [
+          "Array Element 2"
+        ],
+        "categorieId": [
+          "Array Element 1",
+          "Array Element 3"
+        ],
+        "active": true,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": "2023-11-05T09:18:44.632+00:00",
+        "updatedAt": "2023-11-05T09:42:55.017+00:00"
+      },
+      {
+        "_id": "c3e2b0fd9b547ea19c3208ac",
+        "name": "Aurora",
+        "typeId": [
+          "Array Element 1",
+          "Array Element 3"
+        ],
+        "categorieId": [
+          "Array Element 2"
+        ],
+        "active": true,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": "2023-11-07T18:30:11.125+00:00",
+        "updatedAt": "2023-11-07T18:52:22.498+00:00"
+      },
+      {
+        "_id": "f6e9f63a40e28cf4a8fd4d57",
+        "name": "Cerulean",
+        "typeId": [
+          "Array Element 2",
+          "Array Element 3"
+        ],
+        "categorieId": [
+          "Array Element 1"
+        ],
+        "active": true,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": "2023-11-10T07:52:36.712+00:00",
+        "updatedAt": "2023-11-10T08:16:47.198+00:00"
+      },
+      {
+        "_id": "9c4c38a1bf4e6b2c4c3ae2f9",
+        "name": "Sapphire",
+        "typeId": [
+          "Array Element 1",
+          "Array Element 2",
+          "Array Element 3"
+        ],
+        "categorieId": [
+          "Array Element 3"
+        ],
+        "active": true,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": "2023-11-12T15:10:58.943+00:00",
+        "updatedAt": "2023-11-12T15:35:09.429+00:00"
+      },
+      {
+        "id": "50c0b27b-1dfc-4a30-a0f6-e0b8b7c76330",
+        "_id": "fb039176-5df5-4017-8a36-d24dc94360d8",
+        "name": "sc",
+        "typeId": [
+          "sc"
+        ],
+        "categorieId": [
+          "sc"
+        ],
+        "active": false,
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null,
+        "categorieIde": [
+          "c"
+        ]
+      },
+      {
+        "id": "7f663d2f-e7be-4cfe-a6d2-3e6e4ab85daa",
+        "_id": "514bc7f0-becc-41b9-bbd3-2713185554fe",
+        "name": "Autumn Hogan",
+        "typeId": [
+          "Lyle Flowers"
+        ],
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null,
+        "categorieId": [
+          "Patrick Rasmussen"
+        ],
+        "active": true
+      },
+      {
+        "id": "d1ced85b-4fc0-452f-a7aa-76f471e25903",
+        "_id": "c9a6524c-4e03-4740-98d1-f409864c349a",
+        "name": "men",
+        "typeId": [
+          "125478963"
+        ],
+        "categorieId": [
+          "258741369852"
+        ],
+        "active": true,
+        "image": "Screenshot 2023-11-18 231024.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null
+      },
+      {
+        "id": "324915ad-b9bf-4269-88e4-0faa0baa2e5f",
+        "_id": "49aaadea-f018-49f4-b1ba-bbeb510de0cf",
+        "name": "c",
+        "typeId": [
+          "c"
+        ],
+        "categorieId": [
+          "cc"
+        ],
+        "active": false,
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null
+      },
+      {
+        "id": "851ca424-28eb-4d06-86cc-ef1e01985c21",
+        "_id": "ce0d53b5-4e4b-408b-aa2b-7461f1c9236a",
+        "name": "cccccc",
+        "typeId": [
+          "scsc"
+        ],
+        "categorieId": [
+          "cs"
+        ],
+        "active": false,
+        "image": "Screenshot 2023-11-18 231024.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null
+      },
+      {
+        "id": "3065bf16-ad2c-4132-9304-6e668871063a",
+        "_id": "2de456b3-27d9-499b-8c04-bc6c20a56e1c",
+        "name": "s",
+        "typeId": [
+          "c"
+        ],
+        "categorieId": [
+          "c"
+        ],
+        "active": false,
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null
+      },
+      {
+        "id": "dfcc8159-993e-4c4b-ad95-bcfc70424958",
+        "_id": "3b98fb69-fa17-4675-8adf-42a2fd7f6407",
+        "name": "ax",
+        "typeId": [
+          "ax"
+        ],
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null,
+        "categorieId": [
+          "ax"
+        ]
+      },
+      {
+        "id": "d3b09cb8-b6a0-4819-9eb2-8f75284ea9e4",
+        "_id": "b50a660b-3924-4303-a1d2-0dba0b69b42c",
+        "name": "ax",
+        "typeId": [
+          "ax"
+        ],
+        "image": "women.png",
+        "createdBy": null,
+        "updatedBy": null,
+        "deletedAt": null,
+        "deletedBy": null,
+        "createdAt": null,
+        "updatedAt": null,
+        "categorieId": [
+          "ax"
+        ]
+      }
+    ]
+  }
