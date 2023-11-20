@@ -3,6 +3,7 @@ import Layout from "../../layouts/layouts";
 import { TabView, TabPanel } from "primereact/tabview";
 import { Toolbar } from 'primereact/toolbar';
 
+
 export default function CategoriesAndSubCategories() {
     
   return (
