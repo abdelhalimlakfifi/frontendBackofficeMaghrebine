@@ -23,6 +23,8 @@ import {
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
+  handleFileChange,
+  // onDelete
   // chooseOptions,
   // uploadOptions,
   // cancelOptions,
@@ -37,11 +39,11 @@ import SkeletonDataTable from "./SkeletonDataTable";
 import { Calendar } from "primereact/calendar";
 
 const TypesTable = () => {
+  const [showDataTable, setShowDataTable] = useState(false);
+
   const [imageName, setImageName] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const imageRef = useRef(null);
-
-  const [showDataTable, setShowDataTable] = useState(false);
 
   const toast = useRef(null);
   const dt = useRef(null);
@@ -97,6 +99,7 @@ const TypesTable = () => {
     fetchData();
   }, [submitted]);
 
+  // POST
   const handleSubmit = async () => {
     try {
       if (!formData.name || !imagePreview) {
@@ -117,7 +120,6 @@ const TypesTable = () => {
       // for my data
       const _id = uuidv4();
 
-      // Include only the image name in the newFormData object
       const newFormData = { id, _id, ...formData, image: fileName };
 
       const response = await axios.post(
@@ -130,7 +132,6 @@ const TypesTable = () => {
       setSubmitted(true);
       setNewDialogVisible(false);
 
-      // Show a success message using the Toast component
       toast.current.show({
         severity: "success",
         summary: "Success",
@@ -140,7 +141,6 @@ const TypesTable = () => {
     } catch (error) {
       console.error("Error submitting form:", error);
 
-      // Show an error message using the Toast component
       toast.current.show({
         severity: "error",
         summary: "Error",
@@ -150,19 +150,34 @@ const TypesTable = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  // DELETE Should fix it 
+  const handleDelete = async () => {
+    try {
+      console.log(selectedTypes);
+      // Extract the array of IDs from selectedTypes
+      const idsToDelete = selectedTypes.map((type) => type.id);
+      console.log(idsToDelete);
 
-    // Extract the file name
-    const fileName = file.name;
+      await axios.delete(`http://localhost:3000/types/${idsToDelete}`);
 
-    setImageName(fileName);
+      toast.current.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Types deleted successfully.",
+        life: 3000,
+      });
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImagePreview(event.target.result);
-    };
-    reader.readAsDataURL(file);
+      setSubmitted(true);
+      setSelectedTypes(null);
+    } catch (error) {
+      console.error("Error deleting types:", error);
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "An error occurred while deleting types.",
+        life: 3000,
+      });
+    }
   };
 
   return (
@@ -173,7 +188,8 @@ const TypesTable = () => {
         left={() =>
           leftToolbarTemplate(
             () => openNew(setSubmitted, setNewDialogVisible, setFormData),
-            selectedTypes
+            selectedTypes,
+            handleDelete
           )
         }
         right={() => rightToolbarTemplate(exportCSV, selectedTypes, dt)}
@@ -187,7 +203,7 @@ const TypesTable = () => {
           dataKey="_id"
           paginator
           rows={10}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10]}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
           selectionMode="checkbox"
@@ -221,7 +237,7 @@ const TypesTable = () => {
             accept="image/jpeg, image/png, image/gif"
             className="hidden"
             ref={imageRef}
-            onChange={handleFileChange}
+            onChange={(e) => handleFileChange(e, setImagePreview, setImageName)}
           />
 
           <label
