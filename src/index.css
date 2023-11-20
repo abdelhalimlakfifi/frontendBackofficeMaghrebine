@@ -17,3 +17,12 @@
   }
 }
 
+/* Checked state (green) */
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background: #22c55e;
+}
+
+/* Unchecked state (red) */
+.p-inputswitch .p-inputswitch-slider {
+  background: #ef4444;
+}
