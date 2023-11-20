@@ -6,7 +6,7 @@ import { Tag } from "primereact/tag";
 import { Dropdown } from "primereact/dropdown";
 
 
-export const handleFileChange = (e) => {
+export const handleFileChange = (e, setImagePreview, setImageName) => {
   const file = e.target.files[0];
 
   // Extract the file name
@@ -59,7 +59,7 @@ export const saveType = (
   setEditDialogVisible(false);
 };
 // -------------------------NEW + DELETE-------------------------
-export const leftToolbarTemplate = (openNew, selectedTypes) => (
+export const leftToolbarTemplate = (openNew, selectedTypes, onDelete) => (
   <div className="flex flex-wrap gap-2">
     <Button
       label="New"
@@ -72,7 +72,7 @@ export const leftToolbarTemplate = (openNew, selectedTypes) => (
       icon="pi pi-trash"
       severity="danger"
       disabled={!selectedTypes || !selectedTypes.length}
-      // onClick={() => Delete()}
+      onClick={() => onDelete()}
     />
   </div>
 );
