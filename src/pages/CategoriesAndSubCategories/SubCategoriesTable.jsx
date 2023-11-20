@@ -8,17 +8,14 @@ import { Toast } from "primereact/toast";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-
-// Image
-import { FileUpload } from "primereact/fileupload";
 import { InputSwitch } from "primereact/inputswitch";
 
 // TableUtils.jsx
 import {
   openNew,
   hideDialog,
-  saveType,
-  typeDialogFooter,
+  // saveType,
+  // typeDialogFooter,
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
@@ -26,7 +23,6 @@ import {
   // uploadOptions,
   // cancelOptions,
   // onFileUpload
-  handleFileChange
 } from "./TableUtils";
 
 import { dataSubCategorieTableColumns } from "./dataTableColumns";
@@ -37,10 +33,6 @@ import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 
 const SubCategoriesTable = () => {
-  const [imageName, setImageName] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const imageRef = useRef(null);
-
   const [showDataTable, setShowDataTable] = useState(false);
 
   const toast = useRef(null);
@@ -58,7 +50,6 @@ const SubCategoriesTable = () => {
     typeId: [],
     categorieId: [],
     active: false,
-    image: "",
     createdBy: null,
     updatedBy: null,
     deletedAt: null,
@@ -73,7 +64,6 @@ const SubCategoriesTable = () => {
       typeId: [],
       categorieId: [],
       active: false,
-      image: "",
       createdBy: null,
       updatedBy: null,
       deletedAt: null,
@@ -82,9 +72,6 @@ const SubCategoriesTable = () => {
       updatedAt: null,
     });
 
-    setImageName(null);
-    setImagePreview(null);
-    imageRef.current.value = null;
   };
 
   useEffect(() => {
@@ -103,7 +90,7 @@ const SubCategoriesTable = () => {
 
   const handleSubmit = async () => {
     try {
-      if (!formData.name || !imagePreview) {
+      if (!formData.name) {
         toast.current.show({
           severity: "error",
           summary: "Validation Error",
@@ -113,14 +100,12 @@ const SubCategoriesTable = () => {
         return;
       }
 
-      const fileName = imageName;
-
       // Generate a unique id for Server Json
       const id = uuidv4();
       // for my data
       const _id = uuidv4();
 
-      const newFormData = { id, _id, ...formData, image: fileName };
+      const newFormData = { id, _id, ...formData };
 
       const response = await axios.post(
         "http://localhost:3000/subCategories",
@@ -132,8 +117,6 @@ const SubCategoriesTable = () => {
       clearForm();
       setSubmitted(true);
       setNewDialogVisible(false);
-
-      clearForm();
 
       toast.current.show({
         severity: "success",
@@ -151,21 +134,6 @@ const SubCategoriesTable = () => {
         life: 3000,
       });
     }
-  };
-
- const handleFileChange = (e) => {
-    const file = e.target.files[0];
-  
-    // Extract the file name
-    const fileName = file.name;
-  
-    setImageName(fileName);
-  
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImagePreview(event.target.result);
-    };
-    reader.readAsDataURL(file);
   };
 
   const typeIdOptions = formData.typeId.map((type, index) => ({
@@ -201,7 +169,7 @@ const SubCategoriesTable = () => {
           dataKey="_id"
           paginator
           rows={10}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10]}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
           selectionMode="checkbox"
@@ -230,57 +198,6 @@ const SubCategoriesTable = () => {
         // )}
         onHide={() => hideDialog(setSubmitted, setNewDialogVisible)}
       >
-        <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
-          <input
-            type="file"
-            accept="image/jpeg, image/png, image/gif"
-            className="hidden"
-            ref={imageRef}
-            onChange={handleFileChange}
-          />
-
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2 text-center"
-            htmlFor="image"
-          >
-            Type Image <span className="text-red-600"> </span>
-          </label>
-
-          <div className="text-center">
-            <div
-              className="mt-2"
-              style={{ display: !imagePreview ? "block" : "none" }}
-            >
-              <img
-                src="./public/200x200.png"
-                className="w-40 h-40 m-auto rounded-full shadow"
-                alt="Profile"
-              />
-            </div>
-            <div
-              className="mt-2"
-              style={{ display: imagePreview ? "block" : "none" }}
-            >
-              <span
-                className="block w-40 h-40 rounded-full m-auto shadow"
-                style={{
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center center",
-                  backgroundImage: `url(${imagePreview})`,
-                }}
-              />
-            </div>
-            <button
-              type="button"
-              className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 mt-2 ml-3"
-              onClick={() => imageRef.current.click()}
-            >
-              Select New Image
-            </button>
-          </div>
-        </div>
-
         <div className="field mb-4">
           <label htmlFor="name" className="font-bold text-[#5A6A85]">
             Name
@@ -367,7 +284,6 @@ const SubCategoriesTable = () => {
         // )}
         onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
       >
-
         {/* Name */}
         <div className="p-field mb-4">
           <label htmlFor="name" className="font-bold text-[#5A6A85]">
