@@ -23,8 +23,13 @@ export default function ProductStore() {
 
     const handlePrevious = () => setActiveIndex(activeIndex - 1);
     const handleNext = () => {
-        childRef.current.getAlert()
-        setActiveIndex(activeIndex + 1)
+        console.log(childRef.current.submitedForm());
+
+        if(childRef.current.submitedForm().status)
+        {
+            setData(childRef.current.submitedForm().data)
+            setActiveIndex(activeIndex + 1)
+        }
     };
 
     const isPreviousDisabled = activeIndex === 0;
