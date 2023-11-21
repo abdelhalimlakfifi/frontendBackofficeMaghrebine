@@ -12,8 +12,8 @@ const ImagesUploadForm = forwardRef((props, ref) => {
     ];
 
     useImperativeHandle(ref, () => ({
-        getAlert() {
-            alert('getAlert from 2');
+        submitedForm() {
+            return { status: true };
         },
     }));
 

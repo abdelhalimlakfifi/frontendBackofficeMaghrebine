@@ -1,10 +1,35 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { MultiSelect } from 'primereact/multiselect';
+import ImageItem from './ImageItem';
+
 
 export default forwardRef((props, ref) => {
-    const [selectedCities, setSelectedCities] = useState(null);
-    const [selectedColor, setSelectedColor] = useState(null);
-    const cities = [
+    const [selectedColors, setSelectedColors] = useState([]);
+    const [errorIndex, setErrorIndex] = useState([]);
+    const [images, setImages] = useState([
+        { src:'https://via.placeholder.com/400x200' },
+        { src:'https://via.placeholder.com/400x200' },
+        { src:'https://via.placeholder.com/400x200' },
+        { src:'https://via.placeholder.com/400x200' },
+        { src:'https://via.placeholder.com/400x200' },
+        { src:'https://via.placeholder.com/400x200' },
+        { src:'https://via.placeholder.com/400x200' },
+        { src:'https://via.placeholder.com/400x200' },
+    ])
+
+
+    const handleColorChange = (color, index) => {
+        // Create a new copy of the images array
+        const updatedImages = [...images];
+        // Update the color property of the specific image
+        updatedImages[index] = { ...updatedImages[index], color: color };
+        // Update the state with the new copy of the images array
+        setImages(updatedImages);
+
+        console.log(updatedImages);
+    };
+
+    const colors = [
         { name: 'Blue' },
         { name: 'Red' },
         { name: 'Green' },
@@ -13,16 +38,27 @@ export default forwardRef((props, ref) => {
     ];
 
     useImperativeHandle(ref, () => ({
-        getAlert() {
-            alert('getAlert from 3');
+        submitedForm() {
+
+            const indicesWithoutColor = images.map((image, index) => (!image.color || image.color === '') ? index : -1)
+                .filter(index => index !== -1);
+            
+            setErrorIndex(indicesWithoutColor);
+
+            console.log(indicesWithoutColor.length);
+
+            if(indicesWithoutColor.length !== 0) {
+                return { status: false };
+            }
+            return { status: true };
         },
     }));
 
     return (
         <div className="mt-12">
             <div className="card flex justify-center">
-                <MultiSelect value={selectedCities} onChange={(e)=> setSelectedCities(e.value)}
-                    options={cities}
+                <MultiSelect value={selectedColors} onChange={(e)=> setSelectedColors(e.value)}
+                    options={colors}
                     optionLabel="name"
                     filter
                     placeholder="Select Color"
@@ -33,52 +69,17 @@ export default forwardRef((props, ref) => {
 
             <div className="mt-4">
                 <div className='grid grid-cols-3'>
-                    {Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index}
-                        className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                        <div key={index}
-                            className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                            <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href="#">
-                                <img className="object-cover" src="https://via.placeholder.com/400x200" alt="product image" />
-                            </div>
-                            <div className="mt-4 px-5 pb-5">
-                                <div className='mb-2'>
-                                    <ul
-                                        className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-                                        <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-                                            <div className="flex items-center ps-3">
-                                                <input id={`main-checkbox-${index}`} type="checkbox" value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
-                                                <label htmlFor={`main-checkbox-${index}`}
-                                                    className="w-full py-3 ms-2 text-sm font-medium text-gray-900 ">Main</label>
-                                            </div>
-                                        </li>
-                                        <li className="w-full">
-                                            <div className="flex items-center ps-3">
-                                                <input id={`secondary-checkbox-${index}`} type="checkbox" value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
-                                                <label htmlFor={`secondary-checkbox-${index}`}
-                                                    className="w-full py-3 ms-2 text-sm font-medium text-gray-900 ">Secondary</label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <label htmlFor={`color-select-${index}`}
-                                    className="block mb-2 text-sm font-medium text-gray-900">Color</label>
-                                <select id={`color-select-${index}`} value={selectedColor || "" } onChange={(e)=>
-                                    setSelectedColor(e.target.value)}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    >
-                                    <option value="">Choose image Color</option>
-                                    <option value="Blue">Blue</option>
-                                    <option value="Black">Black</option>
-                                    <option value="Green">Green</option>
-                                    <option value="Yellow">Yellow</option>
-                                </select>
-                            </div>
+                    {images.map((image, index) => (
+                        <div key={index}>
+                            <ImageItem 
+                                key={index}
+                                image={image}
+                                index={index}
+                                errorIndex={errorIndex}
+                                colors={selectedColors}
+                                onColorChange={handleColorChange}
+                            />
                         </div>
-                    </div>
                     ))}
                 </div>
             </div>
