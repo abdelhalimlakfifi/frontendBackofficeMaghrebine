@@ -26,8 +26,8 @@ return (
                 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                 <option value="">Choose image Color</option>
-                {colors.map(color => (
-                    <option value={color.name}>{color.name}</option>
+                {colors.map((color, index) => (
+                    <option key={index} value={color.name}>{color.name}</option>
                 ))}
 
             </select>
