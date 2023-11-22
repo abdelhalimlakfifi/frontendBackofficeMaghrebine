@@ -9,12 +9,7 @@ export default forwardRef((props, ref) => {
     const [images, setImages] = useState([
         { src:'https://via.placeholder.com/400x200' },
         { src:'https://via.placeholder.com/400x200' },
-        { src:'https://via.placeholder.com/400x200' },
-        { src:'https://via.placeholder.com/400x200' },
-        { src:'https://via.placeholder.com/400x200' },
-        { src:'https://via.placeholder.com/400x200' },
-        { src:'https://via.placeholder.com/400x200' },
-        { src:'https://via.placeholder.com/400x200' },
+        
     ])
 
 
@@ -68,9 +63,9 @@ export default forwardRef((props, ref) => {
             </div>
 
             <div className="mt-4">
-                <div className='grid grid-cols-3'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
                     {images.map((image, index) => (
-                        <div key={index}>
+                        <div key={index} className='flex justify-center'>
                             <ImageItem 
                                 key={index}
                                 image={image}
