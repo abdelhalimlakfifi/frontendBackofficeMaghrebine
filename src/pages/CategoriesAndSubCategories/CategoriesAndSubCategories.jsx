@@ -2,22 +2,22 @@ import React from "react";
 import Layout from "../../layouts/layouts";
 import { TabView, TabPanel } from "primereact/tabview";
 
-import TypesTable from "./TypesTable";
-import CategoriesTable from "./CategoriesTable";
-import SubCategoriesTable from "./SubCategoriesTable";
+import TypesCrud from "./TypesCrud";
+import CategoriesCrud from "./CategoriesCrud";
+import SubCategoriesCrud from "./SubCategoriesCrud";
 
 export default function CategoriesAndSubCategories() {
   return (
     <Layout>
       <TabView className="px-20 py-8 text-xs ">
         <TabPanel header="Types">
-          <TypesTable />
+          <TypesCrud />
         </TabPanel>
         <TabPanel header="Categories">
-          <CategoriesTable />
+          <CategoriesCrud />
         </TabPanel>
         <TabPanel header="Sub-Categories">
-          <SubCategoriesTable />
+          <SubCategoriesCrud />
         </TabPanel>
       </TabView>
     </Layout>
