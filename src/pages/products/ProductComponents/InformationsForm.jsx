@@ -19,7 +19,7 @@ const InformationsForm = forwardRef((props, ref) => {
         description: '',
     });
 
-    const [longDescription, setLongDescription] = useState();
+    const [longDescription, setLongDescription] = useState('');
     const titleLimits = 100;
     const descriptionLimit = 255;
 
@@ -61,14 +61,31 @@ const InformationsForm = forwardRef((props, ref) => {
 
             // If no errors, set longDescription in formData and return status: true with data
             setFormData({ ...formData, longDescription: longDescription });
+
+            localStorage.setItem('product_information', JSON.stringify({
+                title: formData.title,
+                price: formData.price,
+                description: formData.description,
+                longDescription: longDescription
+            }));
             return {
                 status: true,
-                data: formData,
-                longDescription: longDescription
+                step: 1,
             };
         },
     }));
 
+    const data = JSON.parse(localStorage.getItem('product_information'));
+
+    useEffect(() => {
+        setFormData({
+            title: data?.title || '',
+            price: data?.price || 0,
+            description: data?.description || '',
+        });
+
+        setLongDescription(data?.longDescription || '');
+    }, []);
     // JSX for the form
     return (
         <form>
@@ -134,7 +151,7 @@ const InformationsForm = forwardRef((props, ref) => {
                         Long Description
                     </label>
                     <Editor
-                        value={longDescription}
+                        value={longDescription || data?.longDescription || longDescription}
                         onTextChange={(e) => setLongDescription(e.htmlValue)}
                         style={{ height: '200px' }}
                         className="w-full"
