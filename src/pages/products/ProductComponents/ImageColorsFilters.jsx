@@ -21,7 +21,7 @@ export default forwardRef((props, ref) => {
         // Update the state with the new copy of the images array
         setImages(updatedImages);
 
-        console.log(updatedImages);
+        console.log(images);
     };
 
     const colors = [
