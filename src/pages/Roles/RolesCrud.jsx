@@ -77,10 +77,6 @@ const RolesCrud = () => {
       createdAt: null,
       updatedAt: null,
     });
-
-    setImageName(null);
-    setImagePreview(null);
-    imageRef.current.value = null;
   };
 
   useEffect(() => {
@@ -100,7 +96,7 @@ const RolesCrud = () => {
   // POST
   const handleSubmit = async () => {
     try {
-      if (!formData.name || !imagePreview) {
+      if (!formData.role || !formData.permessions) {
         toast.current.show({
           severity: "error",
           summary: "Validation Error",
@@ -110,18 +106,15 @@ const RolesCrud = () => {
         return;
       }
 
-      // Extract the file name from the image preview
-      const fileName = imageName;
-
       // Generate a unique id for Server Json
       const id = uuidv4();
       // for my data
       const _id = uuidv4();
 
-      const newFormData = { id, _id, ...formData, image: fileName };
+      const newFormData = { id, _id, ...formData };
 
       const response = await axios.post(
-        "http://localhost:3000/types",
+        "http://localhost:3000/roles",
         newFormData
       );
 

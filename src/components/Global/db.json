@@ -64,6 +64,34 @@
       "deletedBy": null,
       "createdAt": null,
       "updatedAt": null
+    },
+    {
+      "id": "2e2c60f5-37bd-4442-9492-374270510633",
+      "_id": "eea16ceb-39af-4f21-a859-42e77b958d90",
+      "role": "adsv",
+      "permessions": [
+        "sdv"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "e4db97ea-3a0a-4e1b-9538-f5f02902dfc7",
+      "_id": "2ce03f58-6f23-4855-a6f2-cd0695667f69",
+      "role": "/",
+      "permessions": [
+        "l"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
     }
   ],
   "categories": [
@@ -71,7 +99,9 @@
       "id": "1d727df7-84df-4d13-9b8b-4be8f9dafa3c",
       "_id": "f75bb981-1826-47e3-9d8a-f68e308a3692",
       "name": "jlaleb",
-      "typeId": ["women"],
+      "typeId": [
+        "women"
+      ],
       "image": "women.png",
       "createdBy": null,
       "updatedBy": null,
@@ -85,8 +115,13 @@
     {
       "_id": "6542cc01d6408fcdd4d10369",
       "name": "Rbati",
-      "typeId": ["Array Element 1"],
-      "categorieId": ["Array Element 1", "Array Element 2"],
+      "typeId": [
+        "Array Element 1"
+      ],
+      "categorieId": [
+        "Array Element 1",
+        "Array Element 2"
+      ],
       "active": true,
       "updatedBy": null,
       "deletedAt": null,
@@ -97,8 +132,12 @@
     {
       "_id": "7f3a9e05b9a817d62e9405d2",
       "name": "Mojave",
-      "typeId": ["Array Element 3"],
-      "categorieId": ["Array Element 2"],
+      "typeId": [
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 2"
+      ],
       "active": true,
       "updatedBy": null,
       "deletedAt": null,
@@ -109,8 +148,13 @@
     {
       "_id": "a8e4fc2a7d8efcd52b1f6b12",
       "name": "Azure",
-      "typeId": ["Array Element 2"],
-      "categorieId": ["Array Element 1", "Array Element 3"],
+      "typeId": [
+        "Array Element 2"
+      ],
+      "categorieId": [
+        "Array Element 1",
+        "Array Element 3"
+      ],
       "active": true,
       "updatedBy": null,
       "deletedAt": null,
@@ -121,8 +165,13 @@
     {
       "_id": "c3e2b0fd9b547ea19c3208ac",
       "name": "Aurora",
-      "typeId": ["Array Element 1", "Array Element 3"],
-      "categorieId": ["Array Element 2"],
+      "typeId": [
+        "Array Element 1",
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 2"
+      ],
       "active": true,
       "updatedBy": null,
       "deletedAt": null,
@@ -133,8 +182,13 @@
     {
       "_id": "f6e9f63a40e28cf4a8fd4d57",
       "name": "Cerulean",
-      "typeId": ["Array Element 2", "Array Element 3"],
-      "categorieId": ["Array Element 1"],
+      "typeId": [
+        "Array Element 2",
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 1"
+      ],
       "active": true,
       "updatedBy": null,
       "deletedAt": null,
@@ -145,8 +199,14 @@
     {
       "_id": "9c4c38a1bf4e6b2c4c3ae2f9",
       "name": "Sapphire",
-      "typeId": ["Array Element 1", "Array Element 2", "Array Element 3"],
-      "categorieId": ["Array Element 3"],
+      "typeId": [
+        "Array Element 1",
+        "Array Element 2",
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 3"
+      ],
       "active": true,
       "updatedBy": null,
       "deletedAt": null,
@@ -158,8 +218,12 @@
       "id": "3edb1aac-7b0f-49a6-9a75-e27cabdc369f",
       "_id": "8e452dfd-d2cb-4247-8623-024704446317",
       "name": "men",
-      "typeId": ["men"],
-      "categorieId": ["men"],
+      "typeId": [
+        "men"
+      ],
+      "categorieId": [
+        "men"
+      ],
       "active": false,
       "image": "men.png",
       "createdBy": null,
@@ -172,7 +236,7 @@
   ],
   "roles": [
     {
-      "id":"5454",
+      "id": "5454",
       "_id": "653a546d9324bf206f586d41",
       "role": "admiin",
       "permessions": [
@@ -184,6 +248,114 @@
       "deletedBy": null,
       "createdAt": "2023-11-01T22:06:57.214+00:00",
       "updatedAt": "2023-11-01T22:26:17.494+00:00"
+    },
+    {
+      "id": "5ad3ebae-573f-4eba-8c30-4b366da2e692",
+      "_id": "21aedd4d-1e5d-4848-9714-96a117490ca3",
+      "role": "sdv",
+      "permessions": [
+        "sdv"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "167f76de-51f3-4050-98ad-cc59a340207d",
+      "_id": "be0e068a-0fcc-4853-9fe3-497b029c7148",
+      "role": "f",
+      "permessions": [
+        "f"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "410b826c-f3bf-4beb-aa65-aa76eaf286c9",
+      "_id": "de8125ad-f7c2-458c-a128-cf9b0846cd5d",
+      "role": "fvfv",
+      "permessions": [
+        "fvad"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "c40e69c2-3ad2-456f-bd20-49b6582511d7",
+      "_id": "27d75c63-f0c8-4d7e-94e2-b77856baccf8",
+      "role": "dv",
+      "permessions": [
+        "fdv"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "f54d8802-16f8-48c3-b3fc-acd4f43212c5",
+      "_id": "70d102c5-6967-4c31-89b2-8ba0d068bce3",
+      "role": "dfvdfv",
+      "permessions": [
+        "dfv"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "74409b7a-198f-4063-8992-2b95a7d3768f",
+      "_id": "647f1933-ee92-4a2c-beb6-3c9f251279c3",
+      "role": "fdvdfv",
+      "permessions": [],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "b8bda61e-2890-488f-9f52-23f50b817231",
+      "_id": "cbf13abf-ed54-45e8-9101-3ae943045d0f",
+      "role": "ff",
+      "permessions": [
+        "f"
+      ],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "15d7fc37-15b8-4d6a-841c-7c1919672bce",
+      "_id": "d1def45f-58e5-4248-8ba1-99a34d506669",
+      "role": "f",
+      "permessions": [],
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
     }
   ]
 }
