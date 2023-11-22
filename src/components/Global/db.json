@@ -1,0 +1,189 @@
+{
+  "types": [
+    {
+      "id": "ddcb4856-a35f-48f8-9b87-a6c725bc7d3a",
+      "_id": "c4a5b053-0a38-4e37-a171-92290c713d79",
+      "name": "men",
+      "active": true,
+      "image": "men.png",
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "cdff693b-4ec2-470a-b19c-9ed2b2e5001a",
+      "_id": "3c67421c-72a3-40c7-ae20-1f9759629c16",
+      "name": "kids",
+      "active": true,
+      "image": "kids.png",
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "07352e26-31ed-4007-a440-fc754e0aed49",
+      "_id": "567b4375-b91f-4b6e-ba71-1d9efb167b35",
+      "name": "women",
+      "active": false,
+      "image": "women.png",
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "692bea6b-52ae-476d-a350-2c57af252974",
+      "_id": "f4018986-eb35-472d-ada1-6dc0774be6bd",
+      "name": "men",
+      "active": false,
+      "image": "kids.png",
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    },
+    {
+      "id": "7706ea8c-f505-4caf-b8fa-94f7546fc480",
+      "_id": "1b1d6431-7889-4356-b1b7-6e146cf04b5c",
+      "name": "asdasd",
+      "active": true,
+      "image": "Screenshot 2023-11-06 193046.png",
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    }
+  ],
+  "categories": [
+    {
+      "id": "1d727df7-84df-4d13-9b8b-4be8f9dafa3c",
+      "_id": "f75bb981-1826-47e3-9d8a-f68e308a3692",
+      "name": "jlaleb",
+      "typeId": ["women"],
+      "image": "women.png",
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    }
+  ],
+  "subCategories": [
+    {
+      "_id": "6542cc01d6408fcdd4d10369",
+      "name": "Rbati",
+      "typeId": ["Array Element 1"],
+      "categorieId": ["Array Element 1", "Array Element 2"],
+      "active": true,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00"
+    },
+    {
+      "_id": "7f3a9e05b9a817d62e9405d2",
+      "name": "Mojave",
+      "typeId": ["Array Element 3"],
+      "categorieId": ["Array Element 2"],
+      "active": true,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": "2023-11-03T14:45:22.789+00:00",
+      "updatedAt": "2023-11-03T15:12:33.221+00:00"
+    },
+    {
+      "_id": "a8e4fc2a7d8efcd52b1f6b12",
+      "name": "Azure",
+      "typeId": ["Array Element 2"],
+      "categorieId": ["Array Element 1", "Array Element 3"],
+      "active": true,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": "2023-11-05T09:18:44.632+00:00",
+      "updatedAt": "2023-11-05T09:42:55.017+00:00"
+    },
+    {
+      "_id": "c3e2b0fd9b547ea19c3208ac",
+      "name": "Aurora",
+      "typeId": ["Array Element 1", "Array Element 3"],
+      "categorieId": ["Array Element 2"],
+      "active": true,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": "2023-11-07T18:30:11.125+00:00",
+      "updatedAt": "2023-11-07T18:52:22.498+00:00"
+    },
+    {
+      "_id": "f6e9f63a40e28cf4a8fd4d57",
+      "name": "Cerulean",
+      "typeId": ["Array Element 2", "Array Element 3"],
+      "categorieId": ["Array Element 1"],
+      "active": true,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": "2023-11-10T07:52:36.712+00:00",
+      "updatedAt": "2023-11-10T08:16:47.198+00:00"
+    },
+    {
+      "_id": "9c4c38a1bf4e6b2c4c3ae2f9",
+      "name": "Sapphire",
+      "typeId": ["Array Element 1", "Array Element 2", "Array Element 3"],
+      "categorieId": ["Array Element 3"],
+      "active": true,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": "2023-11-12T15:10:58.943+00:00",
+      "updatedAt": "2023-11-12T15:35:09.429+00:00"
+    },
+    {
+      "id": "3edb1aac-7b0f-49a6-9a75-e27cabdc369f",
+      "_id": "8e452dfd-d2cb-4247-8623-024704446317",
+      "name": "men",
+      "typeId": ["men"],
+      "categorieId": ["men"],
+      "active": false,
+      "image": "men.png",
+      "createdBy": null,
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": null,
+      "updatedAt": null
+    }
+  ],
+  "roles": [
+    {
+      "id":"5454",
+      "_id": "653a546d9324bf206f586d41",
+      "role": "admiin",
+      "permessions": [
+        "read",
+        "write"
+      ],
+      "updatedBy": null,
+      "deletedAt": null,
+      "deletedBy": null,
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00"
+    }
+  ]
+}
