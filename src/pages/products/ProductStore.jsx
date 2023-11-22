@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Layout from '../../layouts/layouts';
 import { Steps } from 'primereact/steps';
 import InformationsForm from './ProductComponents/InformationsForm';
@@ -8,8 +8,10 @@ import ImageColorsFilters from './ProductComponents/ImageColorsFilters';
 import { Button } from 'primereact/button';
 
 export default function ProductStore() {
-    const [data, setData] = useState();
+    // const [data, setData] = useState({});
     const [activeIndex, setActiveIndex] = useState(0);
+    
+
 
     const nullRef = useRef();
     const childRef = useRef();
@@ -22,12 +24,9 @@ export default function ProductStore() {
     ];
 
     const handlePrevious = () => setActiveIndex(activeIndex - 1);
-    const handleNext = () => {
-        console.log(childRef.current.submitedForm());
-
+    const handleNext = async () => {
         if(childRef.current.submitedForm().status)
         {
-            setData(childRef.current.submitedForm().data)
             setActiveIndex(activeIndex + 1)
         }
     };
@@ -47,6 +46,8 @@ export default function ProductStore() {
 
     const stepComponents = [InformationsForm, ImagesUploadForm, ImageColorsFilters, FiltersStoreForm];
 
+
+    
     return (
         <Layout>
             <div className='mx-4 lg:mx-32 mt-8 min-h-[80vh] md:min-h-[88vh] flex flex-col justify-between'>
