@@ -32,6 +32,11 @@ export default function ProductStore() {
         }
     };
 
+    const handleSubmit = () => {
+        console.log(childRef.current.submitedForm());
+        console.log('submit');
+    }
+
     const isPreviousDisabled = activeIndex === 0;
     const isNextDisabled = activeIndex === items.length - 1;
 
@@ -72,11 +77,10 @@ export default function ProductStore() {
                         className='bg-light-gold border-light-gold'
                     />
                     <Button
-                        disabled={isNextDisabled}
-                        onClick={handleNext}
-                        label='Next'
+                        onClick={ isNextDisabled ? handleSubmit  : handleNext}
+                        label={isNextDisabled ? 'Submit' : 'Next'}
                         iconPos='right'
-                        icon='pi pi-angle-right'
+                        icon={isNextDisabled ? '' : 'pi pi-angle-right'}
                         className='bg-light-gold border-light-gold'
                     />
                 </div>
