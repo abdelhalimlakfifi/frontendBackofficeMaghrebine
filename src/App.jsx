@@ -1,93 +1,117 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import './App.css'
-import Home from './pages/Home'
-import Login from './pages/Auth/Login'
-import ConfirmEmail from './pages/Auth/ConfirmEmail'
-import Profile from './pages/Profile'
-import ProtectedRoute from './utils/ProtectedRoutes';
-import InsertOtp from './pages/Auth/InsertOtp'
-import ResetPassword from './pages/Auth/ResetPassword'
-import GuestRoutes from './utils/GuestRoutes'
-import Users from './pages/users/Users'
-import CategoriesAndSubCategories from './pages/CategoriesAndSubCategories/CategoriesAndSubCategories'
-import Types from './pages/types/Types'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Home from "./pages/Home";
+import Login from "./pages/Auth/Login";
+import ConfirmEmail from "./pages/Auth/ConfirmEmail";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./utils/ProtectedRoutes";
+import InsertOtp from "./pages/Auth/InsertOtp";
+import ResetPassword from "./pages/Auth/ResetPassword";
+import GuestRoutes from "./utils/GuestRoutes";
+import Users from "./pages/users/Users";
+import CategoriesAndSubCategories from "./pages/CategoriesAndSubCategories/CategoriesAndSubCategories";
+import Types from "./pages/types/Types";
+import Roles from "./pages/Roles/Roles";
 
 function App() {
+  return (
+    <>
+      <Router>
+        <Routes>
+          {/* session-expired */}
+          <Route
+            path="/session-expired"
+            element={
+              <GuestRoutes>
+                <h1>Hello from session Expired</h1>
+              </GuestRoutes>
+            }
+          />
+          <Route
+            path="/unauthorized"
+            element={
+              <GuestRoutes>
+                <h1>Hello from Unauthorized</h1>
+              </GuestRoutes>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <GuestRoutes>
+                <Login />
+              </GuestRoutes>
+            }
+          />
+          <Route path="/ConfirmEmail" element={<ConfirmEmail />} />
+          <Route
+            path="/InsertOtp"
+            element={
+              <GuestRoutes>
+                <InsertOtp />
+              </GuestRoutes>
+            }
+          />
+          <Route
+            path="/ResetPassword"
+            element={
+              <GuestRoutes>
+                <ResetPassword />
+              </GuestRoutes>
+            }
+          />
 
-    return (
-        <>
-            <Router>
-                <Routes>
-                    {/* session-expired */}
-                    <Route path='/session-expired' element={
-                        <GuestRoutes>
-                            <h1>Hello from session Expired</h1>
-                        </GuestRoutes>} 
-                    />
-                    <Route path='/unauthorized' element={
-                            <GuestRoutes>
-                                <h1>Hello from Unauthorized</h1>
-                            </GuestRoutes>
-                        } 
-                    />
-                    <Route path='/login' element={
-                        <GuestRoutes>
-                            <Login />
-                        </GuestRoutes>
-                        } 
-                    />
-                    <Route path='/ConfirmEmail' element={
-                        <ConfirmEmail />
-                        } 
-                    />
-                    <Route path='/InsertOtp' element={
-                        <GuestRoutes>
-                            <InsertOtp />
-                        </GuestRoutes>
-                        } 
-                    />
-                    <Route path='/ResetPassword' element={
+          {/* authenticated */}
+          <Route
+            exact
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <Users />
+              </ProtectedRoute>
+            }
+          />
 
-                        <GuestRoutes>
-                            <ResetPassword />
-                        </GuestRoutes>
-                    } />
-                    
+          <Route
+            path="/categories-subcategories"
+            element={<CategoriesAndSubCategories />}
+          />
 
+          <Route
+            path="/roles"
+            element={<Roles />}
+          />
 
-                    {/* authenticated */}
-                    <Route exact path='/' element={
-                        <ProtectedRoute>
-                            <Home />
-                        </ProtectedRoute>
-                    } />
-                    <Route path='/users' element={
-                        <ProtectedRoute>
-                            <Users/>
-                        </ProtectedRoute>
-                    } />
+          <Route
+            path="/types"
+            element={
+              <ProtectedRoute>
+                <Types />
+              </ProtectedRoute>
+            }
+          />
 
-                    <Route path='/categories-subcategories' element={
-                        
-                            <CategoriesAndSubCategories />
-                    } />
-
-                    <Route path='/types' element={
-                        <ProtectedRoute>
-                            <Types />
-                        </ProtectedRoute>
-                    } />
-
-                    <Route path='/profile' element={
-                        <ProtectedRoute>
-                            <Profile/>
-                        </ProtectedRoute>
-                    } />
-                    {/* authenticated */}
-                </Routes>
-            </Router>
-        </>
-    )
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          {/* authenticated */}
+        </Routes>
+      </Router>
+    </>
+  );
 }
 
-export default App
+export default App;
