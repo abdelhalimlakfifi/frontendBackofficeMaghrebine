@@ -8,33 +8,32 @@ import { Toast } from "primereact/toast";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 
 // Image
 import { FileUpload } from "primereact/fileupload";
 import { InputSwitch } from "primereact/inputswitch";
 
-// TableUtils.jsx
-import {
-  openNew,
-  hideDialog,
-  //   saveType,
-  //   typeDialogFooter,
-  leftToolbarTemplate,
-  rightToolbarTemplate,
-  exportCSV,
-  handleFileChange,
-  // chooseOptions,
-  // uploadOptions,
-  // cancelOptions,
-  // onFileUpload,
-} from "../../components/Global/TableUtils";
+// UpdateAt CreatedAt DeletedAt
+import DateCDU from "../../components/Global/DateCDU";
 
+// Data Column
 import { dataCategorieTableColumns } from "../../components/Global/dataTableColumns";
 
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
-import { Calendar } from "primereact/calendar";
-import { Dropdown } from "primereact/dropdown";
+
+// TableUtils.jsx
+import {
+  openNew,
+  hideDialog,
+  leftToolbarTemplate,
+  rightToolbarTemplate,
+  exportCSV,
+  handleFileChange,
+} from "../../components/Global/TableUtils";
+
+
 
 const CategoriesCrud = () => {
   const [showDataTable, setShowDataTable] = useState(false);
@@ -57,10 +56,10 @@ const CategoriesCrud = () => {
     name: "",
     typeId: [],
     image: "",
-    createdBy: null,
-    updatedBy: null,
+    createdBy: "",
+    updatedBy: "",
+    deletedBy: "",
     deletedAt: null,
-    deletedBy: null,
     createdAt: null,
     updatedAt: null,
   });
@@ -73,10 +72,10 @@ const CategoriesCrud = () => {
       name: "",
       typeId: [],
       image: "",
-      createdBy: null,
-      updatedBy: null,
+      createdBy: "",
+      updatedBy: "",
+      deletedBy: "",
       deletedAt: null,
-      deletedBy: null,
       createdAt: null,
       updatedAt: null,
     });
@@ -380,112 +379,7 @@ const CategoriesCrud = () => {
           />
         </div>
 
-        {/* Created By & Created At */}
-        <div className="flex items-center justify-between p-field mb-4 space-x-4">
-          <div className="flex-1">
-            <label htmlFor="createdBy" className="font-bold text-[#5A6A85]">
-              Created By
-            </label>
-            <InputText
-              id="createdBy"
-              name="createdBy"
-              value={formData.createdBy}
-              onChange={(e) =>
-                setFormData({ ...formData, createdBy: e.target.value })
-              }
-            />
-          </div>
-          <div className="flex-1">
-            <label htmlFor="createdAt" className="font-bold text-[#5A6A85]">
-              Created At
-            </label>
-            <Calendar
-              id="createdAt"
-              name="createdAt"
-              // value={formData.createdAt}
-              value={new Date(formData.createdAt)}
-              showTime
-              hourFormat="24"
-              onChange={(e) =>
-                setFormData({ ...formData, createdAt: e.target.value })
-              }
-              readOnly
-            />
-          </div>
-        </div>
-
-        {/* Updated By & Updated At */}
-        <div className="flex items-center justify-between p-field mb-4 space-x-4">
-          <div className="flex-1">
-            <label htmlFor="updatedBy" className="font-bold text-[#5A6A85]">
-              Updated By
-            </label>
-            <InputText
-              id="updatedBy"
-              name="updatedBy"
-              value={formData.updatedBy}
-              onChange={(e) =>
-                setFormData({ ...formData, updatedBy: e.target.value })
-              }
-            />
-          </div>
-          <div className="flex-1">
-            <label htmlFor="updatedAt" className="font-bold text-[#5A6A85]">
-              Updated At
-            </label>
-            <Calendar
-              id="updatedAt"
-              name="updatedAt"
-              value={new Date(formData.updatedAt)}
-              // showIcon
-              showTime
-              hourFormat="24"
-              onChange={(e) =>
-                setFormData({ ...formData, updatedAt: e.target.value })
-              }
-              readOnly
-            />
-          </div>
-        </div>
-
-        {/* Deleted By & Deleted At */}
-        <div className="flex items-center justify-between p-field mb-4 space-x-4">
-          <div className="flex-1">
-            <label htmlFor="deletedBy" className="font-bold text-[#5A6A85]">
-              Deleted By
-            </label>
-            <InputText
-              id="deletedBy"
-              name="deletedBy"
-              value={formData.deletedBy}
-              onChange={(e) =>
-                setFormData({ ...formData, deletedBy: e.target.value })
-              }
-            />
-          </div>
-          <div className="flex-1">
-            <label htmlFor="deletedAt" className="font-bold text-[#5A6A85]">
-              Deleted At
-            </label>
-            <Calendar
-              id="deletedAt"
-              name="deletedAt"
-              value={
-                formData.deletedAt !== null
-                  ? new Date(formData.deletedAt)
-                  : null
-              }
-              showIcon
-              // showIcon
-              showTime
-              hourFormat="24"
-              onChange={(e) =>
-                setFormData({ ...formData, deletedAt: e.target.value })
-              }
-              readOnly
-            />
-          </div>
-        </div>
+        <DateCDU formData={formData} setFormData={setFormData} />
       </Dialog>
     </div>
   );
