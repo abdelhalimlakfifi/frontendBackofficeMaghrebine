@@ -1,112 +1,32 @@
 {
   "types": [
     {
-      "id": "ddcb4856-a35f-48f8-9b87-a6c725bc7d3a",
-      "_id": "c4a5b053-0a38-4e37-a171-92290c713d79",
-      "name": "men",
-      "active": true,
-      "image": "men.png",
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "cdff693b-4ec2-470a-b19c-9ed2b2e5001a",
-      "_id": "3c67421c-72a3-40c7-ae20-1f9759629c16",
-      "name": "kids",
+      "id": "62267083-d7c9-4bfc-bed9-96e3e5485204",
+      "_id": "d2682584-cd11-4db1-ac5a-aa9e0f5b8bbe",
+      "name": "Kids",
       "active": true,
       "image": "kids.png",
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "07352e26-31ed-4007-a440-fc754e0aed49",
-      "_id": "567b4375-b91f-4b6e-ba71-1d9efb167b35",
-      "name": "women",
-      "active": false,
-      "image": "women.png",
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "692bea6b-52ae-476d-a350-2c57af252974",
-      "_id": "f4018986-eb35-472d-ada1-6dc0774be6bd",
-      "name": "men",
-      "active": false,
-      "image": "kids.png",
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "7706ea8c-f505-4caf-b8fa-94f7546fc480",
-      "_id": "1b1d6431-7889-4356-b1b7-6e146cf04b5c",
-      "name": "asdasd",
-      "active": true,
-      "image": "Screenshot 2023-11-06 193046.png",
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "2e2c60f5-37bd-4442-9492-374270510633",
-      "_id": "eea16ceb-39af-4f21-a859-42e77b958d90",
-      "role": "adsv",
-      "permessions": [
-        "sdv"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "e4db97ea-3a0a-4e1b-9538-f5f02902dfc7",
-      "_id": "2ce03f58-6f23-4855-a6f2-cd0695667f69",
-      "role": "/",
-      "permessions": [
-        "l"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
+      "deletedAt": "2023-11-01T22:06:57.214+00:00",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
       "updatedAt": null
     }
   ],
   "categories": [
     {
-      "id": "1d727df7-84df-4d13-9b8b-4be8f9dafa3c",
-      "_id": "f75bb981-1826-47e3-9d8a-f68e308a3692",
-      "name": "jlaleb",
+      "id": "ff2e8424-1dec-4390-8fdd-3728f11fb9b0",
+      "_id": "b4ee8cb7-a81d-4caf-bf62-7e53d70080d4",
+      "name": "Jelaba",
       "typeId": [
-        "women"
+        "Kids"
       ],
-      "image": "women.png",
-      "createdBy": null,
-      "updatedBy": null,
+      "image": "kids.png",
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
       "deletedAt": null,
-      "deletedBy": null,
       "createdAt": null,
       "updatedAt": null
     }
@@ -123,11 +43,12 @@
         "Array Element 2"
       ],
       "active": true,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
       "createdAt": "2023-11-01T22:06:57.214+00:00",
-      "updatedAt": "2023-11-01T22:26:17.494+00:00"
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
     },
     {
       "_id": "7f3a9e05b9a817d62e9405d2",
@@ -139,11 +60,11 @@
         "Array Element 2"
       ],
       "active": true,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": "2023-11-03T14:45:22.789+00:00",
-      "updatedAt": "2023-11-03T15:12:33.221+00:00"
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
     },
     {
       "_id": "a8e4fc2a7d8efcd52b1f6b12",
@@ -156,11 +77,11 @@
         "Array Element 3"
       ],
       "active": true,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": "2023-11-05T09:18:44.632+00:00",
-      "updatedAt": "2023-11-05T09:42:55.017+00:00"
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
     },
     {
       "_id": "c3e2b0fd9b547ea19c3208ac",
@@ -173,11 +94,11 @@
         "Array Element 2"
       ],
       "active": true,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": "2023-11-07T18:30:11.125+00:00",
-      "updatedAt": "2023-11-07T18:52:22.498+00:00"
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
     },
     {
       "_id": "f6e9f63a40e28cf4a8fd4d57",
@@ -190,11 +111,11 @@
         "Array Element 1"
       ],
       "active": true,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": "2023-11-10T07:52:36.712+00:00",
-      "updatedAt": "2023-11-10T08:16:47.198+00:00"
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
     },
     {
       "_id": "9c4c38a1bf4e6b2c4c3ae2f9",
@@ -208,152 +129,43 @@
         "Array Element 3"
       ],
       "active": true,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": "2023-11-12T15:10:58.943+00:00",
-      "updatedAt": "2023-11-12T15:35:09.429+00:00"
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
     },
     {
-      "id": "3edb1aac-7b0f-49a6-9a75-e27cabdc369f",
-      "_id": "8e452dfd-d2cb-4247-8623-024704446317",
-      "name": "men",
+      "id": "f854a084-1a48-4df8-ba22-948135d5095f",
+      "_id": "2dcb7097-85ae-4477-82d9-afa4bbb76cd3",
+      "name": "Rbati",
       "typeId": [
-        "men"
+        "Kids"
       ],
       "categorieId": [
-        "men"
+        "Jelaba"
       ],
-      "active": false,
-      "image": "men.png",
-      "createdBy": null,
-      "updatedBy": null,
+      "active": true,
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
       "deletedAt": null,
-      "deletedBy": null,
       "createdAt": null,
       "updatedAt": null
     }
   ],
   "roles": [
     {
-      "id": "5454",
-      "_id": "653a546d9324bf206f586d41",
-      "role": "admiin",
+      "id": "000589e1-8e3a-4dbb-90cc-8d6c96b3fb8c",
+      "_id": "3d761647-a369-4e8b-b94e-b8452f8313f7",
+      "role": "admin",
       "permessions": [
-        "read",
         "write"
       ],
-      "updatedBy": null,
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
       "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": "2023-11-01T22:06:57.214+00:00",
-      "updatedAt": "2023-11-01T22:26:17.494+00:00"
-    },
-    {
-      "id": "5ad3ebae-573f-4eba-8c30-4b366da2e692",
-      "_id": "21aedd4d-1e5d-4848-9714-96a117490ca3",
-      "role": "sdv",
-      "permessions": [
-        "sdv"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "167f76de-51f3-4050-98ad-cc59a340207d",
-      "_id": "be0e068a-0fcc-4853-9fe3-497b029c7148",
-      "role": "f",
-      "permessions": [
-        "f"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "410b826c-f3bf-4beb-aa65-aa76eaf286c9",
-      "_id": "de8125ad-f7c2-458c-a128-cf9b0846cd5d",
-      "role": "fvfv",
-      "permessions": [
-        "fvad"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "c40e69c2-3ad2-456f-bd20-49b6582511d7",
-      "_id": "27d75c63-f0c8-4d7e-94e2-b77856baccf8",
-      "role": "dv",
-      "permessions": [
-        "fdv"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "f54d8802-16f8-48c3-b3fc-acd4f43212c5",
-      "_id": "70d102c5-6967-4c31-89b2-8ba0d068bce3",
-      "role": "dfvdfv",
-      "permessions": [
-        "dfv"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "74409b7a-198f-4063-8992-2b95a7d3768f",
-      "_id": "647f1933-ee92-4a2c-beb6-3c9f251279c3",
-      "role": "fdvdfv",
-      "permessions": [],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "b8bda61e-2890-488f-9f52-23f50b817231",
-      "_id": "cbf13abf-ed54-45e8-9101-3ae943045d0f",
-      "role": "ff",
-      "permessions": [
-        "f"
-      ],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
-      "createdAt": null,
-      "updatedAt": null
-    },
-    {
-      "id": "15d7fc37-15b8-4d6a-841c-7c1919672bce",
-      "_id": "d1def45f-58e5-4248-8ba1-99a34d506669",
-      "role": "f",
-      "permessions": [],
-      "createdBy": null,
-      "updatedBy": null,
-      "deletedAt": null,
-      "deletedBy": null,
       "createdAt": null,
       "updatedAt": null
     }
