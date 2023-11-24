@@ -1,7 +1,6 @@
 // TypesTable.jsx
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -22,18 +21,19 @@ import { dataTypeTableColumns } from "../../components/Global/dataTableColumns";
 
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
-
+import { useNavigate } from "react-router-dom";
 // TableUtils.jsx
 import {
   openNew,
   hideDialog,
-  saveType,
   typeDialogFooter,
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
   handleFileChange,
 } from "../../components/Global/TableUtils";
+
+import { get } from "../../utils/request";
 
 const TypesCrud = () => {
   const [showDataTable, setShowDataTable] = useState(false);
@@ -64,6 +64,8 @@ const TypesCrud = () => {
     updatedAt: null,
   });
 
+  const navigate = useNavigate();
+
   const clearForm = () => {
     setFormData({
       name: "",
@@ -77,103 +79,100 @@ const TypesCrud = () => {
       updatedAt: null,
     });
 
-    setImageName(null);
+    // setImageName(null);
     setImagePreview(null);
-    imageRef.current.value = null;
+    // imageRef.current.value = null;
   };
 
+  // GET
   useEffect(() => {
+    const unauthorizedCallback = () => {
+      // This function will be called if the request is unauthorized (status code 401)
+      alert("Unauthorized access! Redirecting to login.");
+      // You can also use react-router's useNavigate here
+      navigate("/login");
+    };
+
     const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/types");
-        setData(response.data);
-        setShowDataTable(true);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      const token = JSON.parse(localStorage.getItem("user")).token;
+      console.log(token);
+      const data = await get(
+        "http://localhost:3000/api/type/",
+        token,
+        unauthorizedCallback
+      );
+      setData(data);
+      setShowDataTable(true);
     };
 
     fetchData();
-  }, [submitted]);
+  }, [submitted, setData, setShowDataTable]);
 
   // POST
   const handleSubmit = async () => {
+    const role = JSON.parse(localStorage.getItem("user")).role;
+    console.log(role);
+    
     try {
-      if (!formData.name || !imagePreview) {
+      if (!formData.name || imageRef.current.files.length === 0) {
+        // If name, image, or active status is not provided, show an error message
         toast.current.show({
           severity: "error",
           summary: "Validation Error",
-          detail: "all Fields are required.",
-          life: 3000,
+          detail: "Please enter Name, Image, and select Active status.",
         });
         return;
       }
 
-      // Extract the file name from the image preview
-      const fileName = imageName;
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("active", formData.active);
 
-      // Generate a unique id for Server Json
-      const id = uuidv4();
-      // for my data
-      const _id = uuidv4();
+      if (imageRef.current.files.length > 0) {
+        formDataToSend.append("image", imageRef.current.files[0]);
+      }
 
-      const newFormData = { id, _id, ...formData, image: fileName };
-
+      // Make a request to your backend API endpoint using axios
       const response = await axios.post(
-        "http://localhost:3000/types",
-        newFormData
+        "http://localhost:3000/api/type/store",
+        formDataToSend
       );
 
-      console.log("Response:", response.data);
-      clearForm();
-      setSubmitted(true);
-      setNewDialogVisible(false);
+      // Handle the successful response, e.g., show a success message
+      console.log("Type added successfully:", response.data);
 
+      // Show success toast
       toast.current.show({
         severity: "success",
         summary: "Success",
         detail: "Type added successfully.",
-        life: 3000,
       });
-    } catch (error) {
-      console.error("Error submitting form:", error);
 
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An error occurred while submitting the form.",
-        life: 3000,
-      });
+      clearForm();
+      setSubmitted(true);
+      setNewDialogVisible(false);
+    } catch (error) {
+      // Handle the error response, e.g., show an error message
+      console.error("Error adding type:", error.message);
     }
   };
 
-  // DELETE Should fix it
-  const handleDelete = async () => {
+  // DELETE
+  const handleDelete = async (rowData) => {
+    console.log(rowData);
     try {
-      console.log(selectedTypes);
-      // Extract the array of IDs from selectedTypes
-      const idsToDelete = selectedTypes.map((type) => type.id);
-      console.log(idsToDelete);
+      const response = await axios.delete(
+        `http://localhost:3000/api/type/delete/${rowData._id}`,
+        {}
+      );
 
-      await axios.delete(`http://localhost:3000/types/${idsToDelete}`);
-
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Types deleted successfully.",
-        life: 3000,
-      });
-
-      setSubmitted(true);
-      setSelectedTypes(null);
+      if (response.status === 200) {
+        console.log("deleted successfully");
+        setSubmitted(true);
+        // You might want to refresh your data or take other actions here
+      }
     } catch (error) {
-      console.error("Error deleting types:", error);
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An error occurred while deleting types.",
-        life: 3000,
-      });
+      console.error("Error deleting type", error);
     }
   };
 
@@ -205,11 +204,13 @@ const TypesCrud = () => {
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
           selectionMode="checkbox"
         >
-          {dataTypeTableColumns(setFormData, setEditDialogVisible).map(
-            (col, index) => (
-              <Column key={index} {...col} />
-            )
-          )}
+          {dataTypeTableColumns(
+            setFormData,
+            setEditDialogVisible,
+            handleDelete
+          ).map((col, index) => (
+            <Column key={index} {...col} />
+          ))}
         </DataTable>
       ) : (
         <SkeletonDataTable />
@@ -222,10 +223,10 @@ const TypesCrud = () => {
         header="Add Type"
         modal
         className="p-fluid"
-        // footer={typeDialogFooter(
-        //   () => hideDialog(setSubmitted, setNewDialogVisible),
-        //   () => saveType(setSubmitted, setNewDialogVisible)
-        // )}
+        footer={typeDialogFooter(
+          () => hideDialog(setSubmitted, setNewDialogVisible),
+          handleSubmit
+        )}
         onHide={() => hideDialog(setSubmitted, setNewDialogVisible)}
       >
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
@@ -251,7 +252,7 @@ const TypesCrud = () => {
             >
               <img
                 src="./public/200x200.png"
-                className="w-40 h-40 m-auto rounded-full shadow"
+                className="w-40 h-40 m-auto shadow"
                 alt="Profile"
               />
             </div>
@@ -260,7 +261,7 @@ const TypesCrud = () => {
               style={{ display: imagePreview ? "block" : "none" }}
             >
               <span
-                className="block w-40 h-40 rounded-full m-auto shadow"
+                className="block w-40 h-40 m-auto shadow"
                 style={{
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
@@ -303,19 +304,12 @@ const TypesCrud = () => {
           <InputSwitch
             id="active"
             checked={formData.active}
-            onChange={(e) => setFormData({ ...formData, active: e.value })}
+            onChange={(e) => {
+              console.log("Switch value:", e.value);
+              setFormData({ ...formData, active: e.value });
+            }}
             className="ml-2 w-12"
           />
-        </div>
-
-        <div className="text-center mt-4">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
         </div>
       </Dialog>
 
@@ -327,8 +321,8 @@ const TypesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setEditDialogVisible),
-          () => saveType(setSubmitted, setEditDialogVisible)
+          () => hideDialog(setSubmitted, setEditDialogVisible)
+          // () => saveType(setSubmitted, setEditDialogVisible)
         )}
         onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
       >
@@ -383,6 +377,45 @@ const TypesCrud = () => {
 
         <DateCDU formData={formData} setFormData={setFormData} />
       </Dialog>
+
+      {/* <Dialog
+        visible={deleteTypetDialog}
+        style={{ width: "32rem" }}
+        breakpoints={{ "960px": "75vw", "641px": "90vw" }}
+        header="Confirm"
+        modal
+        footer={deleteTypeDialogFooter}
+        onHide={hideDeleteTypeDialog}
+      >
+        <div className="confirmation-content">
+          <i
+            className="pi pi-exclamation-triangle mr-3"
+            style={{ fontSize: "2rem" }}
+          />
+
+          <span>Are you sure you want to delete?</span>
+        </div>
+      </Dialog>
+
+      <Dialog
+        visible={deleteProductsDialog}
+        style={{ width: "32rem" }}
+        breakpoints={{ "960px": "75vw", "641px": "90vw" }}
+        header="Confirm"
+        modal
+        footer={deleteProductsDialogFooter}
+        onHide={hideDeleteProductsDialog}
+      >
+        <div className="confirmation-content">
+          <i
+            className="pi pi-exclamation-triangle mr-3"
+            style={{ fontSize: "2rem" }}
+          />
+          {product && (
+            <span>Are you sure you want to delete the selected products?</span>
+          )}
+        </div>
+      </Dialog> */}
     </>
   );
 };
