@@ -13,31 +13,17 @@ tailwind-utilities;
 
 
 @layer components {
-    .p-password-input {
-        width: 100%;
-    }
-
-    .p-steps-number, .p-steps-title {
-        font-weight: 700;
-    }
-
-    .p-steps-current > a > .p-steps-number {
-        background-color: #bbab83;
-        color: #fff !important;
-    }
-
-    .p-steps-number, .p-steps-title{
-        color: #bbab83;
-    }
-    .p-button{
-        background-color: #bbab83;
-        color: #fff !important;
-        border: 0 ;
-    }
-
-    
-
+  .p-password-input{
+    width: 100%;
+  }
 }
 
-/* background-color: #DBCAA0;
-        color: #685934; */
+/* Checked state (green) */
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background: #22c55e;
+}
+
+/* Unchecked state (red) */
+.p-inputswitch .p-inputswitch-slider {
+  background: #ef4444;
+}

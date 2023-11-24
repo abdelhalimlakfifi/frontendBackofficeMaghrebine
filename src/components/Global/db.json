@@ -1,0 +1,173 @@
+{
+  "types": [
+    {
+      "id": "62267083-d7c9-4bfc-bed9-96e3e5485204",
+      "_id": "d2682584-cd11-4db1-ac5a-aa9e0f5b8bbe",
+      "name": "Kids",
+      "active": true,
+      "image": "kids.png",
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
+      "deletedAt": "2023-11-01T22:06:57.214+00:00",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": null
+    }
+  ],
+  "categories": [
+    {
+      "id": "ff2e8424-1dec-4390-8fdd-3728f11fb9b0",
+      "_id": "b4ee8cb7-a81d-4caf-bf62-7e53d70080d4",
+      "name": "Jelaba",
+      "typeId": [
+        "Kids"
+      ],
+      "image": "kids.png",
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
+      "deletedAt": null,
+      "createdAt": null,
+      "updatedAt": null
+    }
+  ],
+  "subCategories": [
+    {
+      "_id": "6542cc01d6408fcdd4d10369",
+      "name": "Rbati",
+      "typeId": [
+        "Array Element 1"
+      ],
+      "categorieId": [
+        "Array Element 1",
+        "Array Element 2"
+      ],
+      "active": true,
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
+    },
+    {
+      "_id": "7f3a9e05b9a817d62e9405d2",
+      "name": "Mojave",
+      "typeId": [
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 2"
+      ],
+      "active": true,
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
+    },
+    {
+      "_id": "a8e4fc2a7d8efcd52b1f6b12",
+      "name": "Azure",
+      "typeId": [
+        "Array Element 2"
+      ],
+      "categorieId": [
+        "Array Element 1",
+        "Array Element 3"
+      ],
+      "active": true,
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
+    },
+    {
+      "_id": "c3e2b0fd9b547ea19c3208ac",
+      "name": "Aurora",
+      "typeId": [
+        "Array Element 1",
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 2"
+      ],
+      "active": true,
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
+    },
+    {
+      "_id": "f6e9f63a40e28cf4a8fd4d57",
+      "name": "Cerulean",
+      "typeId": [
+        "Array Element 2",
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 1"
+      ],
+      "active": true,
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
+    },
+    {
+      "_id": "9c4c38a1bf4e6b2c4c3ae2f9",
+      "name": "Sapphire",
+      "typeId": [
+        "Array Element 1",
+        "Array Element 2",
+        "Array Element 3"
+      ],
+      "categorieId": [
+        "Array Element 3"
+      ],
+      "active": true,
+      "updatedBy": "",
+      "deletedBy": "",
+      "createdAt": "2023-11-01T22:06:57.214+00:00",
+      "updatedAt": "2023-11-01T22:26:17.494+00:00",
+      "deletedAt": null
+    },
+    {
+      "id": "f854a084-1a48-4df8-ba22-948135d5095f",
+      "_id": "2dcb7097-85ae-4477-82d9-afa4bbb76cd3",
+      "name": "Rbati",
+      "typeId": [
+        "Kids"
+      ],
+      "categorieId": [
+        "Jelaba"
+      ],
+      "active": true,
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
+      "deletedAt": null,
+      "createdAt": null,
+      "updatedAt": null
+    }
+  ],
+  "roles": [
+    {
+      "id": "000589e1-8e3a-4dbb-90cc-8d6c96b3fb8c",
+      "_id": "3d761647-a369-4e8b-b94e-b8452f8313f7",
+      "role": "admin",
+      "permessions": [
+        "write"
+      ],
+      "createdBy": "",
+      "updatedBy": "",
+      "deletedBy": "",
+      "deletedAt": null,
+      "createdAt": null,
+      "updatedAt": null
+    }
+  ]
+}

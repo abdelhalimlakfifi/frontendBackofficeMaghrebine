@@ -17,7 +17,13 @@ export const SidebarData = [
       title: 'Types',
       link: '/types',
       icon: "pi pi-shopping-bag  flex justify-center",
-      items: [],
+      items: [{title:'Types List', link:'/categories-subcategories'}],
+    },
+    {
+      title: 'Roles',
+      link: '/roles',
+      icon: "pi pi-shopping-bag  flex justify-center",
+      items: [{title:'Roles List', link:'/roles'}],
     },
     {
       title: 'Customers',
