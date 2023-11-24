@@ -5,20 +5,22 @@ import { Button } from "primereact/button";
 import { Tag } from "primereact/tag";
 import { Dropdown } from "primereact/dropdown";
 
-
 export const handleFileChange = (e, setImagePreview, setImageName) => {
-  const file = e.target.files[0];
+  // const file = e.target.files[0];
+  const file = e.target.files && e.target.files[0];
 
-  // Extract the file name
-  const fileName = file.name;
+  if (file) {
+    // Extract the file name
+    const fileName = file.name;
 
-  setImageName(fileName);
+    setImageName(fileName);
 
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    setImagePreview(event.target.result);
-  };
-  reader.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImagePreview(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
 };
 
 export const openNew = (setSubmitted, setNewDialogVisible) => {
@@ -39,25 +41,44 @@ export const openNew = (setSubmitted, setNewDialogVisible) => {
   // });
 };
 
+// export const hideDialog = (
+//   setSubmitted,
+//   setNewDialogVisible,
+//   setEditDialogVisible
+// ) => {
+//   setSubmitted(false);
+//   setNewDialogVisible(false);
+//   setEditDialogVisible(false);
+// };
+
+// export const saveType = (
+//   setSubmitted,
+//   setNewDialogVisible,
+//   setEditDialogVisible
+// ) => {
+//   setSubmitted(true);
+//   setNewDialogVisible(false);
+//   setEditDialogVisible(false);
+// };
+
 export const hideDialog = (
   setSubmitted,
   setNewDialogVisible,
   setEditDialogVisible
 ) => {
   setSubmitted(false);
-  setNewDialogVisible(false);
-  setEditDialogVisible(false);
+  if (setNewDialogVisible) {
+    setNewDialogVisible(false);
+  }
+  if (setEditDialogVisible) {
+    setEditDialogVisible(false);
+  }
 };
 
-export const saveType = (
-  setSubmitted,
-  setNewDialogVisible,
-  setEditDialogVisible
-) => {
-  setSubmitted(true);
-  setNewDialogVisible(false);
-  setEditDialogVisible(false);
+export const saveType = (handleSubmit) => {
+  handleSubmit();
 };
+
 // -------------------------NEW + DELETE-------------------------
 export const leftToolbarTemplate = (openNew, selectedTypes, onDelete) => (
   <div className="flex flex-wrap gap-2">
@@ -96,7 +117,7 @@ export const exportCSV = (selectedTypes, dt) => {
 };
 
 // -------------------------FOOTER Dialog-------------------------
-export const typeDialogFooter = (hideDialog, saveType) => (
+export const typeDialogFooter = (hideDialog, handleSubmit) => (
   <>
     <Button
       label="Cancel"
@@ -104,10 +125,9 @@ export const typeDialogFooter = (hideDialog, saveType) => (
       outlined
       onClick={() => hideDialog()}
     />
-    <Button label="Save" icon="pi pi-check" onClick={() => saveType()} />
+    <Button label="Save" icon="pi pi-check" onClick={handleSubmit} />
   </>
 );
-
 
 // -------------------------TEMPLATE COLUMN TABLE-------------------------
 // -------------------------STATUS ACTIVE / INACTIVE-------------------------
@@ -117,12 +137,12 @@ export const statusBodyTemplate = (rowData) => {
   return <Tag value={statusText} severity={severity} />;
 };
 
-export const getSeverity = (status) => (status.active ? "success" : "danger"); 
+export const getSeverity = (status) => (status.active ? "success" : "danger");
 
 // -------------------------IMAGE-------------------------
 export const imageBodyTemplate = (rowData) => (
   <img
-    src={`public/${rowData.image}`}
+    src={`http://localhost:3000/api/${rowData.image}`}
     alt={rowData.image}
     className="shadow-2 border-round"
     style={{ width: "64px" }}
@@ -133,6 +153,7 @@ export const imageBodyTemplate = (rowData) => (
 export const actionBodyTemplate = (
   setFormData,
   setEditDialogVisible,
+  handleDelete,
   rowData
 ) => (
   <>
@@ -148,14 +169,13 @@ export const actionBodyTemplate = (
       rounded
       outlined
       severity="danger"
-      // onClick={() => confirmDeleteType(rowData)}
+      onClick={() => handleDelete(rowData)}
     />
   </>
 );
 
 export const editType = (setFormData, setEditDialogVisible, rowData) => {
-
-    setFormData({ ...rowData });
+  setFormData({ ...rowData });
   setEditDialogVisible(true);
 };
 
@@ -211,7 +231,7 @@ export const permessionsBodyTemplate = (rowData) => {
   }
 
   return <span>{permessions}</span>;
-}
+};
 // -------------------------TEMPLATE COLUMN TABLE-------------------------
 
 export const chooseOptions = {
@@ -233,6 +253,3 @@ export const cancelOptions = {
   className:
     "custom-cancel-btn p-button-danger p-button-rounded p-button-outlined",
 };
-
-
-
