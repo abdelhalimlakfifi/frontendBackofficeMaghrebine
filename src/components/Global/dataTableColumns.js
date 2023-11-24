@@ -12,7 +12,7 @@ import {
   } from "./TableUtils";
   
   // Types-Categories-SubCategories
-  export const dataTypeTableColumns = (setFormData, setEditDialogVisible) => [
+  export const dataTypeTableColumns = (setFormData, setEditDialogVisible, handleDelete) => [
     { selectionMode: "multiple", exportable: false },
     {
       field: "name",
@@ -39,10 +39,18 @@ import {
       header: "Created By",
       sortable: true,
       style: { minWidth: "8rem" },
+      body: (rowData) => {
+        if (rowData.createdBy) {
+          const { first_name, last_name } = rowData.createdBy;
+          return `${first_name} ${last_name}`;
+        } else {
+          return 'not available';
+        }
+      }
     },
     {
       body: (rowData) =>
-        actionBodyTemplate(setFormData, setEditDialogVisible, rowData),
+        actionBodyTemplate(setFormData, setEditDialogVisible, handleDelete, rowData),
       exportable: false,
       style: { minWidth: "12rem" },
     },
