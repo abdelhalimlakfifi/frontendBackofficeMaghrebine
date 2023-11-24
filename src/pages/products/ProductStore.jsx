@@ -6,11 +6,19 @@ import ImagesUploadForm from './ProductComponents/ImagesUploadForm';
 import FiltersStoreForm from './ProductComponents/FiltersStoreForm';
 import ImageColorsFilters from './ProductComponents/ImageColorsFilters';
 import { Button } from 'primereact/button';
+import axios from 'axios';
 
 export default function ProductStore() {
     // const [data, setData] = useState({});
     const [activeIndex, setActiveIndex] = useState(0);
-    
+    const [backendData, setBackendData] = useState({})
+    useEffect(() => {
+        const getDataFromBackend = async () => {
+            const data = await axios.get('http://localhost:3000/api/product/create');
+            setBackendData(data.data);
+        }
+        getDataFromBackend();
+    }, []);
 
 
     const nullRef = useRef();
