@@ -62,9 +62,7 @@ function App() {
                         </ProtectedRoute>
                     } />
                     <Route path='/users' element={
-                        <ProtectedRoute>
                             <Users/>
-                        </ProtectedRoute>
                     } />
 
                     <Route path='/categories-subcategories' element={
