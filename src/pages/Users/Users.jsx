@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { ProductService } from "../../components/Users/Usersdata"
+import { UsersServices } from "./userData/user.data";
+import Layout from "../../layouts/layouts";
+
 
 function Users() {
   const [products, setProducts] = useState([]);
@@ -13,17 +15,19 @@ function Users() {
   ];
 
   useEffect(() => {
-    ProductService.getProductsMini().then((data) => setProducts(data));
+    console.log(UsersServices)
   }, []);
 
   return (
-    <div className="card">
-      <DataTable value={products} tableStyle={{ minWidth: "50rem" }}>
-        {columns.map((col, i) => (
-          <Column key={col.field} field={col.field} header={col.header} />
-        ))}
-      </DataTable>
-    </div>
+    <Layout>
+      <div className="card">
+        <DataTable value={products} tableStyle={{ minWidth: "50rem" }}>
+          {columns.map((col, i) => (
+            <Column key={col.field} field={col.field} header={col.header} />
+          ))}
+        </DataTable>
+      </div>
+    </Layout>
   );
 }
 
