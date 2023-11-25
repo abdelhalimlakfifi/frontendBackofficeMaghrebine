@@ -1,16 +1,22 @@
+import { get } from '../../../utils/request'
+import axios from 'axios';
 export const UsersServices = {
-    getUsersData() {
-
+    async getUsersData(unauthorizedCallback) {
+        // const token = JSON.parse(localStorage.getItem('user')).token;
         try {
+            // const data = await get("http://localhost:3000/api/product/upload-images", token,unauthorizedCallback );
+            const response = await axios.get('http://localhost:3000/users');
             
+            return await response.data
         } catch (error) {
-            
+            console.log(error);
+            unauthorizedCallback()
         }
     },
 
 
-    getAllUsers() {
-        return Promise.resolve(this.getProductsData().slice(0, 5));
+    getAllUsers(unauthorizedCallback) {
+        return this.getUsersData(unauthorizedCallback);
     },
 
     
