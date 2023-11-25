@@ -12,106 +12,109 @@ import Users from "./pages/users/Users";
 import CategoriesAndSubCategories from "./pages/CategoriesAndSubCategories/CategoriesAndSubCategories";
 import Types from "./pages/types/Types";
 import Roles from "./pages/Roles/Roles";
-
+import AddUser from "./pages/Users/AddUser";
 function App() {
   return (
     <>
       <Router>
         <Routes>
           {/* session-expired */}
-          <Route
-            path="/session-expired"
-            element={
-              <GuestRoutes>
-                <h1>Hello from session Expired</h1>
-              </GuestRoutes>
-            }
-          />
-          <Route
-            path="/unauthorized"
-            element={
-              <GuestRoutes>
-                <h1>Hello from Unauthorized</h1>
-              </GuestRoutes>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <GuestRoutes>
-                <Login />
-              </GuestRoutes>
-            }
-          />
-          <Route path="/ConfirmEmail" element={<ConfirmEmail />} />
-          <Route
-            path="/InsertOtp"
-            element={
-              <GuestRoutes>
-                <InsertOtp />
-              </GuestRoutes>
-            }
-          />
-          <Route
-            path="/ResetPassword"
-            element={
-              <GuestRoutes>
-                <ResetPassword />
-              </GuestRoutes>
-            }
-          />
+            <Route
+                path="/session-expired"
+                element={
+                    <GuestRoutes>
+                        <h1>Hello from session Expired</h1>
+                    </GuestRoutes>
+                }
+            />
+            <Route
+                path="/unauthorized"
+                element={
+                    <GuestRoutes>
+                        <h1>Hello from Unauthorized</h1>
+                    </GuestRoutes>
+                }
+            />
+            <Route
+                path="/login"
+                element={
+                    <GuestRoutes>
+                        <Login />
+                    </GuestRoutes>
+                }
+            />
+            <Route path="/ConfirmEmail" element={<ConfirmEmail />} />
+            <Route
+                path="/InsertOtp"
+                element={
+                    <GuestRoutes>
+                        <InsertOtp />
+                    </GuestRoutes>
+                }
+            />
+            <Route
+                path="/ResetPassword"
+                element={
+                    <GuestRoutes>
+                        <ResetPassword />
+                    </GuestRoutes>
+                }
+            />
 
           {/* authenticated */}
-          <Route
-            exact
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/users"
-            element={
-              <ProtectedRoute>
-                <Users />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+                exact
+                path="/"
+                element={
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/users"
+                element={
+                    <Users />
+                }
+            />
 
-          <Route
-            path="/categories-subcategories"
-            element={
-              <ProtectedRoute>
-            <CategoriesAndSubCategories />
-            </ProtectedRoute>
-            }
-          />
+            <Route 
+                path="/add-user"
+                element={
+                    <AddUser />
+                }
+            />
+            <Route
+                path="/categories-subcategories"
+                element={
+                    <ProtectedRoute>
+                        <CategoriesAndSubCategories />
+                    </ProtectedRoute>
+                }
+            />
 
-          <Route
-            path="/roles"
-            element={<Roles />}
-          />
+            <Route
+                path="/roles"
+                element={<Roles />}
+            />
 
-          <Route
-            path="/types"
-            element={
-              <ProtectedRoute>
-                <Types />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+                path="/types"
+                element={
+                    <ProtectedRoute>
+                        <Types />
+                    </ProtectedRoute>
+                }
+            />
 
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          {/* authenticated */}
+            <Route
+                path="/profile"
+                element={
+                    <ProtectedRoute>
+                        <Profile />
+                    </ProtectedRoute>
+                }
+            />
         </Routes>
       </Router>
     </>
