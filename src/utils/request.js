@@ -19,7 +19,7 @@ export async function get(url, token, unauthorizedCallback ,...others){
             //   alert('Token is invalid')
             // }
             unauthorizedCallback()
-          }
+        }
     }
 }
 
