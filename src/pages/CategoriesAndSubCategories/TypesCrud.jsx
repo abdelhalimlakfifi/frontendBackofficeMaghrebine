@@ -1,5 +1,6 @@
 // TypesTable.jsx
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { DataTable } from "primereact/datatable";
@@ -21,7 +22,7 @@ import { dataTypeTableColumns } from "../../components/Global/dataTableColumns";
 
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
-import { useNavigate } from "react-router-dom";
+
 // TableUtils.jsx
 import {
   openNew,
@@ -95,7 +96,7 @@ const TypesCrud = () => {
 
     const fetchData = async () => {
       const token = JSON.parse(localStorage.getItem("user")).token;
-      console.log(token);
+
       const data = await get(
         "http://localhost:3000/api/type/",
         token,
@@ -112,8 +113,7 @@ const TypesCrud = () => {
   const handleSubmit = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    const role = user.role; 
-  
+
     try {
       if (!formData.name || imageRef.current.files.length === 0) {
         toast.current.show({
@@ -123,61 +123,62 @@ const TypesCrud = () => {
         });
         return;
       }
-  
+
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
       formDataToSend.append("active", formData.active);
-        // formDataToSend.append("role", role);
-  
+
       if (imageRef.current.files.length > 0) {
         formDataToSend.append("image", imageRef.current.files[0]);
       }
-  
-      // Make a request to your backend API endpoint using axios
+
       const response = await axios.post(
         "http://localhost:3000/api/type/store",
         formDataToSend,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            Role: role, // Add the role to the headers
           },
         }
       );
-  
+
       // Handle the successful response, e.g., show a success message
       console.log("Type added successfully:", response.data);
-  
+
       // Show success toast
       toast.current.show({
         severity: "success",
         summary: "Success",
         detail: "Type added successfully.",
       });
-  
+
       clearForm();
       setSubmitted(true);
       setNewDialogVisible(false);
     } catch (error) {
-      // Handle the error response, e.g., show an error message
       console.error("Error adding type:", error.message);
     }
   };
-  
 
   // DELETE
   const handleDelete = async (rowData) => {
-    console.log(rowData);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const { token, userId } = user;
+
     try {
       const response = await axios.delete(
         `http://localhost:3000/api/type/delete/${rowData._id}`,
-        {}
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            UserId: userId, // Add the userId to the headers
+          },
+        }
       );
 
       if (response.status === 200) {
         console.log("deleted successfully");
         setSubmitted(true);
-        // You might want to refresh your data or take other actions here
       }
     } catch (error) {
       console.error("Error deleting type", error);
@@ -280,7 +281,7 @@ const TypesCrud = () => {
             </div>
             <button
               type="button"
-              className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 mt-2 ml-3"
+              className="inline-flex mt-4  items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 "
               onClick={() => imageRef.current.click()}
             >
               Select New Image
