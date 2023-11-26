@@ -110,12 +110,12 @@ const TypesCrud = () => {
 
   // POST
   const handleSubmit = async () => {
-    const role = JSON.parse(localStorage.getItem("user")).role;
-    console.log(role);
-    
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user.token;
+    const role = user.role; 
+  
     try {
       if (!formData.name || imageRef.current.files.length === 0) {
-        // If name, image, or active status is not provided, show an error message
         toast.current.show({
           severity: "error",
           summary: "Validation Error",
@@ -123,31 +123,38 @@ const TypesCrud = () => {
         });
         return;
       }
-
+  
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
       formDataToSend.append("active", formData.active);
-
+        // formDataToSend.append("role", role);
+  
       if (imageRef.current.files.length > 0) {
         formDataToSend.append("image", imageRef.current.files[0]);
       }
-
+  
       // Make a request to your backend API endpoint using axios
       const response = await axios.post(
         "http://localhost:3000/api/type/store",
-        formDataToSend
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Role: role, // Add the role to the headers
+          },
+        }
       );
-
+  
       // Handle the successful response, e.g., show a success message
       console.log("Type added successfully:", response.data);
-
+  
       // Show success toast
       toast.current.show({
         severity: "success",
         summary: "Success",
         detail: "Type added successfully.",
       });
-
+  
       clearForm();
       setSubmitted(true);
       setNewDialogVisible(false);
@@ -156,6 +163,7 @@ const TypesCrud = () => {
       console.error("Error adding type:", error.message);
     }
   };
+  
 
   // DELETE
   const handleDelete = async (rowData) => {
