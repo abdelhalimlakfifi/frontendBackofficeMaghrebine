@@ -386,45 +386,6 @@ const TypesCrud = () => {
 
         <DateCDU formData={formData} setFormData={setFormData} />
       </Dialog>
-
-      {/* <Dialog
-        visible={deleteTypetDialog}
-        style={{ width: "32rem" }}
-        breakpoints={{ "960px": "75vw", "641px": "90vw" }}
-        header="Confirm"
-        modal
-        footer={deleteTypeDialogFooter}
-        onHide={hideDeleteTypeDialog}
-      >
-        <div className="confirmation-content">
-          <i
-            className="pi pi-exclamation-triangle mr-3"
-            style={{ fontSize: "2rem" }}
-          />
-
-          <span>Are you sure you want to delete?</span>
-        </div>
-      </Dialog>
-
-      <Dialog
-        visible={deleteProductsDialog}
-        style={{ width: "32rem" }}
-        breakpoints={{ "960px": "75vw", "641px": "90vw" }}
-        header="Confirm"
-        modal
-        footer={deleteProductsDialogFooter}
-        onHide={hideDeleteProductsDialog}
-      >
-        <div className="confirmation-content">
-          <i
-            className="pi pi-exclamation-triangle mr-3"
-            style={{ fontSize: "2rem" }}
-          />
-          {product && (
-            <span>Are you sure you want to delete the selected products?</span>
-          )}
-        </div>
-      </Dialog> */}
     </>
   );
 };
