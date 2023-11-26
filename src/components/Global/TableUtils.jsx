@@ -153,7 +153,7 @@ export const imageBodyTemplate = (rowData) => (
 export const actionBodyTemplate = (
   setFormData,
   setEditDialogVisible,
-  handleDelete,
+  openDeleteDialog,
   rowData
 ) => (
   <>
@@ -169,7 +169,7 @@ export const actionBodyTemplate = (
       rounded
       outlined
       severity="danger"
-      onClick={() => handleDelete(rowData)}
+      onClick={() => openDeleteDialog(rowData)}
     />
   </>
 );
