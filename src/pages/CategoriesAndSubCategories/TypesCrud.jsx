@@ -35,8 +35,29 @@ import {
 } from "../../components/Global/TableUtils";
 
 import { get } from "../../utils/request";
+import { Button } from "primereact/button";
 
 const TypesCrud = () => {
+  // ------------------------------to fix
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+
+  const openDeleteDialog = (rowData) => {
+    setSelectedRowData(rowData);
+    setDeleteDialogVisible(true);
+  };
+
+  const hideDeleteDialog = () => {
+    setSelectedRowData(null);
+    setDeleteDialogVisible(false);
+  };
+
+  const confirmDelete = async () => {
+    handleDelete(selectedRowData);
+    hideDeleteDialog();
+  };
+  // ------------------------------
+
   const [showDataTable, setShowDataTable] = useState(false);
 
   const [imageName, setImageName] = useState(null);
@@ -178,7 +199,6 @@ const TypesCrud = () => {
 
       if (response.status === 200) {
         console.log("deleted successfully");
-        setSubmitted(true);
       }
     } catch (error) {
       console.error("Error deleting type", error);
@@ -216,7 +236,7 @@ const TypesCrud = () => {
           {dataTypeTableColumns(
             setFormData,
             setEditDialogVisible,
-            handleDelete
+            openDeleteDialog
           ).map((col, index) => (
             <Column key={index} {...col} />
           ))}
@@ -385,6 +405,39 @@ const TypesCrud = () => {
         </div>
 
         <DateCDU formData={formData} setFormData={setFormData} />
+      </Dialog>
+
+      <Dialog
+        visible={deleteDialogVisible}
+        style={{ width: "25rem" }}
+        header="Confirm"
+        modal
+        className="p-fluid"
+        footer={
+          <div>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              className="p-button-text"
+              onClick={hideDeleteDialog}
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              className="p-button-text"
+              onClick={confirmDelete}
+            />
+          </div>
+        }
+        onHide={hideDeleteDialog}
+      >
+        <div className="confirmation-content">
+          <i
+            className="pi pi-exclamation-triangle p-mr-3"
+            style={{ fontSize: "2rem" }}
+          />
+          <span>Are you sure you want to delete the selected item(s)?</span>
+        </div>
       </Dialog>
     </>
   );
