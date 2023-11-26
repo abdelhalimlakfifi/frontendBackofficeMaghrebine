@@ -84,15 +84,12 @@ function App() {
             path="/categories-subcategories"
             element={
               <ProtectedRoute>
-            <CategoriesAndSubCategories />
-            </ProtectedRoute>
+                <CategoriesAndSubCategories />
+              </ProtectedRoute>
             }
           />
 
-          <Route
-            path="/roles"
-            element={<Roles />}
-          />
+          <Route path="/roles" element={<Roles />} />
 
           <Route
             path="/types"
