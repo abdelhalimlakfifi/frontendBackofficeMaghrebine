@@ -3,127 +3,54 @@ import { InputText } from "primereact/inputtext";
 import React from "react";
 
 const DateCDU = ({ formData, setFormData }) => {
+  const dateFields = [
+    { key: "createdBy", label: "Created By", dataKey: "createdAt" },
+    { key: "updatedBy", label: "Updated By", dataKey: "updatedAt" },
+    { key: "deletedBy", label: "Deleted By", dataKey: "deletedAt" },
+  ];
+
   return (
     <>
-      {/* Created By & Created At */}
-      <div className="flex items-center justify-between p-field mb-4 space-x-4">
-        <div className="flex-1">
-          <label htmlFor="createdBy" className="font-bold text-[#5A6A85]">
-            Created By
-          </label>
-          <InputText
-            id="createdBy"
-            name="createdBy"
-            value={formData.createdBy}
-            onChange={(e) =>
-              setFormData({ ...formData, createdBy: e.target.value })
-            }
-          />
+      {dateFields.map(({ key, label, dataKey }) => (
+        <div key={key} className="flex items-center justify-between p-field mb-4 space-x-4">
+          <div className="flex-1">
+            <label htmlFor={key} className="font-bold text-[#5A6A85]">
+              {label}
+            </label>
+            <InputText
+              id={key}
+              name={key}
+              value={formData[key] ? `${formData[key].first_name} ${formData[key].last_name}` : ''}
+              onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+            />
+          </div>
+          <div className="flex-1">
+            <label htmlFor={dataKey} className="font-bold text-[#5A6A85]">
+              {label} At
+            </label>
+            <Calendar
+              id={dataKey}
+              name={dataKey}
+              value={
+                formData[dataKey]
+                  ? new Date(formData[dataKey])
+                  : ''
+              }
+              showIcon
+              showTime
+              hourFormat="24"
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormData({
+                  ...formData,
+                  [dataKey]: value ? value : new Date().toISOString(),
+                });
+              }}
+              readOnly
+            />
+          </div>
         </div>
-        <div className="flex-1">
-          <label htmlFor="createdAt" className="font-bold text-[#5A6A85]">
-            Created At
-          </label>
-          <Calendar
-            id="createdAt"
-            name="createdAt"
-            value={
-              formData.createdAt ? new Date(formData.createdAt) : new Date()
-            }
-            showIcon
-            showTime
-            hourFormat="24"
-            onChange={(e) => {
-              const value = e.target.value;
-              setFormData({
-                ...formData,
-                createdAt: value ? value : new Date().toISOString(),
-              });
-            }}
-            readOnly
-          />
-        </div>
-      </div>
-
-      {/* Updated By & Updated At */}
-      <div className="flex items-center justify-between p-field mb-4 space-x-4">
-        <div className="flex-1">
-          <label htmlFor="updatedBy" className="font-bold text-[#5A6A85]">
-            Updated By
-          </label>
-          <InputText
-            id="updatedBy"
-            name="updatedBy"
-            value={formData.updatedBy}
-            onChange={(e) =>
-              setFormData({ ...formData, updatedBy: e.target.value })
-            }
-          />
-        </div>
-        <div className="flex-1">
-          <label htmlFor="updatedAt" className="font-bold text-[#5A6A85]">
-            Updated At
-          </label>
-          <Calendar
-            id="updatedAt"
-            name="updatedAt"
-            value={
-              formData.updatedAt ? new Date(formData.updatedAt) : new Date()
-            }
-            showIcon
-            showTime
-            hourFormat="24"
-            onChange={(e) => {
-              const value = e.target.value;
-              setFormData({
-                ...formData,
-                updatedAt: value ? value : new Date().toISOString(),
-              });
-            }}
-            readOnly
-          />
-        </div>
-      </div>
-
-      {/* Deleted By & Deleted At */}
-      <div className="flex items-center justify-between p-field mb-4 space-x-4">
-        <div className="flex-1">
-          <label htmlFor="deletedBy" className="font-bold text-[#5A6A85]">
-            Deleted By
-          </label>
-          <InputText
-            id="deletedBy"
-            name="deletedBy"
-            value={formData.deletedBy}
-            onChange={(e) =>
-              setFormData({ ...formData, deletedBy: e.target.value })
-            }
-          />
-        </div>
-        <div className="flex-1">
-          <label htmlFor="deletedAt" className="font-bold text-[#5A6A85]">
-            Deleted At
-          </label>
-          <Calendar
-            id="deletedAt"
-            name="deletedAt"
-            value={
-              formData.deletedAt ? new Date(formData.deletedAt) : new Date()
-            }
-            showIcon
-            showTime
-            hourFormat="24"
-            onChange={(e) => {
-              const value = e.target.value;
-              setFormData({
-                ...formData,
-                deletedAt: value ? value : new Date().toISOString(),
-              });
-            }}
-            readOnly
-          />
-        </div>
-      </div>
+      ))}
     </>
   );
 };

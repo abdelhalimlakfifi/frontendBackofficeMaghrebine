@@ -32,6 +32,7 @@ import {
   rightToolbarTemplate,
   exportCSV,
   handleFileChange,
+  // handleDeleteBySelecting,
 } from "../../components/Global/TableUtils";
 
 import { get } from "../../utils/request";
@@ -184,24 +185,65 @@ const TypesCrud = () => {
   // DELETE
   const handleDelete = async (rowData) => {
     const user = JSON.parse(localStorage.getItem("user"));
-    const { token, userId } = user;
+    const token = user.token;
 
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/type/delete/${rowData._id}`,
+        "http://localhost:3000/api/type/delete",
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            UserId: userId, // Add the userId to the headers
+          },
+          data: {
+            ids: [rowData._id], // Pass the ID in the request body
           },
         }
       );
 
       if (response.status === 200) {
         console.log("deleted successfully");
+
+        // Should update data after successful delete
       }
     } catch (error) {
       console.error("Error deleting type", error);
+    }
+  };
+
+  // DELETE BY SELECTION
+  const handleDeleteBySelecting = async (selectedTypes) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const { token } = user;
+    console.log("Deleting selected types :", selectedTypes);
+    try {
+      if (!selectedTypes || !selectedTypes.length) {
+        console.log("No types selected for deletion.");
+        return;
+      }
+
+      const idsToDelete = selectedTypes.map((type) => type._id);
+
+      const response = await axios.delete(
+        `http://localhost:3000/api/type/delete`,
+        {
+          data: { ids: idsToDelete },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Items deleted successfully:", idsToDelete);
+      } else {
+        console.error(
+          "Failed to delete types. Server returned:",
+          response.status,
+          response.data
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting types:", error.message);
     }
   };
 
@@ -214,7 +256,7 @@ const TypesCrud = () => {
           leftToolbarTemplate(
             () => openNew(setSubmitted, setNewDialogVisible, setFormData),
             selectedTypes,
-            handleDelete
+            () => handleDeleteBySelecting(selectedTypes)
           )
         }
         right={() => rightToolbarTemplate(exportCSV, selectedTypes, dt)}
@@ -230,7 +272,7 @@ const TypesCrud = () => {
           rows={10}
           rowsPerPageOptions={[5, 10]}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} types"
           selectionMode="checkbox"
         >
           {dataTypeTableColumns(
@@ -385,7 +427,10 @@ const TypesCrud = () => {
             id="name"
             name="name"
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, name: e.target.value });
+              console.log("FormData:", formData);
+            }}
           />
         </div>
 
@@ -436,7 +481,7 @@ const TypesCrud = () => {
             className="pi pi-exclamation-triangle p-mr-3"
             style={{ fontSize: "2rem" }}
           />
-          <span>Are you sure you want to delete the selected item(s)?</span>
+          <span>Are you sure you want to delete the selected type(s)?</span>
         </div>
       </Dialog>
     </>
