@@ -46,7 +46,7 @@ const DateCDU = ({ formData, setFormData }) => {
                   [dataKey]: value ? value : new Date().toISOString(),
                 });
               }}
-              readOnly
+              disabled={true}
             />
           </div>
         </div>
