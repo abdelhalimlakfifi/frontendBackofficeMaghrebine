@@ -75,8 +75,8 @@ export const hideDialog = (
   }
 };
 
-export const saveType = (handleSubmit) => {
-  handleSubmit();
+export const saveType = () => {
+  alert('dddddddd')
 };
 
 // -------------------------NEW + DELETE-------------------------

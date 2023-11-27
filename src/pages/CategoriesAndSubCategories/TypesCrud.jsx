@@ -32,6 +32,7 @@ import {
   rightToolbarTemplate,
   exportCSV,
   handleFileChange,
+  saveType,
   // handleDeleteBySelecting,
 } from "../../components/Global/TableUtils";
 
@@ -392,29 +393,60 @@ const TypesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setEditDialogVisible)
-          // () => saveType(setSubmitted, setEditDialogVisible)
+          () => hideDialog(setSubmitted, setEditDialogVisible),
+          () => saveType(setSubmitted, setEditDialogVisible)
         )}
         onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
       >
         {/* Image */}
-        <div className="flex items-center gap-2 mb-4">
-          <div>
-            <img
-              src={formData.image}
-              alt="Uploaded Image"
-              className="h-16 w-16 rounded-full shadow-lg"
-            />
-          </div>
-          <div>
-            <FileUpload
-              mode="basic"
-              accept="image/*"
-              chooseLabel="Change Image"
-              auto
-              customUpload
-              // uploadHandler={onFileUpload}
-            />
+        <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
+          <input
+            type="file"
+            accept="image/jpeg, image/png, image/gif"
+            className="hidden"
+            ref={imageRef}
+            onChange={(e) => handleFileChange(e, setImagePreview, setImageName)}
+          />
+
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2 text-center"
+            htmlFor="image"
+          >
+            Type Image <span className="text-red-600"> </span>
+          </label>
+
+          <div className="text-center">
+            <div
+              className="mt-2"
+              style={{ display: !imagePreview ? "block" : "none" }}
+            >
+              <img
+                src={`http://localhost:3000/api/${formData.image}`}
+                className="w-40 h-40 m-auto shadow"
+                alt="Profile"
+              />
+            </div>
+            <div
+              className="mt-2"
+              style={{ display: imagePreview ? "block" : "none" }}
+            >
+              <span
+                className="block w-40 h-40 m-auto shadow"
+                style={{
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center center",
+                  backgroundImage: `url(${imagePreview})`,
+                }}
+              />
+            </div>
+            <button
+              type="button"
+              className="inline-flex mt-4  items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 "
+              onClick={() => imageRef.current.click()}
+            >
+              Select New Image
+            </button>
           </div>
         </div>
 
@@ -436,17 +468,21 @@ const TypesCrud = () => {
 
         {/* Active Switch */}
         <div className="p-field mb-4">
-          <label htmlFor="active" className="font-bold text-[#5A6A85]">
-            Active
+          <label
+            htmlFor="active"
+            className="font-bold mr-2 w-16 text-[#5A6A85]"
+          >
+            {formData.active ? "Active" : "Inactive"}
           </label>
-          <div>
-            <InputSwitch
-              id="active"
-              name="active"
-              checked={formData.active}
-              onChange={(e) => setFormData({ ...formData, active: e.value })}
-            />
-          </div>
+          <InputSwitch
+            id="active"
+            checked={formData.active}
+            onChange={(e) => {
+              console.log("Switch value:", e.value);
+              setFormData({ ...formData, active: e.value });
+            }}
+            className="ml-2 w-12"
+          />
         </div>
 
         <DateCDU formData={formData} setFormData={setFormData} />
