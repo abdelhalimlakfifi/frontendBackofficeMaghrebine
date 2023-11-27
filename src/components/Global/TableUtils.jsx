@@ -80,7 +80,7 @@ export const saveType = (handleSubmit) => {
 };
 
 // -------------------------NEW + DELETE-------------------------
-export const leftToolbarTemplate = (openNew, selectedTypes, onDelete) => (
+export const leftToolbarTemplate = (openNew, selectedTypes, handleDeleteBySelecting) => (
   <div className="flex flex-wrap gap-2">
     <Button
       label="New"
@@ -93,7 +93,7 @@ export const leftToolbarTemplate = (openNew, selectedTypes, onDelete) => (
       icon="pi pi-trash"
       severity="danger"
       disabled={!selectedTypes || !selectedTypes.length}
-      onClick={() => onDelete()}
+      onClick={() => handleDeleteBySelecting(selectedTypes)}
     />
   </div>
 );
