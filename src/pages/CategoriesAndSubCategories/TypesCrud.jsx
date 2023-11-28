@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
+
 
 // Image
 import { FileUpload } from "primereact/fileupload";
@@ -32,7 +33,6 @@ import {
   rightToolbarTemplate,
   exportCSV,
   handleFileChange,
-  saveType,
   // handleDeleteBySelecting,
 } from "../../components/Global/TableUtils";
 
@@ -248,6 +248,7 @@ const TypesCrud = () => {
     }
   };
 
+
   return (
     <>
       <Toast ref={toast}></Toast>
@@ -394,7 +395,7 @@ const TypesCrud = () => {
         className="p-fluid"
         footer={typeDialogFooter(
           () => hideDialog(setSubmitted, setEditDialogVisible),
-          () => saveType(setSubmitted, setEditDialogVisible)
+          () => editType(formData)
         )}
         onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
       >
