@@ -4,8 +4,24 @@ import { Button } from 'primereact/button';
 import profileImageNone from "../../assets/profileImageNone.png"
 import axios  from 'axios';
 import { useForm, Controller } from 'react-hook-form';
+import { get, post } from "../../utils/request";
+import { Toast } from 'primereact/toast';
+import { BreadCrumb } from 'primereact/breadcrumb';
 
 export default function AddUser() {
+    const token = JSON.parse(localStorage.getItem('user')).token;
+    const toast = useRef(null);
+    const [loading, setLoading] = useState();
+    const items = [{ label: 'Users' }, { label: 'Add User',}];
+    const home = { icon: 'pi pi-home' }
+    const unauthorizedCallback = () => {
+        // This function will be called if the request is unauthorized (status code 401)
+        alert("Unauthorized access! Redirecting to login.");
+        // You can also use react-router's useNavigate here
+        navigate("/login");
+    };
+
+
     const formRef = useRef();
     const [image, setImage] = useState(profileImageNone);
     const [selctedImage, setSelctedImage] = useState(null);
@@ -65,7 +81,7 @@ export default function AddUser() {
     };
 
     const submitForm = async (e) => {
-
+        setLoading(true);
         const formData = new FormData();
 
         
@@ -73,7 +89,8 @@ export default function AddUser() {
         if(formRef.current.role.value == 0)
         {
             setSelectedRoleError("Please select a role")
-            console.log("hey lalalala")
+            setLoading(false);
+            return 
         }else{
             setSelectedRoleError("")
         }
@@ -86,22 +103,42 @@ export default function AddUser() {
         formData.append('role', formRef.current.role.value);
         formData.append('password', formRef.current.password.value);
 
-        
 
-        try {
-            
-            const user = await axios.post('http://localhost:3000/api/users');
-        } catch (error) {
-            
+
+        const response = await post(
+            "http://localhost:3000/api/users/store",
+            token,
+            formData,
+            unauthorizedCallback
+        );
+
+        if(response.errors && response.errors.length > 0) {
+            response.errors.map(err => {
+                toast.current.show({ severity: 'error', summary: err.attribute, detail: err.error });
+            })
+        }else{
+            formRef.current.role.value = "0"
+            form.reset()
+            setSelctedImage(profileImageNone);
+            setImage(profileImageNone)
+            toast.current.show({ severity: 'success', summary: 'success', detail: "User saved successfully" });
         }
+
+        setLoading(false);
     }
 
     useEffect(() => {
         const getRoles = async () => {
 
+            
 
-            const roles = await axios.get('http://localhost:3000/api/role')
-            setRoles(roles.data);
+            const roles = await get(
+                'http://localhost:3000/api/role',
+                token,
+                unauthorizedCallback
+            );
+
+            setRoles(roles);
         }
 
         getRoles();
@@ -111,6 +148,8 @@ export default function AddUser() {
     return (
         <Layout>
             <div>
+                <BreadCrumb model={items} home={home} />
+                <Toast ref={toast} />
                 <div className="h-full p-6 bg-gray-100 flex items-center justify-center">
                     <div className="container max-w-screen-lg mx-auto">
                         <div>
@@ -283,7 +322,8 @@ export default function AddUser() {
                                         <div className=''>
                                             <Button 
                                                 icon="pi pi-check" 
-                                                label="Submit "
+                                                label="Submit"
+                                                loading={loading}
                                                 className=' px-4 bg-light-gold border-none'  
                                                 type='submit'
                                             />
