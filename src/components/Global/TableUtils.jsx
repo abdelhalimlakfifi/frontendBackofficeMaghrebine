@@ -75,12 +75,16 @@ export const hideDialog = (
   }
 };
 
-export const saveType = () => {
-  alert('dddddddd')
+export const saveType = (handleSubmit) => {
+  handleSubmit();
 };
 
 // -------------------------NEW + DELETE-------------------------
-export const leftToolbarTemplate = (openNew, selectedTypes, handleDeleteBySelecting) => (
+export const leftToolbarTemplate = (
+  openNew,
+  selectedTypes,
+  handleDeleteBySelecting
+) => (
   <div className="flex flex-wrap gap-2">
     <Button
       label="New"
@@ -103,7 +107,7 @@ export const rightToolbarTemplate = (exportCSV, selectedTypes, dt) => (
   <Button
     label="Export"
     icon="pi pi-upload"
-    className="p-button-help"
+    className="p-button-help bg-light-gold"
     onClick={() => exportCSV(selectedTypes, dt)}
   />
 );
@@ -120,12 +124,17 @@ export const exportCSV = (selectedTypes, dt) => {
 export const typeDialogFooter = (hideDialog, handleSubmit) => (
   <>
     <Button
+      className="bg-light-gold"
       label="Cancel"
       icon="pi pi-times"
       outlined
       onClick={() => hideDialog()}
     />
-    <Button label="Save" icon="pi pi-check" onClick={handleSubmit} />
+    <Button 
+    className="bg-light-gold"
+    label="Save" 
+    icon="pi pi-check" 
+    onClick={handleSubmit} />
   </>
 );
 
