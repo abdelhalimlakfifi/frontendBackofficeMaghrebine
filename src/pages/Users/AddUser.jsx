@@ -1,28 +1,41 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import Layout from '../../layouts/layouts'
 import { Button } from 'primereact/button';
 import profileImageNone from "../../assets/profileImageNone.png"
+import axios  from 'axios';
+import { useForm, Controller } from 'react-hook-form';
 
 export default function AddUser() {
-
     const formRef = useRef();
     const [image, setImage] = useState(profileImageNone);
+    const [selctedImage, setSelctedImage] = useState(null);
+    const [roles, setRoles] = useState([]);
+    const [selectedRoleError, setSelectedRoleError] = useState();
+    const defaultValues = {
+        first_name: '',
+        last_name: '',
+        username: '',
+        email: '',
+        role: '0', // Assuming '0' is the default value for the role
+        password: '',
+    };
+    const form = useForm({ defaultValues });
+    const errors = form.formState.errors;
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+        
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImage(reader.result);
             };
             reader.readAsDataURL(file);
+            setSelctedImage(file);
         }
+
     };
 
-    const onSubmit = (data) => {
-        // Handle form submission here
-        console.log(data);
-    };
     
     const generatePassword = () => {
         const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -47,15 +60,53 @@ export default function AddUser() {
 
         formRef.current.password.value = password;
     }
+    const getFormErrorMessage = (name) => {
+        return errors[name] ? <small className="p-error">{errors[name].message}</small> : <small className="p-error">&nbsp;</small>;
+    };
 
-    const submitForm = (e) => {
-        e.preventDefault();
+    const submitForm = async (e) => {
+
+        const formData = new FormData();
 
         
         
-        console.log(formRef.current.password.value);
-        console.log(formRef.current.image.value);
+        if(formRef.current.role.value == 0)
+        {
+            setSelectedRoleError("Please select a role")
+            console.log("hey lalalala")
+        }else{
+            setSelectedRoleError("")
+        }
+        
+        formData.append('profile_picture', selctedImage);
+        formData.append('first_name', formRef.current.first_name.value);
+        formData.append('last_name', formRef.current.last_name.value);
+        formData.append('username', formRef.current.username.value);
+        formData.append('email', formRef.current.email.value);
+        formData.append('role', formRef.current.role.value);
+        formData.append('password', formRef.current.password.value);
+
+        
+
+        try {
+            
+            const user = await axios.post('http://localhost:3000/api/users');
+        } catch (error) {
+            
+        }
     }
+
+    useEffect(() => {
+        const getRoles = async () => {
+
+
+            const roles = await axios.get('http://localhost:3000/api/role')
+            setRoles(roles.data);
+        }
+
+        getRoles();
+    }, []);
+
 
     return (
         <Layout>
@@ -70,7 +121,7 @@ export default function AddUser() {
                                         <p className="font-medium text-lg">Personal Details</p>
                                         <p>Please fill out all the fields.</p>
                                     </div>
-                                    <form className=' col-span-2' onSubmit={submitForm} ref={formRef}>
+                                    <form className=' col-span-2' onSubmit={form.handleSubmit(submitForm)} ref={formRef}>
                                         
                                         <div className='flex justify-center h-24'>
                                             <input type="file" className='hidden' id='fileInput' onChange={handleFileChange} />
@@ -88,44 +139,148 @@ export default function AddUser() {
                                             </div>
                                         </div>
                                         <div className="flex space-x-4">
-                                            <div>
-                                                <label htmlFor="email">First name</label>
-                                                <input type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
-                                            </div>
-                                            <div>
-                                                <label htmlFor="email">Last name</label>
-                                                <input type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
-                                            </div>
+                                            <Controller
+                                                name="first_name"
+                                                control={form.control}
+                                                rules={{ required: 'First name is required' }}
+                                                render={({ field, fieldState }) => (
+                                                    <div>
+                                                        <label htmlFor="first_name">First name</label>
+                                                        <input
+                                                            type="text"
+                                                            {...field}
+                                                            className={`h-10 border mt-1 rounded px-4 w-full bg-gray-50 ${fieldState.error ? 'border-red-600' : ""}`}
+                                                        />
+                                                        <div className={getFormErrorMessage(field.name) ? '' : "hidden"}>
+                                                            {getFormErrorMessage(field.name)}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                )}
+                                            />
+                                            
+                                            <Controller
+                                                name="last_name"
+                                                control={form.control}
+                                                rules={{ required: 'Last name is required' }}
+                                                render={({ field, fieldState }) => (
+                                                    <div>
+                                                        <label htmlFor="last_name">Last name</label>
+                                                        <input
+                                                            type="text"
+                                                            {...field}
+                                                            className={`h-10 border mt-1 rounded px-4 w-full bg-gray-50 ${fieldState.error ? 'border-red-600' : ""}`}
+                                                        />
+                                                        <div className="">
+                                                            {getFormErrorMessage(field.name)}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            />
                                         </div>
 
-                                        <div className='mt-4'>
-                                            <label htmlFor="email">Username</label>
-                                            <input type="text" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+                                        <div className=''>
+                                            <Controller
+                                                name="username"
+                                                control={form.control}
+                                                rules={{ required: 'Username is required' }}
+                                                render={({ field, fieldState }) => (
+                                                    <div>
+                                                        <label htmlFor="last_name">Username</label>
+                                                        <input
+                                                            name='username'
+                                                            id='username'
+                                                            type="text"
+                                                            {...field}
+                                                            className={`h-10 border mt-1 rounded px-4 w-full bg-gray-50 ${fieldState.error ? 'border-red-600' : ""}`}
+                                                        />
+                                                        <div>
+                                                            {getFormErrorMessage(field.name)}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            />
                                         </div>
-                                        <div  className='mt-4'>
-                                            <label htmlFor="email">email</label>
-                                            <input type="email" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
-                                        </div>
-
-                                        <div  className='mt-4'>
-                                            <label htmlFor="email">Role</label>
-                                            <select name="" id="" className='h-10 border mt-1 rounded px-4 w-full bg-gray-50'>
-                                                <option value="">Select Role</option>
-                                                <option value="">Admin</option>
-                                                <option value="">Manager</option>
-                                            </select>
+                                        <div  className=''>
+                                            
+                                            <Controller
+                                                name='email'
+                                                control={form.control}
+                                                rules={{ 
+                                                    required: 'E-mail is required',
+                                                    pattern: {
+                                                        value: /^\S+@\S+$/i,
+                                                        message: 'Invalid email address',
+                                                    },
+                                                }}
+                                                render={({ field, fieldState }) => (
+                                                    <div>
+                                                        <label htmlFor="email">E-mail</label>
+                                                        <input
+                                                            type="text" 
+                                                            name='email' 
+                                                            id='email'
+                                                            {...field}
+                                                            className={`h-10 border mt-1 rounded px-4 w-full bg-gray-50 ${fieldState.error ? 'border-red-600' : ""}`}
+                                                        />
+                                                        <div>
+                                                            {getFormErrorMessage(field.name)}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            />
                                         </div>
                                         
-                                        <div className='mt-4'>
-                                            <label htmlFor="email">Password</label>
-                                            <div className='flex space-x-2'>
-                                                <input type="text" className="h-10 border rounded px-4 w-full bg-gray-50" name='password' />
-                                                <Button icon="pi pi-refresh" className='p-0 bg-light-gold border-none' onClick={generatePassword} type='button' />
-
+                                        <div className=''>
+                                            <label htmlFor="role">Role</label>
+                                            <select name="role" id='role' className='h-10 border mt-1 rounded px-4 w-full bg-gray-50'>
+                                                <option value="0">Select Role</option>
+                                                {roles && roles.map((role, index) => (
+                                                    <option key={index} value={role._id}>{role.role}</option>
+                                                ))}
+                                            </select>
+                                            <div className=' text-red-500 text-sm italic'>
+                                                {selectedRoleError ?? (
+                                                    selectedRoleError
+                                                )}
                                             </div>
                                         </div>
 
                                         <div className='mt-4'>
+                                            {/* <label htmlFor="password">Password</label> */}
+                                                <Controller
+                                                    name='password'
+                                                    control={form.control}
+                                                    rules={{ 
+                                                        required: 'Password is required',
+                                                        minLength: {
+                                                            value: 8,
+                                                            message: 'Password must be at least 8 characters',
+                                                        },
+                                                    }}
+                                                    render={({ field, fieldState }) => (
+                                                        <div>
+                                                            <label htmlFor="password">Password</label>
+                                                            <div className='flex space-x-2'>
+                                                                <input
+                                                                    type="text" 
+                                                                    name='password' 
+                                                                    id='password'
+                                                                    {...field}
+                                                                    className={`h-10 border mt-1 rounded px-4 w-full bg-gray-50 ${fieldState.error ? 'border-red-600' : ""}`}
+                                                                />
+                                                                <Button icon="pi pi-refresh" className='p-0 bg-light-gold border-none' onClick={generatePassword} type='button' />
+                                                            </div>
+                                                            <div>
+                                                                {getFormErrorMessage(field.name)}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                />
+                                            
+                                        </div>
+
+                                        <div className=''>
                                             <Button 
                                                 icon="pi pi-check" 
                                                 label="Submit "
