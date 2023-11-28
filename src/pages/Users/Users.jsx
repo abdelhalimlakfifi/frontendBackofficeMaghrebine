@@ -34,7 +34,7 @@ function Users() {
     }, []);
 
     useEffect(() => {
-        console.log(users);
+        
     }, [users]);
 
     const searchable = (e) => {
@@ -107,7 +107,7 @@ function Users() {
                     <Column field={"last_name"} header="Full name" sortable body={(row) => fullname(row)} />
                     <Column field={"username"} header="Username" sortable />
                     <Column field={"email"} header="email" sortable />
-                    <Column field={"role.id"} header="Role" sortable />
+                    <Column field={"role.role"} header="Role" sortable />
                     <Column header="Actions"  body={(row) => actions(row)} />
                 </DataTable>
             </div>
