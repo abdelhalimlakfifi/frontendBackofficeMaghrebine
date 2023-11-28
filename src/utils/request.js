@@ -20,10 +20,29 @@ export async function get(url, token, unauthorizedCallback ,...others){
             // }
             unauthorizedCallback()
         }
+        return error.data;
     }
 }
 
-function post(){
+export async function post(url, token, data, unauthorizedCallback){
+
+    try {
+        const response = await axios.post(url,data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        
+        if(error.response.status === 401)
+        {
+            unauthorizedCallback();
+        }
+
+        return error.response.data;
+    }
 
 }
 
