@@ -5,7 +5,7 @@ export const UsersServices = {
         // const token = JSON.parse(localStorage.getItem('user')).token;
         try {
             // const data = await get("http://localhost:3000/api/product/upload-images", token,unauthorizedCallback );
-            const response = await axios.get('http://localhost:3000/users');
+            const response = await axios.get('http://localhost:3000/api/users');
             
             return await response.data
         } catch (error) {
