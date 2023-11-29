@@ -12,6 +12,7 @@ import Users from "./pages/users/Users";
 import CategoriesAndSubCategories from "./pages/CategoriesAndSubCategories/CategoriesAndSubCategories";
 import Types from "./pages/types/Types";
 import Roles from "./pages/Roles/Roles";
+import Customers from "./pages/Customers/Customers";
 
 function App() {
   return (
@@ -77,6 +78,14 @@ function App() {
               <ProtectedRoute>
                 <Users />
               </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/customers"
+            element={
+              // <ProtectedRoute>
+                <Customers />
+              // </ProtectedRoute>
             }
           />
 
