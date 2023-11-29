@@ -94,7 +94,9 @@ function Users() {
     const actions = (row) => {
         return (
             <div className="flex space-x-4">
-                <Button label="Edit" className=" text-sm bg-light-gold border-none" icon="pi pi-user-edit"  />
+                <Link to={{ pathname: "/edit-user" }} state={row}>
+                    <Button label="Edit" className=" text-sm bg-light-gold border-none" icon="pi pi-user-edit"  />
+                </Link>
                 <Button icon="pi pi-trash" className="bg-transparent border-light-gold text-light-gold" tooltip="Delete user" tooltipOptions={{  position: 'top' }}/>
             </div>
         )
@@ -107,7 +109,7 @@ function Users() {
 
                 {loading ?  (
                     <div>
-                        <DataTable value={Array.from({ length: 5 }, (v, i) => i)} className="p-datatable-striped">
+                        <DataTable value={Array.from({ length: 5 }, (v, i) => i)} header={header} className="p-datatable-striped">
                             <Column field="code" header="Full name" style={{ width: '25%' }} body={<Skeleton />}></Column>
                             <Column field="name" header="Username" style={{ width: '25%' }} body={<Skeleton />}></Column>
                             <Column field="category" header="email" style={{ width: '25%' }} body={<Skeleton />}></Column>
