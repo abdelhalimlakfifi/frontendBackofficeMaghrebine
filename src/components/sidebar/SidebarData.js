@@ -36,7 +36,10 @@ export const SidebarData = [{
         items: [{
             title: 'Customers List',
             link: '/Customers-List'
-        }],
+        },{
+            title: 'Customers add',
+            link: '/Customers-List'
+        },],
     },
     {
         title: 'Users',
