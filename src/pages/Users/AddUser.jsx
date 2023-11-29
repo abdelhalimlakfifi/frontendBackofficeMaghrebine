@@ -2,7 +2,6 @@ import React, {useState, useRef, useEffect} from 'react'
 import Layout from '../../layouts/layouts'
 import { Button } from 'primereact/button';
 import profileImageNone from "../../assets/profileImageNone.png"
-import axios  from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import { get, post } from "../../utils/request";
 import { Toast } from 'primereact/toast';
@@ -42,6 +41,11 @@ export default function AddUser() {
         const file = event.target.files[0];
         
         if (file) {
+            if(event.target.files[0].size > 1 * 2000 * 1024)
+            {
+                toast.current.show({ severity: 'error', summary: "Image", detail: "File with maximum size of 2MB is allowed" });
+                return false;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImage(reader.result);
