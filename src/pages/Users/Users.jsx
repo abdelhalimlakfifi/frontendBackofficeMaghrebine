@@ -10,8 +10,11 @@ import { Avatar } from 'primereact/avatar';
 import { Tooltip } from 'primereact/tooltip';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import { Link } from "react-router-dom";
+import { Skeleton } from 'primereact/skeleton';
+
 function Users() {
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [displayedUsers, setDisplayedUsers] = useState([]);
     const items = [{ label: 'Users' }];
     const home = { icon: 'pi pi-home', url: '/' }
@@ -27,8 +30,10 @@ function Users() {
         };
         const getUsers = async () => {
             const data = await UsersServices.getAllUsers(unauthorizedCallback);
+
             setUsers(data);
             setDisplayedUsers(data);
+            setLoading(false);
         };
         getUsers();
     }, []);
@@ -71,9 +76,14 @@ function Users() {
     );
 
     const fullname = (row) => {
+        console.log(row.profile_picture);
         return (
             <div className="flex space-x-2">
-                <Avatar label={row.last_name.toUpperCase()[0]} size="small" shape="circle" className="hidden md:inline-flex" />
+                {row.profile_picture ? (
+                    <Avatar  image={`http://localhost:3000/api/${row.profile_picture}`} size="small" shape="circle" className="hidden md:inline-flex" />
+                ): (
+                    <Avatar  label={row.last_name.toUpperCase()[0]} size="small" shape="circle" className="hidden md:inline-flex" />
+                )}
                 <p className="flex items-center">
                     {`${row.last_name} ${row.first_name}`}
                 </p>
@@ -94,9 +104,22 @@ function Users() {
             <BreadCrumb model={items} home={home} />
 
             <div className="card">
+
+                {loading ?  (
+                    <div>
+                        <DataTable value={Array.from({ length: 5 }, (v, i) => i)} className="p-datatable-striped">
+                            <Column field="code" header="Full name" style={{ width: '25%' }} body={<Skeleton />}></Column>
+                            <Column field="name" header="Username" style={{ width: '25%' }} body={<Skeleton />}></Column>
+                            <Column field="category" header="email" style={{ width: '25%' }} body={<Skeleton />}></Column>
+                            <Column field="quantity" header="Role" style={{ width: '25%' }} body={<Skeleton />}></Column>
+                            <Column field="quantity" header="Actions" style={{ width: '25%' }} body={<Skeleton />}></Column>
+                        </DataTable>
+                    </div>
+                ) : (
                 <DataTable
                     value={displayedUsers}
                     paginator
+                    loading={loading}
                     rows={5}
                     rowsPerPageOptions={[5, 10, 25, 50]}
                     header={header}
@@ -110,6 +133,7 @@ function Users() {
                     <Column field={"role.role"} header="Role" sortable />
                     <Column header="Actions"  body={(row) => actions(row)} />
                 </DataTable>
+                )}
             </div>
         </Layout>
     );
