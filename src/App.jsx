@@ -13,6 +13,7 @@ import CategoriesAndSubCategories from "./pages/CategoriesAndSubCategories/Categ
 import Types from "./pages/types/Types";
 import Roles from "./pages/Roles/Roles";
 import Customers from "./pages/Customers/Customers";
+import InfoCustomer from "./pages/Customers/InfoCustomer";
 
 function App() {
   return (
@@ -80,28 +81,32 @@ function App() {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/customers"
             element={
               // <ProtectedRoute>
-                <Customers />
+              <Customers />
               // </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/infoCustomer"
+            element={
+              <ProtectedRoute>
+                <InfoCustomer />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/categories-subcategories"
             element={
               <ProtectedRoute>
-            <CategoriesAndSubCategories />
-            </ProtectedRoute>
+                <CategoriesAndSubCategories />
+              </ProtectedRoute>
             }
           />
 
-          <Route
-            path="/roles"
-            element={<Roles />}
-          />
+          <Route path="/roles" element={<Roles />} />
 
           <Route
             path="/types"

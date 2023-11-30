@@ -84,10 +84,16 @@ export default function Customers() {
     return (
       <div className="flex space-x-4">
         <Button
-          label="Edit"
+          // label="Edit"
           className=" text-sm bg-light-gold border-none"
           icon="pi pi-user-edit"
         />
+        <Link to={`/infoCustomer`} state={row}>
+          <Button
+            className="text-sm bg-light-gold border-none"
+            icon="pi-user"
+          />
+        </Link>
         <Button
           icon="pi pi-trash"
           className="bg-transparent border-light-gold text-light-gold"
@@ -98,7 +104,7 @@ export default function Customers() {
     );
   };
   const fullname = (row) => {
-    console.log(row.profile_picture);
+    // console.log(row.profile_picture);
     return (
       <div className="flex space-x-2">
         {row.profile_picture ? (
