@@ -3,7 +3,7 @@ import Layout from '../../layouts/layouts'
 import { Button } from 'primereact/button';
 import profileImageNone from "../../assets/profileImageNone.png"
 import { useForm, Controller } from 'react-hook-form';
-import { get, post } from "../../utils/request";
+import { get, put } from "../../utils/request";
 import { Toast } from 'primereact/toast';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ export default function AddUser() {
     const token = JSON.parse(localStorage.getItem('user')).token;
     const toast = useRef(null);
     const [loading, setLoading] = useState();
-    const items = [{ label: 'Users' }, { label: 'Add User',}];
+    const items = [{ label: 'Users' }, { label: 'Edit User',}];
     const home = { icon: 'pi pi-home' }
     const location = useLocation();
     const userData = location.state;
@@ -112,8 +112,8 @@ export default function AddUser() {
 
 
 
-        const response = await post(
-            "http://localhost:3000/api/users/store",
+        const response = await put(
+            `http://localhost:3000/api/users/update/${userData._id}`,
             token,
             formData,
             unauthorizedCallback
@@ -124,11 +124,11 @@ export default function AddUser() {
                 toast.current.show({ severity: 'error', summary: err.attribute, detail: err.error });
             })
         }else{
-            formRef.current.role.value = "0"
-            form.reset()
+            formRef.current.password.value = ""
             setSelctedImage(profileImageNone);
             setImage(profileImageNone)
             toast.current.show({ severity: 'success', summary: 'success', detail: "User saved successfully" });
+            // navigate("/users");
         }
 
         setLoading(false);
@@ -140,9 +140,8 @@ export default function AddUser() {
         if(userData === null || userData === undefined) {
             navigate('/users');
         }
+        setImage(userData.profile_picture !== null ? `http://localhost:3000/api/${userData.profile_picture}` : profileImageNone);
         const getRoles = async () => {
-
-            
 
             const roles = await get(
                 'http://localhost:3000/api/role',
@@ -310,7 +309,6 @@ export default function AddUser() {
                                                     name='password'
                                                     control={form.control}
                                                     rules={{ 
-                                                        required: 'Password is required',
                                                         minLength: {
                                                             value: 8,
                                                             message: 'Password must be at least 8 characters',
