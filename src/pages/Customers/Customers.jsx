@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Layout from "../../layouts/layouts";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { DataTable } from "primereact/datatable";
@@ -10,6 +10,9 @@ import { useEffect } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Avatar } from "primereact/avatar";
+import { Toast } from "primereact/toast";
+import { del } from "../../utils/request";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
@@ -27,18 +30,16 @@ export default function Customers() {
       alert("Unauthorized access! Redirecting to login.");
       navigate("/login");
     };
-    const getCustomers = async () => {
-      const data = await CustomersServices.getCustomersData(
-        unauthorizedCallback
-      );
+    let getCustomers = async () => {
+      let data = await CustomersServices.getCustomersData(unauthorizedCallback);
 
       setCustomers(data.customers);
       setDisplayedCustomers(data.customers);
       setLoading(false);
     };
     getCustomers();
+    // }, [customers, navigate]); // bug !: makat affichich data dyal customers each time it update
   }, []);
-  useEffect(() => {}, [customers]);
   // console.log("customers ", customers);
   // searching bar logic
   const searchable = (e) => {
@@ -67,19 +68,66 @@ export default function Customers() {
         alignItems: "center",
       }}
     >
-      {/* <Link to="/add-user">
-        <Button
-          label="New user"
-          className=" text-sm bg-light-gold border-none"
-          icon="pi pi-user-plus"
-        />
-      </Link> */}
       <span>
         <i className="pi pi-search" style={{ margin: "4px 4px 0 0" }}></i>
         <InputText type="search" onInput={searchable} placeholder="Search" />
       </span>
     </div>
   );
+  const token = JSON.parse(localStorage.getItem("user")).token;
+  const unauthorizedCallback = () => {
+    // This function will be called if the request is unauthorized (status code 401)
+    alert("Unauthorized access! Redirecting to login.");
+    // You can also use react-router's useNavigate here
+    navigate("/login");
+  };
+  const toast = useRef(null);
+  const handleDeleteUser = async (row) => {
+    confirmDialog({
+      message: `Do you want to delete ${row.username}?`,
+      header: `Delete ${row.username} Confirmation`,
+      icon: "pi pi-info-circle",
+      acceptClassName: "bg-light-gold border-0",
+      rejectClassName: "text-light-gold bg-transparent border-0",
+      accept: async () => {
+        try {
+          const response = await del(
+            `http://localhost:3000/api/customer/${row._id}`,
+            token,
+            unauthorizedCallback
+          );
+
+          if (response.errors && response.errors.length > 0) {
+            response.errors.forEach((err) => {
+              toast.current.show({
+                severity: "error",
+                summary: err.attribute,
+                detail: err.error,
+              });
+            });
+          } else {
+            toast.current.show({
+              severity: "success",
+              summary: "Success",
+              detail: "Customer deleted successfully",
+            });
+            const getCustomers = async () => {
+              const data = await CustomersServices.getCustomersData(
+                unauthorizedCallback
+              );
+
+              setCustomers(data.customers);
+              setDisplayedCustomers(data.customers);
+              setLoading(false);
+            };
+            getCustomers();
+          }
+        } catch (error) {
+          console.error("Error deleting customer:", error);
+        }
+      },
+    });
+  };
   const actions = (row) => {
     return (
       <div className="flex space-x-4">
@@ -99,6 +147,7 @@ export default function Customers() {
           className="bg-transparent border-light-gold text-light-gold"
           tooltip="Delete user"
           tooltipOptions={{ position: "top" }}
+          onClick={() => handleDeleteUser(row)}
         />
       </div>
     );
@@ -128,10 +177,14 @@ export default function Customers() {
       </div>
     );
   };
+  const deleteAt = (rowData) => (rowData.deletedBy ? "true" : "false");
 
   return (
     <Layout>
       <BreadCrumb model={items} home={home} />
+      <Toast ref={toast} />
+      <ConfirmDialog />
+
       <div className="card">
         {loading ? (
           <div>
@@ -164,6 +217,12 @@ export default function Customers() {
                 body={<Skeleton />}
               ></Column>
               <Column
+                field="deleted"
+                header="deleted"
+                style={{ width: "25%" }}
+                body={<Skeleton />}
+              ></Column>
+              <Column
                 field="quantity"
                 header="Actions"
                 style={{ width: "25%" }}
@@ -192,6 +251,12 @@ export default function Customers() {
             <Column field={"username"} header="Username" sortable />
             <Column field={"email"} header="email" sortable />
             <Column field={"valid_account"} header="Active " sortable />
+            <Column
+              field={"deleted"}
+              header="deleted "
+              sortable
+              body={(row) => deleteAt(row)}
+            />
             <Column header="Actions" body={(row) => actions(row)} />
           </DataTable>
         )}

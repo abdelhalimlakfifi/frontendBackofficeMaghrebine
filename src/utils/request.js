@@ -60,4 +60,23 @@ export async function post(url, token, data, unauthorizedCallback) {
   }
 }
 
+
+export async function del(url, token, unauthorizedCallback) {
+  try {
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (error?.response?.status === 401) {
+      unauthorizedCallback();
+    }
+
+    return error?.response?.data;
+  }
+}
+
 // module.exports = { get }

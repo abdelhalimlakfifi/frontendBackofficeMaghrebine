@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Toast } from "primereact/toast";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
+import profileImageNone from "../../assets/profileImageNone.png";
 
 import axios from "axios";
 import { post } from "../../utils/request";
@@ -15,6 +16,7 @@ export default function InfoCustomer() {
   const toast = useRef(null);
   const [loading, setLoading] = useState();
   const items = [{ label: "Users" }, { label: "Add User" }];
+
   const home = { icon: "pi pi-home" };
   // id of the customer
 
@@ -31,8 +33,8 @@ export default function InfoCustomer() {
 
   const additionalData = location.state;
   //   const [image, setImage] = useState(profileImageNone);
-  //   const [selctedImage, setSelctedImage] = useState(null);
   // const [selectedRoleError, setSelectedRoleError] = useState();
+  const [image, setImage] = useState(profileImageNone);
   const defaultValues = {
     first_name: additionalData.first_name,
     last_name: additionalData.last_name,
@@ -42,49 +44,7 @@ export default function InfoCustomer() {
   const form = useForm({ defaultValues });
   const errors = form.formState.errors;
   //   console.log("additionalData ", additionalData);
-  const handleFileChange = (event) => {
-    // const file = event.target.files[0];
-    // if (file) {
-    //   if (event.target.files[0].size > 1 * 2000 * 1024) {
-    //     toast.current.show({
-    //       severity: "error",
-    //       summary: "Image",
-    //       detail: "File with maximum size of 2MB is allowed",
-    //     });
-    //     return false;
-    //   }
-    //   const reader = new FileReader();
-    //   reader.onloadend = () => {
-    //     setImage(reader.result);
-    //   };
-    //   reader.readAsDataURL(file);
-    //   setSelctedImage(file);
-    // }
-  };
 
-  //   const generatePassword = () => {
-  //     const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  //     const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-  //     const numberChars = "0123456789";
-  //     const specialChars = "!@#$%^&*()-=_+[]{}|;:,.<>?";
-
-  //     // Combine character sets
-  //     const allChars =
-  //       uppercaseChars + lowercaseChars + numberChars + specialChars;
-
-  //     // Check if length is provided, otherwise default to 12
-
-  //     // Initialize password
-  //     let password = "";
-
-  //     // Generate random password
-  //     for (let i = 0; i < 12; i++) {
-  //       const randomIndex = Math.floor(Math.random() * allChars.length);
-  //       password += allChars.charAt(randomIndex);
-  //     }
-
-  //     formRef.current.password.value = password;
-  //   };
   const getFormErrorMessage = (name) => {
     return errors[name] ? (
       <small className="p-error">{errors[name].message}</small>
@@ -155,20 +115,14 @@ export default function InfoCustomer() {
                     onSubmit={form.handleSubmit(submitForm)}
                     ref={formRef}
                   >
-                    <div className="flex justify-center h-24">
-                      <input
-                        type="file"
-                        className="hidden"
-                        id="fileInput"
-                        onChange={handleFileChange}
-                      />
-
+                    <div className="flex justify-end h-24">
                       <div className="w-20 h-20 relative">
                         <div className="relative group">
                           <div className=" rounded-full">
                             <img
                               className="w-full object-cover"
-                              //   src={image}
+                              // src={`http://localhost:3000/api/${image}`}
+                              src={image}
                               alt=""
                             />
                             <label
