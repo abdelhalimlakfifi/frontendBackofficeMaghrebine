@@ -131,14 +131,11 @@ export default function Customers() {
   const actions = (row) => {
     return (
       <div className="flex space-x-4">
-        <Button
-          // label="Edit"
-          className=" text-sm bg-light-gold border-none"
-          icon="pi pi-user-edit"
-        />
         <Link to={`/infoCustomer`} state={row}>
           <Button
             className="text-sm bg-light-gold border-none"
+            tooltip="Edite user"
+            tooltipOptions={{ position: "top" }}
             icon="pi-user"
           />
         </Link>

@@ -8,8 +8,8 @@ import { BreadCrumb } from "primereact/breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import profileImageNone from "../../assets/profileImageNone.png";
 
-import axios from "axios";
 import { post } from "../../utils/request";
+import OrdersCustumers from "./OrdersCustumers";
 
 export default function InfoCustomer() {
   const token = JSON.parse(localStorage.getItem("user")).token;
@@ -35,7 +35,7 @@ export default function InfoCustomer() {
   //   const [image, setImage] = useState(profileImageNone);
   // const [selectedRoleError, setSelectedRoleError] = useState();
   const [image, setImage] = useState(profileImageNone);
-  const defaultValues = {
+  let defaultValues = {
     first_name: additionalData.first_name,
     last_name: additionalData.last_name,
     username: additionalData.username,
@@ -80,9 +80,12 @@ export default function InfoCustomer() {
         });
       });
     } else {
-      form.reset();
-      //   setSelctedImage(profileImageNone);
-      //   setImage(profileImageNone);
+      form.reset({
+        first_name: response.data.first_name,
+        last_name: response.data.last_name,
+        username: response.data.username,
+        email: response.data.email,
+      });
       toast.current.show({
         severity: "success",
         summary: "success",
@@ -244,6 +247,10 @@ export default function InfoCustomer() {
                   </form>
                 </div>
               </div>
+            </div>
+            <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+              {/* data table of orders */}
+              <OrdersCustumers id={additionalData._id} />
             </div>
           </div>
         </div>
