@@ -9,9 +9,14 @@ import { Button } from 'primereact/button';
 import axios from 'axios';
 
 export default function ProductStore() {
-    // const [data, setData] = useState({});
     const [activeIndex, setActiveIndex] = useState(0);
-    const [backendData, setBackendData] = useState({})
+    const [backendData, setBackendData] = useState({});
+    const [colors, setColors] = useState([]);
+    const [types, setTypes] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [sizes, setSizes] = useState([]);
+    const [subcategories, setSubCategorie] = useState([]);
+
     useEffect(() => {
         const getDataFromBackend = async () => {
             const data = await axios.get('http://localhost:3000/api/product/create');
@@ -21,6 +26,13 @@ export default function ProductStore() {
     }, []);
 
 
+    useEffect(() => {
+        setTypes(backendData.types);
+        setCategories(backendData.categories);
+        setSizes(backendData.sizes);
+        setSubCategorie(backendData.subcategories);
+        setColors(backendData.colors);
+    }, [backendData])
     const nullRef = useRef();
     const childRef = useRef();
     
@@ -31,17 +43,32 @@ export default function ProductStore() {
         { label: 'Size-Category-Type', command: () => {} },
     ];
 
-    const handlePrevious = () => setActiveIndex(activeIndex - 1);
+    const handlePrevious = () => {
+        
+        if(activeIndex === 2) {
+            setActiveIndex(activeIndex - 2)
+        }else{
+            setActiveIndex(activeIndex - 1)
+        }
+    };
     const handleNext = async () => {
-        if(childRef.current.submitedForm().status)
+
+        const data = await childRef.current.submitedForm();
+        if(data.status)
         {
-            setActiveIndex(activeIndex + 1)
+            const localStorageData = localStorage.getItem('images');
+            if(localStorageData !== null && activeIndex === 0) 
+            {
+                setActiveIndex(activeIndex + 2)
+
+            }else{
+                setActiveIndex(activeIndex + 1)
+            }
         }
     };
 
     const handleSubmit = () => {
-        console.log(childRef.current.submitedForm());
-        console.log('submit');
+        childRef.current.submitedForm()
     }
 
     const isPreviousDisabled = activeIndex === 0;
@@ -70,11 +97,17 @@ export default function ProductStore() {
                     <div>
                         {stepComponents.map((FormComponent, index) => (
                             <div key={index} style={{ display: index === activeIndex ? 'block' : 'none' }}>
-                                <FormComponent ref={index === activeIndex ? childRef : nullRef} />
+                                <FormComponent 
+                                    categories={categories}
+                                    subcategories={subcategories}
+                                    colors={colors}
+                                    types={types}
+                                    sizes={sizes}
+                                    ref={index === activeIndex ? childRef : nullRef}
+                                />
                             </div>
                         ))}
                     </div>
-
                 </div>
 
                 <div className='w-full flex justify-between bottom-4'>
