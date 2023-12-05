@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { MultiSelect } from 'primereact/multiselect';
 import ImageItem from './ImageItem';
 
@@ -6,11 +6,9 @@ import ImageItem from './ImageItem';
 export default forwardRef((props, ref) => {
     const [selectedColors, setSelectedColors] = useState([]);
     const [errorIndex, setErrorIndex] = useState([]);
-    const [images, setImages] = useState([
-        { src:'https://via.placeholder.com/400x200' },
-        { src:'https://via.placeholder.com/400x200' },
-        
-    ])
+    const [images, setImages] = useState([]);
+
+
 
 
     const handleColorChange = (color, index) => {
@@ -20,17 +18,10 @@ export default forwardRef((props, ref) => {
         updatedImages[index] = { ...updatedImages[index], color: color };
         // Update the state with the new copy of the images array
         setImages(updatedImages);
-
-        console.log(images);
+    
     };
 
-    const colors = [
-        { name: 'Blue' },
-        { name: 'Red' },
-        { name: 'Green' },
-        { name: 'Yellow' },
-        { name: 'Brown' }
-    ];
+    
 
     useImperativeHandle(ref, () => ({
         submitedForm() {
@@ -40,27 +31,40 @@ export default forwardRef((props, ref) => {
             
             setErrorIndex(indicesWithoutColor);
 
-            console.log(indicesWithoutColor.length);
-
-            if(indicesWithoutColor.length !== 0) {
-                return { status: false };
+            if(indicesWithoutColor.length == 0) {
+                localStorage.setItem('imagesWithColors', JSON.stringify(images));
+                return { 
+                    status: true,
+                    step: 3
+                };
             }
-            return { status: true };
+
+            return { status: false };
         },
     }));
 
+
+    useEffect(() => {
+        const imageFromLocal = JSON.parse(localStorage.getItem('imagesWithColors'));
+        if(imageFromLocal !== null) {
+            setImages(imageFromLocal);
+        }else{
+            const imagesLocal = JSON.parse(localStorage.getItem('images'));
+            setImages(imagesLocal.others);
+        }
+    }, [])
     return (
         <div className="mt-12">
-            <div className="card flex justify-center">
+            {/* <div className="card flex justify-center">
                 <MultiSelect value={selectedColors} onChange={(e)=> setSelectedColors(e.value)}
-                    options={colors}
+                    options={props.colors}
                     optionLabel="name"
                     filter
                     placeholder="Select Color"
                     maxSelectedLabels={3}
                     className="w-full"
                     />
-            </div>
+            </div> */}
 
             <div className="mt-4">
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
@@ -71,7 +75,7 @@ export default forwardRef((props, ref) => {
                                 image={image}
                                 index={index}
                                 errorIndex={errorIndex}
-                                colors={selectedColors}
+                                colors={props.colors ?? []}
                                 onColorChange={handleColorChange}
                             />
                         </div>
