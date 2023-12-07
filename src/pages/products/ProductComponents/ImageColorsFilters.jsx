@@ -50,22 +50,13 @@ export default forwardRef((props, ref) => {
             setImages(imageFromLocal);
         }else{
             const imagesLocal = JSON.parse(localStorage.getItem('images'));
-            setImages(imagesLocal.others);
+            if(imagesLocal !== null) {
+                setImages(imagesLocal.others);
+            }
         }
     }, [])
     return (
         <div className="mt-12">
-            {/* <div className="card flex justify-center">
-                <MultiSelect value={selectedColors} onChange={(e)=> setSelectedColors(e.value)}
-                    options={props.colors}
-                    optionLabel="name"
-                    filter
-                    placeholder="Select Color"
-                    maxSelectedLabels={3}
-                    className="w-full"
-                    />
-            </div> */}
-
             <div className="mt-4">
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
                     {images.map((image, index) => (
