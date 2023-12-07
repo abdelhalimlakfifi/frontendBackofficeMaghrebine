@@ -10,7 +10,6 @@ const ImagesUploadForm = forwardRef((props, ref) => {
     const [main, setMain] = useState({displayed: null, toSend: null});
     const [secondary, setSecondary] = useState({displayed: null, toSend: null});
     const [others, setOthers]   = useState([]);
-    
 
     useImperativeHandle(ref, () => ({
         async submitedForm() {
@@ -45,10 +44,12 @@ const ImagesUploadForm = forwardRef((props, ref) => {
                 }
 
                 localStorage.setItem('images', JSON.stringify(data));
+                window.dispatchEvent(new Event("storage"));
 
                 return {
                     status: true,
-                    step:2
+                    step:2,
+                    images: data
                 }
             } catch (error) {
                 toast.current.show({severity:'error', summary: 'Error', detail:'500 internal server Error', life: 3000});
@@ -89,10 +90,6 @@ const ImagesUploadForm = forwardRef((props, ref) => {
         {
             const otherFilesArray = Array.from(e.target.files);
             setOthers(otherFilesArray);
-
-            otherFilesArray.map(other => {
-                bodyFormData.append('other', other);
-            });
         }
     }
 
@@ -151,15 +148,6 @@ const ImagesUploadForm = forwardRef((props, ref) => {
                         </div>
                     ))}
                 </Marquee>
-                {/* <FileUpload 
-                    id='filesUpload'
-                    name="demo[]"
-                    url={'/api/upload'}
-                    multiple
-                    accept="image/*"
-                    maxFileSize={1000000}
-                    emptyTemplate={<p className="m-0">Drag and drop files here to upload.</p>} 
-                /> */}
             </div>
         </div>
     );

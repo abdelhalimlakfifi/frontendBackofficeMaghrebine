@@ -7,6 +7,7 @@ import FiltersStoreForm from './ProductComponents/FiltersStoreForm';
 import ImageColorsFilters from './ProductComponents/ImageColorsFilters';
 import { Button } from 'primereact/button';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductStore() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -16,7 +17,9 @@ export default function ProductStore() {
     const [categories, setCategories] = useState([]);
     const [sizes, setSizes] = useState([]);
     const [subcategories, setSubCategorie] = useState([]);
-
+    const [images, setImages] = useState([]);
+    const navigate = useNavigate()
+    
     useEffect(() => {
         const getDataFromBackend = async () => {
             const data = await axios.get('http://localhost:3000/api/product/create');
@@ -54,6 +57,10 @@ export default function ProductStore() {
     const handleNext = async () => {
 
         const data = await childRef.current.submitedForm();
+        console.log(data);
+        if(data.images !== undefined){
+            console.log(data.images);
+        }
         if(data.status)
         {
             const localStorageData = localStorage.getItem('images');
@@ -77,20 +84,23 @@ export default function ProductStore() {
         const mainAndSecondary = JSON.parse(localStorage.getItem('images'))
 
         try {
-            const response = await axios.post('http://localhost:3000/api/product/store',{
-                data: {
-                    images,
-                    filters,
-                    information,
-                    mainAndSecondary
-                }
-            });
-
+            // const response = await axios.post('http://localhost:3000/api/product/store',{
+            //     data: {
+            //         images,
+            //         filters,
+            //         information,
+            //         mainAndSecondary
+            //     }
+            // });
             
             localStorage.removeItem('imagesWithColors');
             localStorage.removeItem('filters');
             localStorage.removeItem('product_information');
             localStorage.removeItem('images');
+
+            navigate('/products', {
+                state: true,
+            })
 
         } catch (error) {
             console.log(error);
@@ -130,6 +140,7 @@ export default function ProductStore() {
                                     colors={colors}
                                     types={types}
                                     sizes={sizes}
+                                    images={images !== undefined ? images : null}
                                     ref={index === activeIndex ? childRef : nullRef}
                                 />
                             </div>

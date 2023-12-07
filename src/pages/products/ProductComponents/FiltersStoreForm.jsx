@@ -14,12 +14,16 @@ const FiltersStoreForm = forwardRef((props, ref) => {
     const [images, setImages] = useState([])
     const [productInformations, setProductInformations] = useState();
     const info = JSON.parse(localStorage.getItem('product_information'));
-    const imagesFromLocal = JSON.parse(localStorage.getItem('imagesWithColors'));
+    // const imagesFromLocal = JSON.parse(localStorage.getItem('imagesWithColors'));
+    const [imagesFromLocal, setImagesFromLocal] = useState(JSON.parse(localStorage.getItem('imagesWithColors')));
     const [errors, setErrors] = useState({});
+
+    window.addEventListener('storage', () => {
+        setImagesFromLocal(JSON.parse(localStorage.getItem('imagesWithColors')));
+    })
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem('filters')) || null;
-
 
         if(data !== null) {
             

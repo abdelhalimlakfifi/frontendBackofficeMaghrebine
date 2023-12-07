@@ -42,24 +42,35 @@ export default forwardRef((props, ref) => {
             return { status: false };
         },
     }));
+    
 
 
-    useEffect(() => {
-        const imageFromLocal = JSON.parse(localStorage.getItem('imagesWithColors'));
-        if(imageFromLocal !== null) {
-            setImages(imageFromLocal);
+    useEffect(() =>{
+        console.log(props.images)
+        if(props.images)
+        {
+            setImages(props.images)
         }else{
-            const imagesLocal = JSON.parse(localStorage.getItem('images'));
-            if(imagesLocal !== null) {
-                setImages(imagesLocal.others);
+            const imageFromLocal = JSON.parse(localStorage.getItem('imagesWithColors'));
+            if(imageFromLocal !== null) {
+                setImages(imageFromLocal);
+            }else{
+                const imagesLocal = JSON.parse(localStorage.getItem('images'));
+                if(imagesLocal !== null) {
+                    setImages(imagesLocal.others);
+                }
             }
         }
-    }, [])
+    }, []);
+
+    useEffect(() =>{
+        console.log(images)
+    }, [images])
     return (
         <div className="mt-12">
             <div className="mt-4">
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
-                    {images.map((image, index) => (
+                    {/* {images.map((image, index) => (
                         <div key={index} className='flex justify-center'>
                             <ImageItem 
                                 key={index}
@@ -70,7 +81,7 @@ export default forwardRef((props, ref) => {
                                 onColorChange={handleColorChange}
                             />
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             </div>
         </div>
