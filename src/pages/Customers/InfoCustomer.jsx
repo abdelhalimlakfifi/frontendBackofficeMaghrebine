@@ -1,4 +1,4 @@
-import  { useState, useRef, useEffect } from "react";
+import  { useState, useRef } from "react";
 import Layout from "../../layouts/layouts";
 import { Button } from "primereact/button";
 import { useForm, Controller } from "react-hook-form";
@@ -53,7 +53,7 @@ export default function InfoCustomer() {
   };
 
   const formData = new FormData();
-  const submitForm = async (e) => {
+  const submitForm = async () => {
     // setLoading(true);
 
     formData.append("first_name", formRef.current.first_name.value);

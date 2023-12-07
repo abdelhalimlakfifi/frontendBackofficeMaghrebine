@@ -7,7 +7,6 @@ import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { OrdersServices } from "./OrderData/Order.data";
-import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { del, post } from "../../utils/request";
 import { Tag } from "primereact/tag";
@@ -21,7 +20,6 @@ export default function OrdersCustumers(Props) {
   const toast = useRef(null);
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState({});
-  const [displayedOrders, setDisplayedOrders] = useState({});
   const items = [{ label: "Orders" }];
   const home = { icon: "pi pi-home", url: "/" };
   const navigate = useNavigate();
@@ -33,13 +31,11 @@ export default function OrdersCustumers(Props) {
       alert("Unauthorized access! Redirecting to login.");
       navigate("/login");
     };
-    console.log("id.id of use effect ", idCustomer);
     let getCustomers = async () => {
       let data = await OrdersServices.getOrdersData(unauthorizedCallback, id);
 
       if (data) {
         setOrders(data.order);
-        setDisplayedOrders(data.order);
         setLoading(false);
       }
     };
@@ -54,7 +50,6 @@ export default function OrdersCustumers(Props) {
     navigate("/login");
   };
 
- 
   const handleDeleteUser = async (row) => {
     confirmDialog({
       message: `Do you want to delete this Order?`,
@@ -93,9 +88,7 @@ export default function OrdersCustumers(Props) {
 
               if (data) {
                 setOrders(data.order);
-                setDisplayedOrders(data.order);
                 setLoading(false);
-                console.log("orders ", orders);
               }
             };
             getCustomers();
@@ -162,8 +155,6 @@ export default function OrdersCustumers(Props) {
           });
         });
       } else {
-        console.log("id.id of get ORders ", idCustomer);
-
         let getCustomers = async () => {
           let data = await OrdersServices.getOrdersData(
             unauthorizedCallback,
@@ -172,9 +163,7 @@ export default function OrdersCustumers(Props) {
 
           if (data) {
             setOrders(data.order);
-            setDisplayedOrders(data.order);
             setLoading(false);
-            console.log("orders ", orders);
           }
         };
         getCustomers();
@@ -224,7 +213,6 @@ export default function OrdersCustumers(Props) {
     );
   };
 
-  
   return (
     <>
       <BreadCrumb model={items} home={home} />
