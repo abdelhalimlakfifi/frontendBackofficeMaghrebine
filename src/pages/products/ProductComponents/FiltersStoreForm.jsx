@@ -115,15 +115,18 @@ const FiltersStoreForm = forwardRef((props, ref) => {
 
                 <div>
                     <Marquee>
-                        {imagesFromLocal.map((image, index) => {
-                            return (
-                                <div key={index} className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-                                    <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href="#">
-                                        <img className="object-cover" src={`http://localhost:3000/api/${image.path}`} alt="product image" />
+                        {
+                            imagesFromLocal !== null && (
+                                imagesFromLocal.map((image, index) => (
+                                    <div key={index} className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                                        <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href="#">
+                                            <img className="object-cover" src={`http://localhost:3000/api/${image.path}`} alt="product image" />
+                                        </div>
                                     </div>
-                                </div>
+                                ))
                             )
-                        })}
+                        }
+
                     </Marquee>
                 </div>
 
