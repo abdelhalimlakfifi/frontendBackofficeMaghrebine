@@ -67,8 +67,35 @@ export default function ProductStore() {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async  () => {
         childRef.current.submitedForm()
+
+        
+        const images = JSON.parse(localStorage.getItem('imagesWithColors'));
+        const filters = JSON.parse(localStorage.getItem('filters'));
+        const information = JSON.parse(localStorage.getItem('product_information'));
+        const mainAndSecondary = JSON.parse(localStorage.getItem('images'))
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/product/store',{
+                data: {
+                    images,
+                    filters,
+                    information,
+                    mainAndSecondary
+                }
+            });
+
+            
+            localStorage.removeItem('imagesWithColors');
+            localStorage.removeItem('filters');
+            localStorage.removeItem('product_information');
+            localStorage.removeItem('images');
+
+        } catch (error) {
+            console.log(error);
+        }
+        console.log("submit from parent");
     }
 
     const isPreviousDisabled = activeIndex === 0;
