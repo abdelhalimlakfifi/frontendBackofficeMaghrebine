@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import  { useState, useRef, useEffect } from "react";
 import Layout from "../../layouts/layouts";
 import { Button } from "primereact/button";
 import { useForm, Controller } from "react-hook-form";
@@ -6,7 +6,6 @@ import { useForm, Controller } from "react-hook-form";
 import { Toast } from "primereact/toast";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
-import profileImageNone from "../../assets/profileImageNone.png";
 
 import { post } from "../../utils/request";
 import OrdersCustumers from "./OrdersCustumers";
@@ -34,7 +33,7 @@ export default function InfoCustomer() {
   const additionalData = location.state;
   //   const [image, setImage] = useState(profileImageNone);
   // const [selectedRoleError, setSelectedRoleError] = useState();
-  const [image, setImage] = useState(profileImageNone);
+  // const [image, setImage] = useState(profileImageNone);
   let defaultValues = {
     first_name: additionalData.first_name,
     last_name: additionalData.last_name,
@@ -91,9 +90,9 @@ export default function InfoCustomer() {
         summary: "success",
         detail: "Customer saved successfully",
       });
+      // setLoading(false);
     }
 
-    // setLoading(false);
   };
 
   return (
@@ -118,7 +117,7 @@ export default function InfoCustomer() {
                     onSubmit={form.handleSubmit(submitForm)}
                     ref={formRef}
                   >
-                    <div className="flex justify-end h-24">
+                    {/* <div className="flex justify-end h-24">
                       <div className="w-20 h-20 relative">
                         <div className="relative group">
                           <div className=" rounded-full">
@@ -135,7 +134,7 @@ export default function InfoCustomer() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex space-x-4">
                       <Controller
                         name="first_name"
