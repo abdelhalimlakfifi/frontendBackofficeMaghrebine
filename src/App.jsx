@@ -11,7 +11,8 @@ import GuestRoutes from './utils/GuestRoutes'
 import Users from './pages/users/Users'
 import Categories from './pages/CategoriesAndSubCategories/Categories'
 import Types from './pages/types/Types'
-import ProductStore from './pages/products/ProductStore'
+import ProductStore from './pages/products/ProductStore';
+import ProductList from './pages/products/ProductList'
 function App() {
 
     return (
@@ -77,8 +78,19 @@ function App() {
                         </ProtectedRoute>
                     } />
 
+                    {/* ProductList */}
+                    <Route
+                        path='products'
+                        element={
+                            <ProtectedRoute>
+                                <ProductList />
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route path='/product-store' element={
-                        <ProductStore />
+                        <ProtectedRoute>
+                            <ProductStore />
+                        </ProtectedRoute>
                     } />
 
                     <Route path='/profile' element={
