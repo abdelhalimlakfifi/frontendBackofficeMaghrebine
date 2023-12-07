@@ -59,7 +59,8 @@ export default function ProductStore() {
         const data = await childRef.current.submitedForm();
         console.log(data);
         if(data.images !== undefined){
-            console.log(data.images);
+            // (console.log(data.images);)
+            setImages(data.images);
         }
         if(data.status)
         {
