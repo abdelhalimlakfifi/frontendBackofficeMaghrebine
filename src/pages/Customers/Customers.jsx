@@ -13,6 +13,7 @@ import { Avatar } from "primereact/avatar";
 import { Toast } from "primereact/toast";
 import { del } from "../../utils/request";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Tag } from "primereact/tag";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
@@ -149,6 +150,34 @@ export default function Customers() {
       </div>
     );
   };
+  const getSeverity = (active) => {
+    switch (active) {
+      case true:
+        return "success";
+
+      case false:
+        return "danger";
+
+      default:
+        return null;
+    }
+  };
+
+  const activeBodyTemplate = (rowData) => {
+    return (
+      <Tag
+        value={rowData.valid_account ? "Active" : "Inactive"}
+        severity={getSeverity(rowData.valid_account)}
+      ></Tag>
+    );
+  };
+  const deleteAt = (rowData) => (
+    <Tag
+      value={rowData.valid_account ? "Active" : "Inactive"}
+      severity={getSeverity(rowData.valid_account)}
+    />
+  );
+
   const fullname = (row) => {
     // console.log(row.profile_picture);
     return (
@@ -174,7 +203,6 @@ export default function Customers() {
       </div>
     );
   };
-  const deleteAt = (rowData) => (rowData.deletedBy ? "true" : "false");
 
   return (
     <Layout>
@@ -247,10 +275,15 @@ export default function Customers() {
             />
             <Column field={"username"} header="Username" sortable />
             <Column field={"email"} header="email" sortable />
-            <Column field={"valid_account"} header="Active " sortable />
+            <Column
+              field={"valid_account"}
+              header="Active "
+              sortable
+              body={(rowData) => activeBodyTemplate(rowData)}
+            />
             <Column
               field={"deleted"}
-              header="deleted "
+              header="deleted"
               sortable
               body={(row) => deleteAt(row)}
             />

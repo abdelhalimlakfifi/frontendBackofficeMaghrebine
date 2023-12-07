@@ -54,23 +54,7 @@ export default function OrdersCustumers(Props) {
     navigate("/login");
   };
 
-  const searchable = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    // Use setDisplayedUsers to update the state with the filtered array
-    setDisplayedOrders(
-      orders.filter((user) => {
-        const firstName = user.first_name.toLowerCase();
-        const lastName = user.last_name.toLowerCase();
-        const username = user.username.toLowerCase();
-
-        return (
-          firstName.includes(searchTerm) ||
-          lastName.includes(searchTerm) ||
-          username.includes(searchTerm)
-        );
-      })
-    );
-  };
+ 
   const handleDeleteUser = async (row) => {
     confirmDialog({
       message: `Do you want to delete this Order?`,
@@ -240,20 +224,7 @@ export default function OrdersCustumers(Props) {
     );
   };
 
-  const header = (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center",
-      }}
-    >
-      <span>
-        <i className="pi pi-search" style={{ margin: "4px 4px 0 0" }}></i>
-        <InputText type="search" onInput={searchable} placeholder="Search" />
-      </span>
-    </div>
-  );
+  
   return (
     <>
       <BreadCrumb model={items} home={home} />
@@ -311,7 +282,6 @@ export default function OrdersCustumers(Props) {
             loading={loading}
             rows={5}
             rowsPerPageOptions={[5, 10, 25, 50]}
-            header={header}
             scrollable
             showGridlines
             stripedRows
