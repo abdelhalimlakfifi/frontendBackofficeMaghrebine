@@ -83,7 +83,7 @@ export const saveType = (handleSubmit) => {
 export const leftToolbarTemplate = (
   openNew,
   selectedTypes,
-  handleDeleteBySelecting
+  openDeleteDialog
 ) => (
   <div className="flex flex-wrap gap-2">
     <Button
@@ -97,7 +97,7 @@ export const leftToolbarTemplate = (
       icon="pi pi-trash"
       severity="danger"
       disabled={!selectedTypes || !selectedTypes.length}
-      onClick={() => handleDeleteBySelecting(selectedTypes)}
+      onClick={() => openDeleteDialog(selectedTypes)}
     />
   </div>
 );
@@ -113,6 +113,7 @@ export const rightToolbarTemplate = (exportCSV, selectedTypes, dt) => (
 );
 
 export const exportCSV = (selectedTypes, dt) => {
+  console.log(dt.current);
   if (selectedTypes?.length) {
     dt.current.exportCSV({ selectionOnly: true });
   } else {
@@ -193,9 +194,9 @@ export const typeIdBodyTemplate = (rowData) => {
   const { typeId } = rowData;
 
   if (Array.isArray(typeId)) {
-    const options = typeId.map((type, index) => ({
-      label: type,
-      value: type,
+    const options = typeId.map((type) => ({
+      label: type.name, // Assuming that 'name' is the property you want to display
+      value: type._id, // Assuming that '_id' is the property you want to use as the value
     }));
 
     const defaultLabel = "Type ID";
@@ -203,7 +204,7 @@ export const typeIdBodyTemplate = (rowData) => {
     return <Dropdown options={options} placeholder={defaultLabel} />;
   }
 
-  return <span>{typeId}</span>;
+  return <span>{typeId.name}</span>; // Assuming that 'name' is the property you want to display
 };
 
 // -------------------------SUBCATEGORIES-------------------------
