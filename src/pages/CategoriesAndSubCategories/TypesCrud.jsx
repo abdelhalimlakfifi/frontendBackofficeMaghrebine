@@ -10,7 +10,6 @@ import { Dialog } from "primereact/dialog";
 import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 
-
 // Image
 import { FileUpload } from "primereact/fileupload";
 import { InputSwitch } from "primereact/inputswitch";
@@ -37,7 +36,7 @@ import {
 } from "../../components/Global/TableUtils";
 
 import { get } from "../../utils/request";
-import { Button } from "primereact/button";
+import DeleteDialog from "../../components/Global/DeleteDialog";
 
 const TypesCrud = () => {
   // ------------------------------to fix
@@ -45,6 +44,7 @@ const TypesCrud = () => {
   const [selectedRowData, setSelectedRowData] = useState(null);
 
   const openDeleteDialog = (rowData) => {
+    console.log(rowData);
     setSelectedRowData(rowData);
     setDeleteDialogVisible(true);
   };
@@ -55,9 +55,18 @@ const TypesCrud = () => {
   };
 
   const confirmDelete = async () => {
-    handleDelete(selectedRowData);
+    if (selectedTypes && selectedTypes.length > 0) {
+      // Delete multiple rows
+      handleDeleteBySelecting(selectedTypes);
+    } else if (selectedRowData) {
+      // Delete a single row
+      handleDelete(selectedRowData);
+    }
+
+    // Hide the delete dialog
     hideDeleteDialog();
   };
+
   // ------------------------------
 
   const [showDataTable, setShowDataTable] = useState(false);
@@ -130,7 +139,7 @@ const TypesCrud = () => {
     };
 
     fetchData();
-  }, [submitted, setData, setShowDataTable]);
+  }, [submitted]);
 
   // POST
   const handleSubmit = async () => {
@@ -203,7 +212,6 @@ const TypesCrud = () => {
 
       if (response.status === 200) {
         console.log("deleted successfully");
-
         // Should update data after successful delete
       }
     } catch (error) {
@@ -248,7 +256,6 @@ const TypesCrud = () => {
     }
   };
 
-
   return (
     <>
       <Toast ref={toast}></Toast>
@@ -258,7 +265,7 @@ const TypesCrud = () => {
           leftToolbarTemplate(
             () => openNew(setSubmitted, setNewDialogVisible, setFormData),
             selectedTypes,
-            () => handleDeleteBySelecting(selectedTypes)
+            () => openDeleteDialog(selectedTypes)
           )
         }
         right={() => rightToolbarTemplate(exportCSV, selectedTypes, dt)}
@@ -289,6 +296,7 @@ const TypesCrud = () => {
         <SkeletonDataTable />
       )}
 
+      {/* Dialog For NEW BTN */}
       <Dialog
         visible={newDialogVisible}
         style={{ width: "32rem" }}
@@ -386,6 +394,7 @@ const TypesCrud = () => {
         </div>
       </Dialog>
 
+      {/* Dialog For EDIT BTN */}
       <Dialog
         visible={editDialogVisible}
         style={{ width: "50rem" }}
@@ -397,7 +406,9 @@ const TypesCrud = () => {
           () => hideDialog(setSubmitted, setEditDialogVisible),
           () => editType(formData)
         )}
-        onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
+        onHide={() =>
+          hideDialog(setSubmitted, setEditDialogVisible, setFormData)
+        }
       >
         {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
@@ -489,38 +500,11 @@ const TypesCrud = () => {
         <DateCDU formData={formData} setFormData={setFormData} />
       </Dialog>
 
-      <Dialog
+      <DeleteDialog
         visible={deleteDialogVisible}
-        style={{ width: "25rem" }}
-        header="Confirm"
-        modal
-        className="p-fluid"
-        footer={
-          <div>
-            <Button
-              label="No"
-              icon="pi pi-times"
-              className="p-button-text"
-              onClick={hideDeleteDialog}
-            />
-            <Button
-              label="Yes"
-              icon="pi pi-check"
-              className="p-button-text"
-              onClick={confirmDelete}
-            />
-          </div>
-        }
         onHide={hideDeleteDialog}
-      >
-        <div className="confirmation-content">
-          <i
-            className="pi pi-exclamation-triangle p-mr-3"
-            style={{ fontSize: "2rem" }}
-          />
-          <span>Are you sure you want to delete the selected type(s)?</span>
-        </div>
-      </Dialog>
+        confirmDelete={confirmDelete}
+      />
     </>
   );
 };
