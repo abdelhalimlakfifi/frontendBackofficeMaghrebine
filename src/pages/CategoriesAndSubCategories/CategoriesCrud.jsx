@@ -99,8 +99,9 @@ const CategoriesCrud = () => {
     updatedAt: null,
   });
 
-  // const [selectedTypeId, setSelectedTypeId] = useState("");
-  // TODO: setSelectedTypeId = formData.typeId
+  /////////////////////////////////
+  const [typeOptions, setTypeOptions] = useState([]);
+  // ////////////////////////////////
 
   const clearForm = () => {
     setFormData({
@@ -141,13 +142,24 @@ const CategoriesCrud = () => {
     const fetchData = async () => {
       const token = JSON.parse(localStorage.getItem("user")).token;
 
-      const data = await get(
-        "http://localhost:3000/api/categorie/",
-        token,
-        unauthorizedCallback
-      );
-      setData(data);
-      setShowDataTable(true);
+      try {
+        // Fetch category data
+        const categoryData = await get(
+          "http://localhost:3000/api/categorie/",
+          token,
+          unauthorizedCallback
+        );
+
+        // Fetch type options
+        const typeOptions = await get("http://localhost:3000/api/type", token);
+
+        // Set the fetched data in state
+        setData(categoryData);
+        setTypeOptions(typeOptions);
+        setShowDataTable(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
@@ -159,21 +171,26 @@ const CategoriesCrud = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user.token;
 
-      if (!formData.name || imageRef.current.files.length === 0) {
+      const { name, typeId } = formData;
+      const imageFiles = imageRef.current.files;
+
+      if (!name || imageFiles.length === 0 || !typeId || typeId.length === 0) {
         showNotification(
           "error",
           "Error",
-          "Please enter Name, Image, and select Active status."
+          "Please enter Name, Image, select Active status, and choose at least one Type."
         );
         return;
       }
 
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("typeIds", [formData.typeId]);
+      const formDataToSend = {
+        name,
+        typeIds: typeId.map((type) => type._id),
+      };
 
-      if (imageRef.current.files.length > 0) {
-        formDataToSend.append("category_image", imageRef.current.files[0]);
+      // Add image to formDataToSend if it exists
+      if (imageFiles.length > 0) {
+        formDataToSend.category_image = imageFiles[0];
       }
 
       const response = await axios.post(
@@ -187,7 +204,7 @@ const CategoriesCrud = () => {
         }
       );
 
-      const responseData = response.data;
+      const responseData = response.data || {};
 
       if (responseData.message === "Category restored successfully") {
         showNotification("warn", "Warning", responseData.message);
@@ -205,7 +222,7 @@ const CategoriesCrud = () => {
         showNotification("warn", "Warning", responseData.message);
       }
     } catch (error) {
-      console.error("Error adding category:", error.message);
+      console.error("Error adding category:", error);
       showNotification(
         "error",
         "Error",
@@ -338,10 +355,25 @@ const CategoriesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setNewDialogVisible),
+          () =>
+            hideDialog(
+              setSubmitted,
+              setNewDialogVisible,
+              "new",
+              formData,
+              setFormData
+            ),
           handleSubmit
         )}
-        onHide={() => hideDialog(setSubmitted, setNewDialogVisible)}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setNewDialogVisible,
+            "new",
+            formData,
+            setFormData
+          )
+        }
       >
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
           <input
@@ -408,22 +440,22 @@ const CategoriesCrud = () => {
           )}
         </div>
 
-        <div className="field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
+        {/* typeId */}
+        <div className="p-field mb-4">
+          <label htmlFor="typeId" className="font-bold text-[#5A6A85]">
             Type ID
           </label>
-          <InputText
-            id="name"
+          <MultiSelect
+            id="typeId"
+            name="typeId"
             value={formData.typeId}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                typeId: [e.target.value],
-              })
-            }
+            onChange={(e) => setFormData({ ...formData, typeId: e.value })}
+            options={typeOptions}
+            optionLabel="name" // Assuming 'name' is the property you want to display
+            placeholder="Select Type ID"
           />
           {submitted && !formData.typeId && (
-            <small className="p-error">typeId is required.</small>
+            <small className="p-error">Type ID is required.</small>
           )}
         </div>
       </Dialog>
@@ -437,10 +469,25 @@ const CategoriesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setEditDialogVisible),
+          () =>
+            hideDialog(
+              setSubmitted,
+              setEditDialogVisible,
+              "edit",
+              formData,
+              setFormData
+            ),
           () => editType(formData)
         )}
-        onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setEditDialogVisible,
+            "edit",
+            formData,
+            setFormData
+          )
+        }
       >
         {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
