@@ -70,6 +70,7 @@ const SubCategoriesCrud = () => {
     });
   };
 
+  // GET 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -84,6 +85,7 @@ const SubCategoriesCrud = () => {
     fetchData();
   }, []);
 
+  // POST
   const handleSubmit = async () => {
     try {
       if (!formData.name) {
@@ -132,11 +134,13 @@ const SubCategoriesCrud = () => {
     }
   };
 
+  // Show name of type
   const typeIdOptions = formData.typeId.map((type, index) => ({
     label: type,
     value: type,
   }));
 
+  // Show name of Category
   const categorieOptions = formData.categorieId.map((type, index) => ({
     label: type,
     value: type,
