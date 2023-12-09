@@ -24,6 +24,7 @@ export const handleFileChange = (e, setImagePreview, setImageName) => {
 };
 
 export const openNew = (setSubmitted, setNewDialogVisible) => {
+  console.log('test open');
   setSubmitted(false);
   setNewDialogVisible(true);
 
@@ -41,38 +42,10 @@ export const openNew = (setSubmitted, setNewDialogVisible) => {
   // });
 };
 
-// export const hideDialog = (
-//   setSubmitted,
-//   setNewDialogVisible,
-//   setEditDialogVisible
-// ) => {
-//   setSubmitted(false);
-//   setNewDialogVisible(false);
-//   setEditDialogVisible(false);
-// };
-
-// export const saveType = (
-//   setSubmitted,
-//   setNewDialogVisible,
-//   setEditDialogVisible
-// ) => {
-//   setSubmitted(true);
-//   setNewDialogVisible(false);
-//   setEditDialogVisible(false);
-// };
-
-export const hideDialog = (
-  setSubmitted,
-  setNewDialogVisible,
-  setEditDialogVisible
-) => {
+export const hideDialog = (setSubmitted, setVisible, dialogType) => {
+  console.log(`Closing ${dialogType} dialog`);
   setSubmitted(false);
-  if (setNewDialogVisible) {
-    setNewDialogVisible(false);
-  }
-  if (setEditDialogVisible) {
-    setEditDialogVisible(false);
-  }
+  setVisible(false);
 };
 
 export const saveType = (handleSubmit) => {
@@ -123,14 +96,14 @@ export const exportCSV = (selectedTypes, dt) => {
 };
 
 // -------------------------FOOTER Dialog-------------------------
-export const typeDialogFooter = (hideDialog, handleSubmit) => (
+export const typeDialogFooter = (hideDialog, handleSubmit, dialogType) => (
   <>
     <Button
       className="bg-light-gold border-light-gold"
       label="Cancel"
       icon="pi pi-times"
       // outlined
-      onClick={() => hideDialog()}
+      onClick={() => hideDialog(dialogType)}
     />
     <Button
       className="bg-light-gold border-light-gold"
