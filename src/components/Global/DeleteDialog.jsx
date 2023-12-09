@@ -3,11 +3,7 @@ import React from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 
-const DeleteDialog = ({
-  visible,
-  onHide,
-  confirmDelete,
-}) => {
+const DeleteDialog = ({ visible, onHide, confirmDelete }) => {
   return (
     <Dialog
       visible={visible}
@@ -20,13 +16,13 @@ const DeleteDialog = ({
           <Button
             label="No"
             icon="pi pi-times"
-            className="p-button-text"
+            className="bg-light-gold border-light-gold"
             onClick={onHide}
           />
           <Button
             label="Yes"
             icon="pi pi-check"
-            className="p-button-text"
+            className="bg-light-gold border-light-gold"
             onClick={confirmDelete}
           />
         </div>
