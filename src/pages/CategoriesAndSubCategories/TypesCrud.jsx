@@ -304,11 +304,27 @@ const TypesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setNewDialogVisible, "new", formData, setFormData),
+          () =>
+            hideDialog(
+              setSubmitted,
+              setNewDialogVisible,
+              "new",
+              formData,
+              setFormData
+            ),
           handleSubmit
         )}
-        onHide={() => hideDialog(setSubmitted, setNewDialogVisible, "new", formData, setFormData)}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setNewDialogVisible,
+            "new",
+            formData,
+            setFormData
+          )
+        }
       >
+        {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
           <input
             type="file"
@@ -360,6 +376,7 @@ const TypesCrud = () => {
           </div>
         </div>
 
+        {/* Name */}
         <div className="field mb-4">
           <label htmlFor="name" className="font-bold text-[#5A6A85]">
             Name
@@ -373,7 +390,8 @@ const TypesCrud = () => {
             <small className="p-error">Name is required.</small>
           )}
         </div>
-
+        
+        {/* typeId */}
         <div className="field mb-4 flex">
           <label
             htmlFor="active"
@@ -402,10 +420,25 @@ const TypesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setEditDialogVisible, "edit", formData, setFormData),
+          () =>
+            hideDialog(
+              setSubmitted,
+              setEditDialogVisible,
+              "edit",
+              formData,
+              setFormData
+            ),
           () => editType(formData)
         )}
-        onHide={() => hideDialog(setSubmitted, setEditDialogVisible, "edit", formData, setFormData)}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setEditDialogVisible,
+            "edit",
+            formData,
+            setFormData
+          )
+        }
       >
         {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
