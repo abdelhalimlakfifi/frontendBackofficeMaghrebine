@@ -87,12 +87,14 @@ export const leftToolbarTemplate = (
 ) => (
   <div className="flex flex-wrap gap-2">
     <Button
+      className="bg-light-gold border-light-gold"
       label="New"
       icon="pi pi-plus"
       severity="success"
       onClick={() => openNew()}
     />
     <Button
+      className="bg-light-gold border-light-gold"
       label="Delete"
       icon="pi pi-trash"
       severity="danger"
@@ -107,13 +109,12 @@ export const rightToolbarTemplate = (exportCSV, selectedTypes, dt) => (
   <Button
     label="Export"
     icon="pi pi-upload"
-    className="p-button-help bg-light-gold"
+    className="bg-light-gold border-light-gold"
     onClick={() => exportCSV(selectedTypes, dt)}
   />
 );
 
 export const exportCSV = (selectedTypes, dt) => {
-  console.log(dt.current);
   if (selectedTypes?.length) {
     dt.current.exportCSV({ selectionOnly: true });
   } else {
@@ -125,17 +126,18 @@ export const exportCSV = (selectedTypes, dt) => {
 export const typeDialogFooter = (hideDialog, handleSubmit) => (
   <>
     <Button
-      className="bg-light-gold"
+      className="bg-light-gold border-light-gold"
       label="Cancel"
       icon="pi pi-times"
-      outlined
+      // outlined
       onClick={() => hideDialog()}
     />
-    <Button 
-    className="bg-light-gold"
-    label="Save" 
-    icon="pi pi-check" 
-    onClick={handleSubmit} />
+    <Button
+      className="bg-light-gold border-light-gold"
+      label="Save"
+      icon="pi pi-check"
+      onClick={handleSubmit}
+    />
   </>
 );
 
