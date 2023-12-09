@@ -282,10 +282,12 @@ const CategoriesCrud = () => {
     }
   };
 
-  const options = formData.typeId.map((type) => ({
+  // Show name of type
+  const typeIdOptions = formData.typeId.map((type, index) => ({
     label: type.name,
     // value: type._id,
   }));
+
   return (
     <div>
       <Toast ref={toast} />
@@ -530,7 +532,7 @@ const CategoriesCrud = () => {
             name="typeId"
             value={selectedType}
             onChange={(e) => setSelectedType(e.value)}
-            options={options}
+            options={typeIdOptions}
             optionLabel="label" // Assuming 'label' is the property you want to display
             placeholder="Select Type Id"
           />
