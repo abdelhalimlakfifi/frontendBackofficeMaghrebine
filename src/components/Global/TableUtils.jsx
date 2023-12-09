@@ -24,7 +24,6 @@ export const handleFileChange = (e, setImagePreview, setImageName) => {
 };
 
 export const openNew = (setSubmitted, setNewDialogVisible) => {
-  console.log('test open');
   setSubmitted(false);
   setNewDialogVisible(true);
 
