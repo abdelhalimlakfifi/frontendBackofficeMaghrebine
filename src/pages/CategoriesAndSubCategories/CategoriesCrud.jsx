@@ -1,26 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
+import { MultiSelect } from "primereact/multiselect";
+import { InputSwitch } from "primereact/inputswitch";
 import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
 
-// Image
-import { FileUpload } from "primereact/fileupload";
-import { InputSwitch } from "primereact/inputswitch";
-
-// UpdateAt CreatedAt DeletedAt
-import DateCDU from "../../components/Global/DateCDU";
+// Skeleton
+import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
 
 // Data Column
 import { dataCategorieTableColumns } from "../../components/Global/dataTableColumns";
 
-// Skeleton
-import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
+//  CreatedAt DeletedAt UpdateAt
+import DateCDU from "../../components/Global/DateCDU";
+
+// Delete Dialog
+import DeleteDialog from "../../components/Global/DeleteDialog";
 
 // TableUtils.jsx
 import {
@@ -31,44 +31,11 @@ import {
   rightToolbarTemplate,
   exportCSV,
   handleFileChange,
-  // handleDeleteBySelecting,
 } from "../../components/Global/TableUtils";
 
 import { get } from "../../utils/request";
-import { MultiSelect } from "primereact/multiselect";
-import { Button } from "primereact/button";
-import DeleteDialog from "../../components/Global/DeleteDialog";
 
 const CategoriesCrud = () => {
-  // ------------------------------to fix
-  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  const [selectedRowData, setSelectedRowData] = useState(null);
-
-  const openDeleteDialog = (rowData) => {
-    console.log(rowData);
-    setSelectedRowData(rowData);
-    setDeleteDialogVisible(true);
-  };
-
-  const hideDeleteDialog = () => {
-    setSelectedRowData(null);
-    setDeleteDialogVisible(false);
-  };
-
-  const confirmDelete = async () => {
-    if (selectedTypes && selectedTypes.length > 0) {
-      // Delete multiple rows
-      handleDeleteBySelecting(selectedTypes);
-    } else if (selectedRowData) {
-      // Delete a single row
-      handleDelete(selectedRowData);
-    }
-
-    // Hide the delete dialog
-    hideDeleteDialog();
-  };
-
-  // ------------------------------
   const [showDataTable, setShowDataTable] = useState(false);
 
   const [imageName, setImageName] = useState(null);
@@ -86,6 +53,7 @@ const CategoriesCrud = () => {
   const [editDialogVisible, setEditDialogVisible] = useState(false);
 
   const [selectedType, setSelectedType] = useState(null);
+  const [typeOptions, setTypeOptions] = useState([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -98,10 +66,6 @@ const CategoriesCrud = () => {
     createdAt: null,
     updatedAt: null,
   });
-
-  /////////////////////////////////
-  const [typeOptions, setTypeOptions] = useState([]);
-  // ////////////////////////////////
 
   const clearForm = () => {
     setFormData({
@@ -151,11 +115,11 @@ const CategoriesCrud = () => {
         );
 
         // Fetch type options
-        const typeOptions = await get("http://localhost:3000/api/type", token);
+        const typeData = await get("http://localhost:3000/api/type", token);
 
         // Set the fetched data in state
         setData(categoryData);
-        setTypeOptions(typeOptions);
+        setTypeOptions(typeData);
         setShowDataTable(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -231,13 +195,51 @@ const CategoriesCrud = () => {
     }
   };
 
+  // ------------------------------to move
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+
+  const openDeleteDialog = (rowData) => {
+    console.log(rowData);
+    setSelectedRowData(rowData);
+    setDeleteDialogVisible(true);
+  };
+
+  const hideDeleteDialog = () => {
+    setSelectedRowData(null);
+    setDeleteDialogVisible(false);
+  };
+
+  // Confirm and handle category deletion
+  const confirmDelete = () => {
+    // Call unified handleDelete function
+    handleDelete(selectedRowData, selectedTypes);
+
+    // Hide the delete dialog
+    hideDeleteDialog();
+  };
+
   // Delete
-  const handleDelete = async (rowData) => {
+  const handleDelete = async (rowData, selectedCategories) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
-    console.log(`Deleting category with ID: ${rowData._id}`);
 
     try {
+      let identifiersToDelete;
+
+      if (selectedCategories && selectedCategories.length > 0) {
+        // Delete multiple categories
+        identifiersToDelete = selectedCategories.map(
+          (category) => category._id
+        );
+      } else if (rowData) {
+        // Delete a single category
+        identifiersToDelete = [rowData._id];
+      } else {
+        console.error("Invalid arguments for handleDelete function.");
+        return;
+      }
+
       const response = await axios.delete(
         "http://localhost:3000/api/categorie/delete",
         {
@@ -245,43 +247,8 @@ const CategoriesCrud = () => {
             Authorization: `Bearer ${token}`,
           },
           data: {
-            ids: [rowData._id], // Pass an array of IDs for single deletion
+            ids: identifiersToDelete,
           },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log("Category deleted successfully");
-        // Should update data after successful delete
-      }
-    } catch (error) {
-      console.error("Error deleting category", error);
-    }
-  };
-
-  // Delete by Selected Category
-  const handleDeleteBySelecting = async (selectedCategories) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const { token } = user;
-    console.log("Deleting selected categories:", selectedCategories);
-
-    try {
-      if (!selectedCategories || !selectedCategories.length) {
-        console.log("No categories selected for deletion.");
-        return;
-      }
-
-      const identifiersToDelete = selectedCategories.map(
-        (category) => category._id
-      );
-
-      const response = await axios.delete(
-        `http://localhost:3000/api/categorie/delete`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          data: { ids: identifiersToDelete }, // Use "ids" instead of "identifiers"
         }
       );
 
@@ -299,7 +266,7 @@ const CategoriesCrud = () => {
     }
   };
 
-  // Show name of type
+  // Function to generate options for type ID dropdown
   const typeIdOptions = formData.typeId.map((type, index) => ({
     label: type.name,
     // value: type._id,
@@ -375,6 +342,7 @@ const CategoriesCrud = () => {
           )
         }
       >
+        {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
           <input
             type="file"
@@ -426,6 +394,7 @@ const CategoriesCrud = () => {
           </div>
         </div>
 
+        {/* Name */}
         <div className="field mb-4">
           <label htmlFor="name" className="font-bold text-[#5A6A85]">
             Name
