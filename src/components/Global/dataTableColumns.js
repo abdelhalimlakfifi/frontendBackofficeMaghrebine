@@ -8,7 +8,7 @@ import {
   permessionsBodyTemplate,
 } from "./TableUtils";
 
-// Types-Categories-SubCategories
+// Types
 export const dataTypeTableColumns = (
   setFormData,
   setEditDialogVisible,
@@ -63,6 +63,7 @@ export const dataTypeTableColumns = (
   },
 ];
 
+// Categories
 export const dataCategorieTableColumns = (
   setFormData,
   setEditDialogVisible,
@@ -116,6 +117,7 @@ export const dataCategorieTableColumns = (
   },
 ];
 
+// SubCategories
 export const dataSubCategorieTableColumns = (
   setFormData,
   setEditDialogVisible
