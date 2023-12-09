@@ -68,7 +68,6 @@ const TypesCrud = () => {
   };
 
   // ------------------------------
-
   const [showDataTable, setShowDataTable] = useState(false);
 
   const [imageName, setImageName] = useState(null);
@@ -305,10 +304,10 @@ const TypesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setNewDialogVisible),
+          () => hideDialog(setSubmitted, setNewDialogVisible, "new", formData, setFormData),
           handleSubmit
         )}
-        onHide={() => hideDialog(setSubmitted, setNewDialogVisible)}
+        onHide={() => hideDialog(setSubmitted, setNewDialogVisible, "new", formData, setFormData)}
       >
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
           <input
@@ -403,12 +402,10 @@ const TypesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setEditDialogVisible),
+          () => hideDialog(setSubmitted, setEditDialogVisible, "edit", formData, setFormData),
           () => editType(formData)
         )}
-        onHide={() =>
-          hideDialog(setSubmitted, setEditDialogVisible, setFormData)
-        }
+        onHide={() => hideDialog(setSubmitted, setEditDialogVisible, "edit", formData, setFormData)}
       >
         {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
