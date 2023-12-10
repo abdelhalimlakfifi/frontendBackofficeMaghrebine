@@ -1,46 +1,68 @@
+// SubCategoriesTable.jsx
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 
+import { MultiSelect } from "primereact/multiselect";
+import { InputSwitch } from "primereact/inputswitch";
 import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { InputSwitch } from "primereact/inputswitch";
-import { Dropdown } from "primereact/dropdown";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
 
-// UpdateAt CreatedAt DeletedAt
-import DateCDU from "../../components/Global/DateCDU";
-
-// Data Columns
-import { dataSubCategorieTableColumns } from "../../components/Global/dataTableColumns";
+// Configuration Dotenv
+const apiUrlSubCategory = import.meta.env.VITE_SUBCATEGORY_URL;
+const apiUrlCategory = import.meta.env.VITE_CATEGORY_URL;
+const apiUrlType = import.meta.env.VITE_TYPE_URL;
 
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
+
+// Data Column
+import { dataSubCategorieTableColumns } from "../../components/Global/dataTableColumns";
+
+//  CreatedAt DeletedAt UpdateAt
+import DateCDU from "../../components/Global/DateCDU";
+
+// Delete Dialog
+import DeleteDialog from "../../components/Global/DeleteDialog";
 
 // TableUtils.jsx
 import {
   openNew,
   hideDialog,
+  typeDialogFooter,
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
+  handleFileChange,
 } from "../../components/Global/TableUtils";
+
+import { get } from "../../utils/request";
 
 const SubCategoriesCrud = () => {
   const [showDataTable, setShowDataTable] = useState(false);
+
+  const [imageName, setImageName] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const imageRef = useRef(null);
 
   const toast = useRef(null);
   const dt = useRef(null);
 
   const [data, setData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState(null);
 
   const [newDialogVisible, setNewDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+
+  const [selectedType, setSelectedType] = useState(null);
+
+  const [typeOptions, setTypeOptions] = useState([]);
+  const [categorieOptions, setCategorieOptions] = useState([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -70,12 +92,42 @@ const SubCategoriesCrud = () => {
     });
   };
 
-  // GET 
+  // Toast Notification
+  const showNotification = (severity, summary, detail) => {
+    toast.current.show({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
+  };
+
+  // GET
   useEffect(() => {
+    const unauthorizedCallback = () => {
+      // This function will be called if the request is unauthorized (status code 401)
+      alert("Unauthorized access! Redirecting to login.");
+      // You can also use react-router's useNavigate here
+      navigate("/login");
+    };
+
     const fetchData = async () => {
+      const token = JSON.parse(localStorage.getItem("user")).token;
+
       try {
-        const response = await axios.get("http://localhost:3000/subCategories");
-        setData(response.data);
+        const subCategoryData = await get(
+          `${apiUrlSubCategory}`,
+          token,
+          unauthorizedCallback
+        );
+
+        // Fetch type options
+        const typeData = await get(`${apiUrlType}`, token);
+        // Fetch Categorie options
+        const categorieData = await get(`${apiUrlCategory}`, token);
+
+        setData(subCategoryData);
+        setTypeOptions(typeData);
+        setCategorieOptions(categorieData);
         setShowDataTable(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -83,78 +135,134 @@ const SubCategoriesCrud = () => {
     };
 
     fetchData();
-  }, []);
+  }, [submitted, deleted]);
 
   // POST
   const handleSubmit = async () => {
     try {
-      if (!formData.name) {
-        toast.current.show({
-          severity: "error",
-          summary: "Validation Error",
-          detail: "all Fields are required.",
-          life: 3000,
-        });
-        return;
-      }
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user.token;
 
-      // Generate a unique id for Server Json
-      const id = uuidv4();
-      // for my data
-      const _id = uuidv4();
+      const { name, typeId, categorieId } = formData;
 
-      const newFormData = { id, _id, ...formData };
+      const formDataToSend = {
+        name,
+        typeIds: typeId.map((type) => type._id),
+        categorieIds: categorieId.map((categorie) => categorie._id),
+      };
 
       const response = await axios.post(
-        "http://localhost:3000/subCategories",
-        newFormData
+        `${apiUrlSubCategory}/store`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        }
       );
 
-      console.log("Response:", response.data);
+      const responseData = response.data || {};
 
-      clearForm();
-      setSubmitted(true);
-      setNewDialogVisible(false);
-
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Type added successfully.",
-        life: 3000,
-      });
+      if (responseData.message === "SubCategory restored successfully") {
+        showNotification("warn", "Warning", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else if (responseData.message === "SubCategory already exists") {
+        showNotification("error", "Error", responseData.message);
+      } else if (responseData.message === "SubCategory saved successfully") {
+        showNotification("success", "Success", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else {
+        showNotification("warn", "Warning", responseData.message);
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
-
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An error occurred while submitting the form.",
-        life: 3000,
-      });
+      console.error("Error adding category:", error);
+      showNotification(
+        "error",
+        "Error",
+        "An unexpected error occurred while adding the category."
+      );
     }
   };
 
-  // Show name of type
-  const typeIdOptions = formData.typeId.map((type, index) => ({
-    label: type,
-    value: type,
-  }));
+  // ------------------------------to fix
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
 
-  // Show name of Category
-  const categorieOptions = formData.categorieId.map((type, index) => ({
-    label: type,
-    value: type,
-  }));
+  const openDeleteDialog = (rowData) => {
+    console.log(rowData);
+    setSelectedRowData(rowData);
+    setDeleteDialogVisible(true);
+  };
+
+  const hideDeleteDialog = () => {
+    setSelectedRowData(null);
+    setDeleteDialogVisible(false);
+  };
+
+  // Confirm and handle category deletion
+  const confirmDelete = () => {
+    // Call unified handleDelete function
+    handleDelete(selectedRowData, selectedTypes);
+    hideDeleteDialog();
+  };
+
+  // Delete
+  const handleDelete = async (rowData, selectedTypes) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user.token;
+
+    try {
+      let identifiersToDelete;
+
+      if (selectedTypes && selectedTypes.length > 0) {
+        // Delete multiple categories
+        identifiersToDelete = selectedTypes.map((type) => type._id);
+      } else if (rowData) {
+        // Delete a single category
+        identifiersToDelete = [rowData._id];
+      } else {
+        console.error("Invalid arguments for handleDelete function.");
+        return;
+      }
+
+      const response = await axios.delete(`${apiUrlSubCategory}/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          ids: identifiersToDelete,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Types deleted successfully:", identifiersToDelete);
+        setDeleted(!deleted);
+      } else {
+        console.error(
+          "Failed to delete Types. Server returned:",
+          response.status,
+          response.data
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting Types:", error.message);
+    }
+  };
 
   return (
-    <div>
+    <>
       <Toast ref={toast} />
       <Toolbar
         className="mb-4"
         left={() =>
           leftToolbarTemplate(
             () => openNew(setSubmitted, setNewDialogVisible, setFormData),
-            selectedTypes
+            selectedTypes,
+            () => openDeleteDialog(selectedTypes)
           )
         }
         right={() => rightToolbarTemplate(exportCSV, selectedTypes, dt)}
@@ -174,11 +282,13 @@ const SubCategoriesCrud = () => {
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
           selectionMode="checkbox"
         >
-          {dataSubCategorieTableColumns(setFormData, setEditDialogVisible).map(
-            (col, index) => (
-              <Column key={index} {...col} />
-            )
-          )}
+          {dataSubCategorieTableColumns(
+            setFormData,
+            setEditDialogVisible,
+            openDeleteDialog
+          ).map((col, index) => (
+            <Column key={index} {...col} />
+          ))}
         </DataTable>
       ) : (
         <SkeletonDataTable />
@@ -192,12 +302,28 @@ const SubCategoriesCrud = () => {
         header="Add SubCategory"
         modal
         className="p-fluid"
-        // footer={typeDialogFooter(
-        //   () => hideDialog(setSubmitted, setNewDialogVisible),
-        //   () => saveType(setSubmitted, setNewDialogVisible)
-        // )}
-        onHide={() => hideDialog(setSubmitted, setNewDialogVisible)}
+        footer={typeDialogFooter(
+          () =>
+            hideDialog(
+              setSubmitted,
+              setNewDialogVisible,
+              "new",
+              formData,
+              setFormData
+            ),
+          handleSubmit
+        )}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setNewDialogVisible,
+            "new",
+            formData,
+            setFormData
+          )
+        }
       >
+        {/* Name */}
         <div className="field mb-4">
           <label htmlFor="name" className="font-bold text-[#5A6A85]">
             Name
@@ -207,44 +333,42 @@ const SubCategoriesCrud = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
-          {submitted && !formData.name && (
-            <small className="p-error">Name is required.</small>
-          )}
         </div>
 
-        <div className="field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
+        {/* typeId */}
+        <div className="p-field mb-4">
+          <label htmlFor="typeId" className="font-bold text-[#5A6A85]">
             Type ID
           </label>
-          <InputText
-            id="name"
+          <MultiSelect
+            id="typeId"
+            name="typeId"
             value={formData.typeId}
-            onChange={(e) =>
-              setFormData({ ...formData, typeId: [e.target.value] })
-            }
+            onChange={(e) => setFormData({ ...formData, typeId: e.value })}
+            options={typeOptions}
+            optionLabel="name" // Assuming 'name' is the property you want to display
+            placeholder="Select Type ID"
           />
-          {submitted && !formData.typeId && (
-            <small className="p-error">typeId is required.</small>
-          )}
         </div>
 
-        <div className="field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
-            Category ID
+        {/* categorieId */}
+        <div className="p-field mb-4">
+          <label htmlFor="categorieId" className="font-bold text-[#5A6A85]">
+            Categorie Id
           </label>
-          <InputText
-            id="name"
+          <MultiSelect
+            id="categorieId"
+            name="categorieId"
             value={formData.categorieId}
-            onChange={(e) =>
-              setFormData({ ...formData, categorieId: [e.target.value] })
-            }
+            onChange={(e) => setFormData({ ...formData, categorieId: e.value })}
+            options={categorieOptions}
+            optionLabel="name" // Assuming 'name' is the property you want to display
+            placeholder="Select Type ID"
           />
-          {submitted && !formData.categorieId && (
-            <small className="p-error">typeId is required.</small>
-          )}
         </div>
 
-        <div className="field mb-4 flex">
+        {/* Active */}
+        {/* <div className="field mb-4 flex">
           <label
             htmlFor="active"
             className="font-bold mr-2 w-16 text-[#5A6A85]"
@@ -257,98 +381,15 @@ const SubCategoriesCrud = () => {
             onChange={(e) => setFormData({ ...formData, active: e.value })}
             className="ml-2 w-12"
           />
-        </div>
-
-        <div className="text-center mt-4">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-        </div>
+        </div> */}
       </Dialog>
 
-      {/* Dialog For EDIT BTN */}
-      <Dialog
-        visible={editDialogVisible}
-        style={{ width: "50rem" }}
-        breakpoints={{ "960px": "75vw", "641px": "90vw" }}
-        header="Add Type"
-        modal
-        className="p-fluid"
-        // footer={typeDialogFooter(
-        //   () => hideDialog(setSubmitted, setEditDialogVisible),
-        //   () => saveType(setSubmitted, setEditDialogVisible)
-        // )}
-        onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
-      >
-        {/* Name */}
-        <div className="p-field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
-            Name
-          </label>
-          <InputText
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          />
-        </div>
-
-        {/* Active Switch */}
-        <div className="p-field mb-4">
-          <label htmlFor="active" className="font-bold text-[#5A6A85]">
-            Active
-          </label>
-          <div>
-            <InputSwitch
-              id="active"
-              name="active"
-              checked={formData.active}
-              onChange={(e) => setFormData({ ...formData, active: e.value })}
-            />
-          </div>
-        </div>
-
-        {/* typeId */}
-        <div className="p-field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
-            Type Id
-          </label>
-          <Dropdown
-            id="typeId"
-            name="typeId"
-            value={formData.typeId}
-            onChange={(e) =>
-              setFormData({ ...formData, typeId: [e.target.value] })
-            }
-            options={typeIdOptions}
-            placeholder="Select Type Id"
-          />
-        </div>
-
-        {/* categorieOptions */}
-        <div className="p-field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
-            Categorie Id
-          </label>
-          <Dropdown
-            id="categorieId"
-            name="categorieId"
-            value={formData.categorieId}
-            onChange={(e) =>
-              setFormData({ ...formData, categorieId: [e.target.value] })
-            }
-            options={categorieOptions}
-            placeholder="Select categorie Id"
-          />
-        </div>
-
-        <DateCDU formData={formData} setFormData={setFormData} />
-      </Dialog>
-    </div>
+      <DeleteDialog
+        visible={deleteDialogVisible}
+        onHide={hideDeleteDialog}
+        confirmDelete={confirmDelete}
+      />
+    </>
   );
 };
 
