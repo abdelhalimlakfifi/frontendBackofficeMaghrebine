@@ -162,7 +162,7 @@ const CategoriesCrud = () => {
       if (imageFiles.length > 0) {
         formDataToSend.category_image = imageFiles[0];
       }
-
+     
       const response = await axios.post(
         `${apiUrlCategory}/store`,
         formDataToSend,
@@ -408,9 +408,9 @@ const CategoriesCrud = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
-          {submitted && !formData.name && (
+          {/* {submitted && !formData.name && (
             <small className="p-error">Name is required.</small>
-          )}
+          )} */}
         </div>
 
         {/* typeId */}
