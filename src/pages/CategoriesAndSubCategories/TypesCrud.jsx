@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { InputSwitch } from "primereact/inputswitch";
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
@@ -10,18 +11,17 @@ import { Dialog } from "primereact/dialog";
 import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 
-// Image
-import { FileUpload } from "primereact/fileupload";
-import { InputSwitch } from "primereact/inputswitch";
-
-// UpdateAt CreatedAt DeletedAt
-import DateCDU from "../../components/Global/DateCDU";
+// Skeleton
+import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
 
 // Data Column
 import { dataTypeTableColumns } from "../../components/Global/dataTableColumns";
 
-// Skeleton
-import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
+//  CreatedAt DeletedAt UpdateAt
+import DateCDU from "../../components/Global/DateCDU";
+
+// Delete Dialog
+import DeleteDialog from "../../components/Global/DeleteDialog";
 
 // TableUtils.jsx
 import {
@@ -32,42 +32,11 @@ import {
   rightToolbarTemplate,
   exportCSV,
   handleFileChange,
-  // handleDeleteBySelecting,
 } from "../../components/Global/TableUtils";
 
 import { get } from "../../utils/request";
-import DeleteDialog from "../../components/Global/DeleteDialog";
 
 const TypesCrud = () => {
-  // ------------------------------to fix
-  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  const [selectedRowData, setSelectedRowData] = useState(null);
-
-  const openDeleteDialog = (rowData) => {
-    console.log(rowData);
-    setSelectedRowData(rowData);
-    setDeleteDialogVisible(true);
-  };
-
-  const hideDeleteDialog = () => {
-    setSelectedRowData(null);
-    setDeleteDialogVisible(false);
-  };
-
-  const confirmDelete = async () => {
-    if (selectedTypes && selectedTypes.length > 0) {
-      // Delete multiple rows
-      handleDeleteBySelecting(selectedTypes);
-    } else if (selectedRowData) {
-      // Delete a single row
-      handleDelete(selectedRowData);
-    }
-
-    // Hide the delete dialog
-    hideDeleteDialog();
-  };
-
-  // ------------------------------
   const [showDataTable, setShowDataTable] = useState(false);
 
   const [imageName, setImageName] = useState(null);
@@ -116,6 +85,15 @@ const TypesCrud = () => {
     // imageRef.current.value = null;
   };
 
+  // Toast Notification
+  const showNotification = (severity, summary, detail) => {
+    toast.current.show({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
+  };
+
   // GET
   useEffect(() => {
     const unauthorizedCallback = () => {
@@ -142,11 +120,14 @@ const TypesCrud = () => {
 
   // POST
   const handleSubmit = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user.token;
-
     try {
-      if (!formData.name || imageRef.current.files.length === 0) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user.token;
+
+      const { name, active } = formData;
+      const imageFiles = imageRef.current.files;
+
+      if (!formData.name || imageFiles.length === 0) {
         toast.current.show({
           severity: "error",
           summary: "Validation Error",
@@ -155,12 +136,13 @@ const TypesCrud = () => {
         return;
       }
 
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("active", formData.active);
+      const formDataToSend = {
+        name,
+        active,
+      };
 
-      if (imageRef.current.files.length > 0) {
-        formDataToSend.append("image", imageRef.current.files[0]);
+      if (imageFiles.length > 0) {
+        formDataToSend.image = imageFiles[0];
       }
 
       const response = await axios.post(
@@ -169,6 +151,7 @@ const TypesCrud = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -191,67 +174,74 @@ const TypesCrud = () => {
     }
   };
 
-  // DELETE
-  const handleDelete = async (rowData) => {
+  // ------------------------------to fix
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+
+  const openDeleteDialog = (rowData) => {
+    console.log(rowData);
+    setSelectedRowData(rowData);
+    setDeleteDialogVisible(true);
+  };
+
+  const hideDeleteDialog = () => {
+    setSelectedRowData(null);
+    setDeleteDialogVisible(false);
+  };
+
+  // Confirm and handle category deletion
+  const confirmDelete = () => {
+    // Call unified handleDelete function
+    handleDelete(selectedRowData, selectedTypes);
+
+    // Hide the delete dialog
+    hideDeleteDialog();
+  };
+
+  // Delete
+  const handleDelete = async (rowData, selectedCategories) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
 
     try {
+      let identifiersToDelete;
+
+      if (selectedCategories && selectedCategories.length > 0) {
+        // Delete multiple categories
+        identifiersToDelete = selectedCategories.map(
+          (category) => category._id
+        );
+      } else if (rowData) {
+        // Delete a single category
+        identifiersToDelete = [rowData._id];
+      } else {
+        console.error("Invalid arguments for handleDelete function.");
+        return;
+      }
+
       const response = await axios.delete(
-        "http://localhost:3000/api/type/delete",
+        "http://localhost:3000/api/categorie/delete",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
           data: {
-            ids: [rowData._id], // Pass the ID in the request body
+            ids: identifiersToDelete,
           },
         }
       );
 
       if (response.status === 200) {
-        console.log("deleted successfully");
-        // Should update data after successful delete
-      }
-    } catch (error) {
-      console.error("Error deleting type", error);
-    }
-  };
-
-  // DELETE BY SELECTION
-  const handleDeleteBySelecting = async (selectedTypes) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const { token } = user;
-    console.log("Deleting selected types :", selectedTypes);
-    try {
-      if (!selectedTypes || !selectedTypes.length) {
-        console.log("No types selected for deletion.");
-        return;
-      }
-
-      const idsToDelete = selectedTypes.map((type) => type._id);
-
-      const response = await axios.delete(
-        `http://localhost:3000/api/type/delete`,
-        {
-          data: { ids: idsToDelete },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log("Items deleted successfully:", idsToDelete);
+        console.log("Categories deleted successfully:", identifiersToDelete);
       } else {
         console.error(
-          "Failed to delete types. Server returned:",
+          "Failed to delete categories. Server returned:",
           response.status,
           response.data
         );
       }
     } catch (error) {
-      console.error("Error deleting types:", error.message);
+      console.error("Error deleting categories:", error.message);
     }
   };
 
@@ -325,6 +315,7 @@ const TypesCrud = () => {
         }
       >
         {/* Image */}
+        {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
           <input
             type="file"
@@ -390,7 +381,7 @@ const TypesCrud = () => {
             <small className="p-error">Name is required.</small>
           )}
         </div>
-        
+
         {/* typeId */}
         <div className="field mb-4 flex">
           <label
