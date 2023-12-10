@@ -11,6 +11,10 @@ import { Dialog } from "primereact/dialog";
 import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 
+// Configuration Dotenv
+const apiUrlCategory = import.meta.env.VITE_CATEGORY_URL;
+const apiUrlType = import.meta.env.VITE_TYPE_URL;
+
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
 
@@ -48,6 +52,7 @@ const CategoriesCrud = () => {
 
   const [data, setData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState(null);
 
   const [newDialogVisible, setNewDialogVisible] = useState(false);
@@ -110,13 +115,13 @@ const CategoriesCrud = () => {
       try {
         // Fetch category data
         const categoryData = await get(
-          "http://localhost:3000/api/categorie/",
+          `${apiUrlCategory}`,
           token,
           unauthorizedCallback
         );
 
         // Fetch type options
-        const typeData = await get("http://localhost:3000/api/type", token);
+        const typeData = await get(`${apiUrlType}`, token);
 
         // Set the fetched data in state
         setData(categoryData);
@@ -128,7 +133,7 @@ const CategoriesCrud = () => {
     };
 
     fetchData();
-  }, [submitted]);
+  }, [submitted, deleted]);
 
   // POST
   const handleSubmit = async () => {
@@ -159,7 +164,7 @@ const CategoriesCrud = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:3000/api/categorie/store",
+        `${apiUrlCategory}/store`,
         formDataToSend,
         {
           headers: {
@@ -241,20 +246,18 @@ const CategoriesCrud = () => {
         return;
       }
 
-      const response = await axios.delete(
-        "http://localhost:3000/api/categorie/delete",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          data: {
-            ids: identifiersToDelete,
-          },
-        }
-      );
+      const response = await axios.delete(`${apiUrlCategory}/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          ids: identifiersToDelete,
+        },
+      });
 
       if (response.status === 200) {
         console.log("Categories deleted successfully:", identifiersToDelete);
+        setDeleted(!deleted);
       } else {
         console.error(
           "Failed to delete categories. Server returned:",
