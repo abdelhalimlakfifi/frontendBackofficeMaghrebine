@@ -11,6 +11,9 @@ import { Dialog } from "primereact/dialog";
 import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 
+// Configuration Dotenv
+const apiUrl = import.meta.env.API_TYPE_URL; 
+
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
 
@@ -48,6 +51,7 @@ const TypesCrud = () => {
 
   const [data, setData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState(null);
 
   const [newDialogVisible, setNewDialogVisible] = useState(false);
@@ -107,7 +111,7 @@ const TypesCrud = () => {
       const token = JSON.parse(localStorage.getItem("user")).token;
 
       const data = await get(
-        "http://localhost:3000/api/type/",
+        `${apiUrl}`,
         token,
         unauthorizedCallback
       );
@@ -116,7 +120,7 @@ const TypesCrud = () => {
     };
 
     fetchData();
-  }, [submitted]);
+  }, [submitted, deleted]);
 
   // POST
   const handleSubmit = async () => {
@@ -146,7 +150,7 @@ const TypesCrud = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:3000/api/type/store",
+        `${apiUrl}/store`,
         formDataToSend,
         {
           headers: {
@@ -202,8 +206,6 @@ const TypesCrud = () => {
   const confirmDelete = () => {
     // Call unified handleDelete function
     handleDelete(selectedRowData, selectedTypes);
-
-    // Hide the delete dialog
     hideDeleteDialog();
   };
 
@@ -217,9 +219,7 @@ const TypesCrud = () => {
 
       if (selectedTypes && selectedTypes.length > 0) {
         // Delete multiple categories
-        identifiersToDelete = selectedTypes.map(
-          (type) => type._id
-        );
+        identifiersToDelete = selectedTypes.map((type) => type._id);
       } else if (rowData) {
         // Delete a single category
         identifiersToDelete = [rowData._id];
@@ -229,7 +229,7 @@ const TypesCrud = () => {
       }
 
       const response = await axios.delete(
-        "http://localhost:3000/api/type/delete",
+        `${apiUrl}/delete`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -241,16 +241,17 @@ const TypesCrud = () => {
       );
 
       if (response.status === 200) {
-        console.log("Categories deleted successfully:", identifiersToDelete);
+        console.log("Types deleted successfully:", identifiersToDelete);
+        setDeleted(!deleted);
       } else {
         console.error(
-          "Failed to delete categories. Server returned:",
+          "Failed to delete Types. Server returned:",
           response.status,
           response.data
         );
       }
     } catch (error) {
-      console.error("Error deleting categories:", error.message);
+      console.error("Error deleting Types:", error.message);
     }
   };
 
