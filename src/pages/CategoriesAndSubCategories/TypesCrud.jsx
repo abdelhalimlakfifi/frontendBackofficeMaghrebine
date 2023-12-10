@@ -156,21 +156,30 @@ const TypesCrud = () => {
         }
       );
 
-      // Handle the successful response, e.g., show a success message
-      console.log("Type added successfully:", response.data);
+      const responseData = response.data || {};
 
-      // Show success toast
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Type added successfully.",
-      });
-
-      clearForm();
-      setSubmitted(true);
-      setNewDialogVisible(false);
+      if (responseData.message === "Type restored successfully") {
+        showNotification("warn", "Warning", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else if (responseData.message === "Type already exists") {
+        showNotification("error", "Error", responseData.message);
+      } else if (responseData.message === "Type saved successfully") {
+        showNotification("success", "Success", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else {
+        showNotification("warn", "Warning", responseData.message);
+      }
     } catch (error) {
-      console.error("Error adding type:", error.message);
+      console.error("Error adding category:", error);
+      showNotification(
+        "error",
+        "Error",
+        "An unexpected error occurred while adding the category."
+      );
     }
   };
 
@@ -199,17 +208,17 @@ const TypesCrud = () => {
   };
 
   // Delete
-  const handleDelete = async (rowData, selectedCategories) => {
+  const handleDelete = async (rowData, selectedTypes) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
 
     try {
       let identifiersToDelete;
 
-      if (selectedCategories && selectedCategories.length > 0) {
+      if (selectedTypes && selectedTypes.length > 0) {
         // Delete multiple categories
-        identifiersToDelete = selectedCategories.map(
-          (category) => category._id
+        identifiersToDelete = selectedTypes.map(
+          (type) => type._id
         );
       } else if (rowData) {
         // Delete a single category
@@ -220,7 +229,7 @@ const TypesCrud = () => {
       }
 
       const response = await axios.delete(
-        "http://localhost:3000/api/categorie/delete",
+        "http://localhost:3000/api/type/delete",
         {
           headers: {
             Authorization: `Bearer ${token}`,
