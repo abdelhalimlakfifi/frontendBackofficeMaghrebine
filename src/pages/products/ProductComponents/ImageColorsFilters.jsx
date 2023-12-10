@@ -2,15 +2,69 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import { MultiSelect } from 'primereact/multiselect';
 import ImageItem from './ImageItem';
 
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
 
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+
+
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
+
+// Check images should be array not object 7it 
+// kayjib lina data men prop 3la chkel Object 
 export default forwardRef((props, ref) => {
     const [selectedColors, setSelectedColors] = useState([]);
     const [errorIndex, setErrorIndex] = useState([]);
     const [images, setImages] = useState([]);
 
 
-
-
+    
     const handleColorChange = (color, index) => {
         // Create a new copy of the images array
         const updatedImages = [...images];
@@ -46,10 +100,10 @@ export default forwardRef((props, ref) => {
 
 
     useEffect(() =>{
-        console.log(props.images)
-        if(props.images)
+        
+        if(props.images.length !== 0)
         {
-            setImages(props.images)
+            setImages(props.images.others)
         }else{
             const imageFromLocal = JSON.parse(localStorage.getItem('imagesWithColors'));
             if(imageFromLocal !== null) {
@@ -63,14 +117,25 @@ export default forwardRef((props, ref) => {
         }
     }, []);
 
+    useEffect(() => {
+        
+    }, [images]);
+
     useEffect(() =>{
-        console.log(images)
-    }, [images])
+        if(props.images.length !== 0)
+        {
+            
+    
+            setImages(props.images.others);
+        }
+
+    }, [props.images])
     return (
         <div className="mt-12">
             <div className="mt-4">
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
-                    {/* {images.map((image, index) => (
+
+                    {images && images.map((image, index) => (
                         <div key={index} className='flex justify-center'>
                             <ImageItem 
                                 key={index}
@@ -81,7 +146,7 @@ export default forwardRef((props, ref) => {
                                 onColorChange={handleColorChange}
                             />
                         </div>
-                    ))} */}
+                    ))}
                 </div>
             </div>
         </div>

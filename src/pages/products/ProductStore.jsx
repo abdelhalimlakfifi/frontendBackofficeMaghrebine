@@ -23,6 +23,7 @@ export default function ProductStore() {
     useEffect(() => {
         const getDataFromBackend = async () => {
             const data = await axios.get('http://localhost:3000/api/product/create');
+            console.log(data);
             setBackendData(data.data);
         }
         getDataFromBackend();
@@ -59,7 +60,7 @@ export default function ProductStore() {
         const data = await childRef.current.submitedForm();
         console.log(data);
         if(data.images !== undefined){
-            // (console.log(data.images);)
+            (console.log(data.images.others))
             setImages(data.images);
         }
         if(data.status)
@@ -75,6 +76,16 @@ export default function ProductStore() {
         }
     };
 
+
+    const clearData = () => {
+        localStorage.removeItem('imagesWithColors');
+        localStorage.removeItem('filters');
+        localStorage.removeItem('product_information');
+        localStorage.removeItem('images');
+
+        navigate('/products')
+    }
+
     const handleSubmit = async  () => {
         childRef.current.submitedForm()
 
@@ -85,14 +96,14 @@ export default function ProductStore() {
         const mainAndSecondary = JSON.parse(localStorage.getItem('images'))
 
         try {
-            // const response = await axios.post('http://localhost:3000/api/product/store',{
-            //     data: {
-            //         images,
-            //         filters,
-            //         information,
-            //         mainAndSecondary
-            //     }
-            // });
+            const response = await axios.post('http://localhost:3000/api/product/store',{
+                data: {
+                    images,
+                    filters,
+                    information,
+                    mainAndSecondary
+                }
+            });
             
             localStorage.removeItem('imagesWithColors');
             localStorage.removeItem('filters');
@@ -108,6 +119,8 @@ export default function ProductStore() {
         }
         console.log("submit from parent");
     }
+
+
 
     const isPreviousDisabled = activeIndex === 0;
     const isNextDisabled = activeIndex === items.length - 1;
@@ -157,13 +170,20 @@ export default function ProductStore() {
                         icon='pi pi-angle-left'
                         className='bg-light-gold border-light-gold'
                     />
-                    <Button
-                        onClick={ isNextDisabled ? handleSubmit  : handleNext}
-                        label={isNextDisabled ? 'Submit' : 'Next'}
-                        iconPos='right'
-                        icon={isNextDisabled ? '' : 'pi pi-angle-right'}
-                        className='bg-light-gold border-light-gold'
-                    />
+                    <div className='flex space-x-4'>
+                        <Button
+                            onClick={clearData}
+                            label="Clear data"
+                            className='bg-light-gold border-light-gold'
+                        />
+                        <Button
+                            onClick={ isNextDisabled ? handleSubmit  : handleNext}
+                            label={isNextDisabled ? 'Submit' : 'Next'}
+                            iconPos='right'
+                            icon={isNextDisabled ? '' : 'pi pi-angle-right'}
+                            className='bg-light-gold border-light-gold'
+                        />
+                    </div>
                 </div>
             </div>
         </Layout>
