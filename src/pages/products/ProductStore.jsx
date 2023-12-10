@@ -7,20 +7,36 @@ import FiltersStoreForm from './ProductComponents/FiltersStoreForm';
 import ImageColorsFilters from './ProductComponents/ImageColorsFilters';
 import { Button } from 'primereact/button';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductStore() {
-    // const [data, setData] = useState({});
     const [activeIndex, setActiveIndex] = useState(0);
-    const [backendData, setBackendData] = useState({})
+    const [backendData, setBackendData] = useState({});
+    const [colors, setColors] = useState([]);
+    const [types, setTypes] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [sizes, setSizes] = useState([]);
+    const [subcategories, setSubCategorie] = useState([]);
+    const [images, setImages] = useState([]);
+    const navigate = useNavigate()
+    
     useEffect(() => {
         const getDataFromBackend = async () => {
             const data = await axios.get('http://localhost:3000/api/product/create');
+            console.log(data);
             setBackendData(data.data);
         }
         getDataFromBackend();
     }, []);
 
 
+    useEffect(() => {
+        setTypes(backendData.types);
+        setCategories(backendData.categories);
+        setSizes(backendData.sizes);
+        setSubCategorie(backendData.subcategories);
+        setColors(backendData.colors);
+    }, [backendData])
     const nullRef = useRef();
     const childRef = useRef();
     
@@ -31,18 +47,80 @@ export default function ProductStore() {
         { label: 'Size-Category-Type', command: () => {} },
     ];
 
-    const handlePrevious = () => setActiveIndex(activeIndex - 1);
+    const handlePrevious = () => {
+        
+        if(activeIndex === 2) {
+            setActiveIndex(activeIndex - 2)
+        }else{
+            setActiveIndex(activeIndex - 1)
+        }
+    };
     const handleNext = async () => {
-        if(childRef.current.submitedForm().status)
+
+        const data = await childRef.current.submitedForm();
+        console.log(data);
+        if(data.images !== undefined){
+            (console.log(data.images.others))
+            setImages(data.images);
+        }
+        if(data.status)
         {
-            setActiveIndex(activeIndex + 1)
+            const localStorageData = localStorage.getItem('images');
+            if(localStorageData !== null && activeIndex === 0) 
+            {
+                setActiveIndex(activeIndex + 2)
+
+            }else{
+                setActiveIndex(activeIndex + 1)
+            }
         }
     };
 
-    const handleSubmit = () => {
-        console.log(childRef.current.submitedForm());
-        console.log('submit');
+
+    const clearData = () => {
+        localStorage.removeItem('imagesWithColors');
+        localStorage.removeItem('filters');
+        localStorage.removeItem('product_information');
+        localStorage.removeItem('images');
+
+        navigate('/products')
     }
+
+    const handleSubmit = async  () => {
+        childRef.current.submitedForm()
+
+        
+        const images = JSON.parse(localStorage.getItem('imagesWithColors'));
+        const filters = JSON.parse(localStorage.getItem('filters'));
+        const information = JSON.parse(localStorage.getItem('product_information'));
+        const mainAndSecondary = JSON.parse(localStorage.getItem('images'))
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/product/store',{
+                data: {
+                    images,
+                    filters,
+                    information,
+                    mainAndSecondary
+                }
+            });
+            
+            localStorage.removeItem('imagesWithColors');
+            localStorage.removeItem('filters');
+            localStorage.removeItem('product_information');
+            localStorage.removeItem('images');
+
+            navigate('/products', {
+                state: true,
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+        console.log("submit from parent");
+    }
+
+
 
     const isPreviousDisabled = activeIndex === 0;
     const isNextDisabled = activeIndex === items.length - 1;
@@ -70,11 +148,18 @@ export default function ProductStore() {
                     <div>
                         {stepComponents.map((FormComponent, index) => (
                             <div key={index} style={{ display: index === activeIndex ? 'block' : 'none' }}>
-                                <FormComponent ref={index === activeIndex ? childRef : nullRef} />
+                                <FormComponent 
+                                    categories={categories}
+                                    subcategories={subcategories}
+                                    colors={colors}
+                                    types={types}
+                                    sizes={sizes}
+                                    images={images !== undefined ? images : null}
+                                    ref={index === activeIndex ? childRef : nullRef}
+                                />
                             </div>
                         ))}
                     </div>
-
                 </div>
 
                 <div className='w-full flex justify-between bottom-4'>
@@ -85,13 +170,20 @@ export default function ProductStore() {
                         icon='pi pi-angle-left'
                         className='bg-light-gold border-light-gold'
                     />
-                    <Button
-                        onClick={ isNextDisabled ? handleSubmit  : handleNext}
-                        label={isNextDisabled ? 'Submit' : 'Next'}
-                        iconPos='right'
-                        icon={isNextDisabled ? '' : 'pi pi-angle-right'}
-                        className='bg-light-gold border-light-gold'
-                    />
+                    <div className='flex space-x-4'>
+                        <Button
+                            onClick={clearData}
+                            label="Clear data"
+                            className='bg-light-gold border-light-gold'
+                        />
+                        <Button
+                            onClick={ isNextDisabled ? handleSubmit  : handleNext}
+                            label={isNextDisabled ? 'Submit' : 'Next'}
+                            iconPos='right'
+                            icon={isNextDisabled ? '' : 'pi pi-angle-right'}
+                            className='bg-light-gold border-light-gold'
+                        />
+                    </div>
                 </div>
             </div>
         </Layout>

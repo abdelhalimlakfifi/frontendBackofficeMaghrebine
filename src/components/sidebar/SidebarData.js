@@ -15,19 +15,7 @@ export const SidebarData = [{
         title: 'Types',
         link: '/types',
         icon: "pi pi-shopping-bag  flex justify-center",
-        items: [{
-            title: 'Types List',
-            link: '/categories-subcategories'
-        }],
-    },
-    {
-        title: 'Roles',
-        link: '/roles',
-        icon: "pi pi-shopping-bag  flex justify-center",
-        items: [{
-            title: 'Roles List',
-            link: '/roles'
-        }],
+        items: [],
     },
     {
         title: 'Customers',
@@ -36,22 +24,22 @@ export const SidebarData = [{
         items: [{
             title: 'Customers List',
             link: '/Customers-List'
-        },{
-            title: 'Customers add',
-            link: '/Customers-List'
-        },],
+        }],
     },
     {
-        title: 'Users',
-        link: '/users',
-        icon: "pi pi-users flex justify-center",
-        items: [{
-            title: 'User List',
-            link: '/users'
-        },{
-            title: 'Add User',
-            link: '/add-user'
-        }],
+        title: 'Products',
+        link: '/products',
+        icon: 'pi pi-box flex justify-center',
+        items: [
+            {
+                title: 'Products List',
+                link: '/products',
+            },
+            {
+                title: 'New Product',
+                link: '/product-store',
+            }
+        ]
     },
     {
         title: 'Statistics ',

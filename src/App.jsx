@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
@@ -14,6 +15,13 @@ import Types from "./pages/types/Types";
 import Roles from "./pages/Roles/Roles";
 import AddUser from "./pages/Users/AddUser";
 import EditUser from "./pages/Users/EditUser";
+
+
+
+import Categories from './pages/CategoriesAndSubCategories/Categories'
+import ProductStore from './pages/products/ProductStore';
+import ProductList from './pages/products/ProductList'
+
 
 function App() {
     return (
@@ -122,7 +130,6 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
-
                     <Route
                         path="/profile"
                         element={
@@ -131,6 +138,33 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
+                    <Route path='/types' element={
+                        <ProtectedRoute>
+                            <Types />
+                        </ProtectedRoute>
+                    } />
+
+                    {/* ProductList */}
+                    <Route
+                        path='products'
+                        element={
+                            <ProtectedRoute>
+                                <ProductList />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route path='/product-store' element={
+                        <ProtectedRoute>
+                            <ProductStore />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path='/profile' element={
+                        <ProtectedRoute>
+                            <Profile/>
+                        </ProtectedRoute>
+                    } />
+                    {/* authenticated */}
                 </Routes>
             </Router>
         </>

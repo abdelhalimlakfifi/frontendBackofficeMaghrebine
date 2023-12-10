@@ -1,54 +1,62 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
 import { FileUpload } from 'primereact/fileupload';
 import Marquee from 'react-fast-marquee';
 import axios from 'axios';
+import { Toast } from 'primereact/toast';
+
 const ImagesUploadForm = forwardRef((props, ref) => {
 
-    const [main, setMain] = useState();
-    const [secondary, setSecondary] = useState();
+    const toast = useRef(null);
+    const [main, setMain] = useState({displayed: null, toSend: null});
+    const [secondary, setSecondary] = useState({displayed: null, toSend: null});
     const [others, setOthers]   = useState([]);
-    const bodyFormData = new FormData();
-    
+
     useImperativeHandle(ref, () => ({
         async submitedForm() {
-            // COMPLETE THIS FORM DATA TO APPEND THE MAIN/SECONDARY AND OTHERS TO A FORM DATA AND SEND IT USING AXIOS
-            if (main) {
-                bodyFormData.append('main', main);
+            
+            const bodyFormData = new FormData();
+
+            const localStorageData = localStorage.getItem('images');
+            
+            if(localStorageData !== null) 
+            {
+                return {
+                    status: true,
+                    step:2
+                }
             }
 
-            // // Append secondary image
-            // if (secondary) {
-            //     bodyFormData.append('secondaryImage', secondary);
-            // }
+            try {
+                bodyFormData.append('main', main.toSend);
+                bodyFormData.append('secondary', secondary.toSend);
+    
+                others.map(other => {
+                    bodyFormData.append('others', other);
+                });
 
+                const response = await axios.post('http://localhost:3000/api/product/upload-images', bodyFormData);
+                
 
-            others.forEach((file, index) => {
-                bodyFormData.append(`others`, file);
-            });
-            // bodyFormData.append('text', "textxtxt");
+                const data = {
+                    main: response.data.data.main,
+                    secondary: response.data.data.secondary,
+                    others: response.data.data.others
+                }
 
+                localStorage.setItem('images', JSON.stringify(data));
+                window.dispatchEvent(new Event("storage"));
 
-            for (var pair of bodyFormData.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]); 
+                return {
+                    status: true,
+                    step:2,
+                    images: data
+                }
+            } catch (error) {
+                toast.current.show({severity:'error', summary: 'Error', detail:'500 internal server Error', life: 3000});
+                return { status: false };
             }
-            
-            // Append other images
-            // Array.from(others).forEach((file, index) => {
-            //     bodyFormData.append(`others[${index}]`, file);
-            // });
-
-            console.log("line: 37");
-            console.log([...bodyFormData]);
-            console.log(others);
 
             
-
-            const response = await axios.post('http://localhost:3000/api/product/upload-images', bodyFormData);
-
-            console.log(response.data);
-
-            
-            return { status: false };
         },
     }));
 
@@ -56,9 +64,12 @@ const ImagesUploadForm = forwardRef((props, ref) => {
         
         if(e.target.files.length > 0)
         {
-            console.log(e.target.files[0]);
-            setMain(e.target.files[0]);
-            // bodyFormData.append('main', e.target.files);
+            
+            setMain({
+                displayed: URL.createObjectURL(e.target.files[0]),
+                toSend: e.target.files[0]
+            });
+            
 
         }
     }
@@ -66,7 +77,10 @@ const ImagesUploadForm = forwardRef((props, ref) => {
     function handleChangeSecondary(e) {
         if(e.target.files.length > 0)
         {
-            setSecondary(URL.createObjectURL(e.target.files[0]));
+            setSecondary({
+                displayed: URL.createObjectURL(e.target.files[0]),
+                toSend: e.target.files[0]
+            });
         }
     }
 
@@ -74,7 +88,6 @@ const ImagesUploadForm = forwardRef((props, ref) => {
 
         if(e.target.files.length > 0)
         {
-            console.log([e.target.files[0], e.target.files[1], e.target.files[2]]);
             const otherFilesArray = Array.from(e.target.files);
             setOthers(otherFilesArray);
         }
@@ -82,11 +95,12 @@ const ImagesUploadForm = forwardRef((props, ref) => {
 
     return (
         <div className=' mt-12'>
+            <Toast ref={toast} />
             <div className=' flex flex-col md:flex-row w-full md:space-x-8'>
                 {/* Main image */}
 
                 <div className=' my-2 flex flex-col space-y-2  w-full'>
-                    <img src={main} alt="" className='h-64 object-cover' />
+                    <img src={main.displayed} alt="" className='h-64 object-cover' htmlFor="mainImage" />
                     <div className=' my-2 flex flex-col space-y-2  w-full'>
                         <label htmlFor="mainImage" className="mb-1 block text-sm font-medium text-gray-600">Upload Main image</label>
                         <input 
@@ -101,7 +115,7 @@ const ImagesUploadForm = forwardRef((props, ref) => {
 
                 {/* Secondary Image */}
                 <div className=' my-2 flex flex-col space-y-2  w-full'>
-                    <img src={secondary} alt="" className='h-64 object-cover' />
+                    <img src={secondary.displayed} alt="" className='h-64 object-cover' htmlFor="secondary" />
                     <div className=' my-2 flex flex-col space-y-2  w-full'>
                         <label htmlFor="secondary" className="mb-1 block text-sm font-medium text-gray-600">Upload secondary image</label>
                         <input 
@@ -134,15 +148,6 @@ const ImagesUploadForm = forwardRef((props, ref) => {
                         </div>
                     ))}
                 </Marquee>
-                {/* <FileUpload 
-                    id='filesUpload'
-                    name="demo[]"
-                    url={'/api/upload'}
-                    multiple
-                    accept="image/*"
-                    maxFileSize={1000000}
-                    emptyTemplate={<p className="m-0">Drag and drop files here to upload.</p>} 
-                /> */}
             </div>
         </div>
     );
