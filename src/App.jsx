@@ -15,10 +15,7 @@ import Types from "./pages/types/Types";
 import Roles from "./pages/Roles/Roles";
 import AddUser from "./pages/Users/AddUser";
 import EditUser from "./pages/Users/EditUser";
-
-
-
-import Categories from './pages/CategoriesAndSubCategories/Categories'
+// import Categories from './pages/CategoriesAndSubCategories/Categories'
 import ProductStore from './pages/products/ProductStore';
 import ProductList from './pages/products/ProductList'
 
