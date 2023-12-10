@@ -187,8 +187,8 @@ export const categoryIdBodyTemplate = (rowData) => {
 
   if (Array.isArray(categorieId)) {
     const options = categorieId.map((category, index) => ({
-      label: category,
-      value: category,
+      label: category.name,
+      value: category._id,
     }));
 
     const defaultLabel = "Category ID";
@@ -196,7 +196,7 @@ export const categoryIdBodyTemplate = (rowData) => {
     return <Dropdown options={options} placeholder={defaultLabel} />;
   }
 
-  return <span>{categorieId}</span>;
+  return <span>{categorieId.name}</span>;
 };
 
 // -------------------------PERMISSION-------------------------
