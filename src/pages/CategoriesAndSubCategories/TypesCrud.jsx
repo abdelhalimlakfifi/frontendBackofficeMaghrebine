@@ -324,7 +324,6 @@ const TypesCrud = () => {
         }
       >
         {/* Image */}
-        {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
           <input
             type="file"
@@ -386,9 +385,6 @@ const TypesCrud = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
-          {submitted && !formData.name && (
-            <small className="p-error">Name is required.</small>
-          )}
         </div>
 
         {/* typeId */}
