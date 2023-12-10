@@ -120,7 +120,8 @@ export const dataCategorieTableColumns = (
 // SubCategories
 export const dataSubCategorieTableColumns = (
   setFormData,
-  setEditDialogVisible
+  setEditDialogVisible,
+  openDeleteDialog
 ) => [
   { selectionMode: "multiple", exportable: false },
   {
@@ -155,10 +156,23 @@ export const dataSubCategorieTableColumns = (
     header: "Created By",
     sortable: true,
     style: { minWidth: "8rem" },
+    body: (rowData) => {
+      if (rowData.createdBy) {
+        const { first_name, last_name } = rowData.createdBy;
+        return `${first_name} ${last_name}`;
+      } else {
+        return "not available";
+      }
+    },
   },
   {
     body: (rowData) =>
-      actionBodyTemplate(setFormData, setEditDialogVisible, rowData),
+      actionBodyTemplate(
+        setFormData,
+        setEditDialogVisible,
+        openDeleteDialog,
+        rowData
+      ),
     exportable: false,
     style: { minWidth: "12rem" },
   },
