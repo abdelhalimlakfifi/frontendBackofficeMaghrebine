@@ -173,7 +173,7 @@ export const typeIdBodyTemplate = (rowData) => {
       value: type._id, // Assuming that '_id' is the property you want to use as the value
     }));
 
-    const defaultLabel = "Type ID";
+    const defaultLabel = "Type";
 
     return <Dropdown options={options} placeholder={defaultLabel} />;
   }
@@ -191,7 +191,7 @@ export const categoryIdBodyTemplate = (rowData) => {
       value: category._id,
     }));
 
-    const defaultLabel = "Category ID";
+    const defaultLabel = "Category";
 
     return <Dropdown options={options} placeholder={defaultLabel} />;
   }
@@ -201,12 +201,12 @@ export const categoryIdBodyTemplate = (rowData) => {
 
 // -------------------------PERMISSION-------------------------
 export const permessionsBodyTemplate = (rowData) => {
-  const { permessions } = rowData;
+  const { permissions } = rowData;
 
-  if (Array.isArray(permessions)) {
-    const options = permessions.map((permession, index) => ({
-      label: permession,
-      value: permession,
+  if (Array.isArray(permissions)) {
+    const options = permissions.map((permession, index) => ({
+      label: permession.label,
+      value: permession._id,
     }));
 
     const defaultLabel = "Persmissions";
@@ -214,7 +214,7 @@ export const permessionsBodyTemplate = (rowData) => {
     return <Dropdown options={options} placeholder={defaultLabel} />;
   }
 
-  return <span>{permessions}</span>;
+  return <span>s{permissions.label}</span>;
 };
 // -------------------------TEMPLATE COLUMN TABLE-------------------------
 
