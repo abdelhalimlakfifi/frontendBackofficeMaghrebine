@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { InputSwitch } from "primereact/inputswitch";
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
@@ -12,7 +11,7 @@ import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 
 // Configuration Dotenv
-const apiUrlRole = import.meta.env.VITE_ROLES_URL; 
+const apiUrlRole = import.meta.env.VITE_ROLES_URL;
 
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
@@ -34,7 +33,6 @@ import {
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
-  handleFileChange,
 } from "../../components/Global/TableUtils";
 
 import { get } from "../../utils/request";
@@ -42,10 +40,6 @@ import { MultiSelect } from "primereact/multiselect";
 
 const TypesCrud = () => {
   const [showDataTable, setShowDataTable] = useState(false);
-
-  const [imageName, setImageName] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const imageRef = useRef(null);
 
   const toast = useRef(null);
   const dt = useRef(null);
@@ -58,11 +52,12 @@ const TypesCrud = () => {
   const [newDialogVisible, setNewDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
 
+  const [selectedPermissions, setSelectedPermissions] = useState(null);
   const [permessionOptions, setPermessionOptions] = useState([]);
 
   const [formData, setFormData] = useState({
     role: "",
-    permessions: [],
+    permissions: [],
     createdBy: "",
     updatedBy: "",
     deletedBy: "",
@@ -76,7 +71,7 @@ const TypesCrud = () => {
   const clearForm = () => {
     setFormData({
       role: "",
-      permessions: [],
+      permissions: [],
       createdBy: "",
       updatedBy: "",
       deletedBy: "",
@@ -106,11 +101,7 @@ const TypesCrud = () => {
     const fetchData = async () => {
       const token = JSON.parse(localStorage.getItem("user")).token;
 
-      const data = await get(
-        `${apiUrlRole}`,
-        token,
-        unauthorizedCallback
-      );
+      const data = await get(`${apiUrlRole}`, token, unauthorizedCallback);
       setData(data);
       setShowDataTable(true);
     };
@@ -126,7 +117,7 @@ const TypesCrud = () => {
 
       const { role } = formData;
 
-      if (!formData.role ) {
+      if (!formData.role) {
         toast.current.show({
           severity: "error",
           summary: "Validation Error",
@@ -137,20 +128,14 @@ const TypesCrud = () => {
 
       const formDataToSend = {
         role,
-        // permessions: permession.map((permessions) => permessions._id),
+        // permissions: permession.map((permissions) => permissions._id),
       };
 
- 
-
-      const response = await axios.post(
-        `${apiUrlRole}/store`,
-        formDataToSend,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.post(`${apiUrlRole}/store`, formDataToSend, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const responseData = response.data || {};
 
@@ -220,17 +205,14 @@ const TypesCrud = () => {
         return;
       }
 
-      const response = await axios.delete(
-        `${apiUrlRole}/delete`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          data: {
-            ids: identifiersToDelete,
-          },
-        }
-      );
+      const response = await axios.delete(`${apiUrlRole}/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          ids: identifiersToDelete,
+        },
+      });
 
       if (response.status === 200) {
         console.log("Types deleted successfully:", identifiersToDelete);
@@ -247,6 +229,11 @@ const TypesCrud = () => {
     }
   };
 
+  // Function to generate options for permission  dropdown
+  const permissionsOptions = formData.permissions.map((permission, index) => ({
+    label: permission.label,
+    // value: type._id,
+  }));
   return (
     <>
       <Toast ref={toast}></Toast>
@@ -316,29 +303,28 @@ const TypesCrud = () => {
           )
         }
       >
-
         {/* Name */}
         <div className="field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
-            Name
+          <label htmlFor="role" className="font-bold text-[#5A6A85]">
+            Role
           </label>
           <InputText
-            id="name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            id="role"
+            value={formData.role}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
           />
         </div>
 
         {/* permession */}
         <div className="p-field mb-4">
-          <label htmlFor="permessions" className="font-bold text-[#5A6A85]">
+          <label htmlFor="permissions" className="font-bold text-[#5A6A85]">
             Type ID
           </label>
           <MultiSelect
-            id="permessions"
-            name="permessions"
-            value={formData.permessions}
-            onChange={(e) => setFormData({ ...formData, permessions: e.value })}
+            id="permissions"
+            name="permissions"
+            value={formData.permissions}
+            onChange={(e) => setFormData({ ...formData, permissions: e.value })}
             options={permessionOptions}
             optionLabel="name" // Assuming 'name' is the property you want to display
             placeholder="Select Type ID"
@@ -375,39 +361,31 @@ const TypesCrud = () => {
           )
         }
       >
-
         {/* Name */}
-        <div className="p-field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
-            Name
+        <div className="field mb-4">
+          <label htmlFor="role" className="font-bold text-[#5A6A85]">
+            Role
           </label>
           <InputText
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={(e) => {
-              setFormData({ ...formData, name: e.target.value });
-              console.log("FormData:", formData);
-            }}
+            id="role"
+            value={formData.role}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
           />
         </div>
 
-        {/* Active Switch */}
+        {/* Permissions */}
         <div className="p-field mb-4">
-          <label
-            htmlFor="active"
-            className="font-bold mr-2 w-16 text-[#5A6A85]"
-          >
-            {formData.active ? "Active" : "Inactive"}
+          <label htmlFor="permissions" className="font-bold text-[#5A6A85]">
+            Permissions
           </label>
-          <InputSwitch
-            id="active"
-            checked={formData.active}
-            onChange={(e) => {
-              console.log("Switch value:", e.value);
-              setFormData({ ...formData, active: e.value });
-            }}
-            className="ml-2 w-12"
+          <MultiSelect
+            id="permissions"
+            name="permissions"
+            value={selectedPermissions}
+            onChange={(e) => setSelectedPermissions(e.value)}
+            options={permissionsOptions}
+            optionLabel="label" // Assuming 'label' is the property you want to display
+            placeholder="Select Type Id"
           />
         </div>
 
