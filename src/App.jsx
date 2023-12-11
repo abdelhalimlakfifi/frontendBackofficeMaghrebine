@@ -91,6 +91,14 @@ function App() {
                         }
                     />
 
+          <Route
+            path="/categories-subcategories"
+            element={
+              <ProtectedRoute>
+                <CategoriesAndSubCategories />
+              </ProtectedRoute>
+            }
+          />
                     <Route 
                         path="/add-user"
                         element={
@@ -117,10 +125,7 @@ function App() {
                         }
                     />
 
-                    <Route
-                        path="/roles"
-                        element={<Roles />}
-                    />
+          <Route path="/roles" element={<Roles />} />
 
                     <Route
                         path="/types"

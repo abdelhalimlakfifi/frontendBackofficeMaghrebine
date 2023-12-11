@@ -1,39 +1,44 @@
+// CategoriesTable.jsx
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 
+import { MultiSelect } from "primereact/multiselect";
+import { InputSwitch } from "primereact/inputswitch";
 import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
 
-// Image
-import { FileUpload } from "primereact/fileupload";
-import { InputSwitch } from "primereact/inputswitch";
+// Configuration Dotenv
+const apiUrlCategory = import.meta.env.VITE_CATEGORY_URL;
+const apiUrlType = import.meta.env.VITE_TYPE_URL;
 
-// UpdateAt CreatedAt DeletedAt
-import DateCDU from "../../components/Global/DateCDU";
+// Skeleton
+import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
 
 // Data Column
 import { dataCategorieTableColumns } from "../../components/Global/dataTableColumns";
 
-// Skeleton
-import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
+//  CreatedAt DeletedAt UpdateAt
+import DateCDU from "../../components/Global/DateCDU";
+
+// Delete Dialog
+import DeleteDialog from "../../components/Global/DeleteDialog";
 
 // TableUtils.jsx
 import {
   openNew,
   hideDialog,
+  typeDialogFooter,
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
   handleFileChange,
 } from "../../components/Global/TableUtils";
 
-
+import { get } from "../../utils/request";
 
 const CategoriesCrud = () => {
   const [showDataTable, setShowDataTable] = useState(false);
@@ -47,10 +52,14 @@ const CategoriesCrud = () => {
 
   const [data, setData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState(null);
 
   const [newDialogVisible, setNewDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+
+  const [selectedType, setSelectedType] = useState(null);
+  const [typeOptions, setTypeOptions] = useState([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -63,9 +72,6 @@ const CategoriesCrud = () => {
     createdAt: null,
     updatedAt: null,
   });
-
-  // const [selectedTypeId, setSelectedTypeId] = useState("");
-  // TODO: setSelectedTypeId = formData.typeId
 
   const clearForm = () => {
     setFormData({
@@ -85,11 +91,41 @@ const CategoriesCrud = () => {
     imageRef.current.value = null;
   };
 
+  // Toast Notification
+  const showNotification = (severity, summary, detail) => {
+    toast.current.show({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
+  };
+
+  // GET
   useEffect(() => {
+    const unauthorizedCallback = () => {
+      // This function will be called if the request is unauthorized (status code 401)
+      alert("Unauthorized access! Redirecting to login.");
+      // You can also use react-router's useNavigate here
+      navigate("/login");
+    };
+
     const fetchData = async () => {
+      const token = JSON.parse(localStorage.getItem("user")).token;
+
       try {
-        const response = await axios.get("http://localhost:3000/categories");
-        setData(response.data);
+        // Fetch category data
+        const categoryData = await get(
+          `${apiUrlCategory}`,
+          token,
+          unauthorizedCallback
+        );
+
+        // Fetch type options
+        const typeData = await get(`${apiUrlType}`, token);
+
+        // Set the fetched data in state
+        setData(categoryData);
+        setTypeOptions(typeData);
         setShowDataTable(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -97,62 +133,147 @@ const CategoriesCrud = () => {
     };
 
     fetchData();
-  }, [submitted]);
+  }, [submitted, deleted]);
 
+  // POST
   const handleSubmit = async () => {
     try {
-      if (!formData.name || !imagePreview) {
-        toast.current.show({
-          severity: "error",
-          summary: "Validation Error",
-          detail: "all Fields are required.",
-          life: 3000,
-        });
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user.token;
+
+      const { name, typeId } = formData;
+      const imageFiles = imageRef.current.files;
+
+      if (!name || imageFiles.length === 0 || !typeId || typeId.length === 0) {
+        showNotification(
+          "error",
+          "Error",
+          "Please enter Name, Image, select Active status, and choose at least one Type."
+        );
         return;
       }
 
-      // Extract the file name from the image preview
-      const fileName = imageName;
+      const formDataToSend = {
+        name,
+        typeIds: typeId.map((type) => type._id),
+      };
 
-      // Generate a unique id for Server Json
-      const id = uuidv4();
-      // for my data
-      const _id = uuidv4();
-
-      const newFormData = { id, _id, ...formData, image: fileName };
-
+      // Add image to formDataToSend if it exists
+      if (imageFiles.length > 0) {
+        formDataToSend.category_image = imageFiles[0];
+      }
+     
       const response = await axios.post(
-        "http://localhost:3000/categories",
-        newFormData
+        `${apiUrlCategory}/store`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
-      console.log("Response:", response.data);
+      const responseData = response.data || {};
 
-      clearForm();
-      setSubmitted(true);
-      setNewDialogVisible(false);
-
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Type added successfully.",
-        life: 3000,
-      });
+      if (responseData.message === "Category restored successfully") {
+        showNotification("warn", "Warning", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else if (responseData.message === "Category already exists") {
+        showNotification("error", "Error", responseData.message);
+      } else if (responseData.message === "Category saved successfully") {
+        showNotification("success", "Success", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else {
+        showNotification("warn", "Warning", responseData.message);
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
-
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An error occurred while submitting the form.",
-        life: 3000,
-      });
+      console.error("Error adding category:", error);
+      showNotification(
+        "error",
+        "Error",
+        "An unexpected error occurred while adding the category."
+      );
     }
   };
 
+  // ------------------------------to move
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+
+  const openDeleteDialog = (rowData) => {
+    console.log(rowData);
+    setSelectedRowData(rowData);
+    setDeleteDialogVisible(true);
+  };
+
+  const hideDeleteDialog = () => {
+    setSelectedRowData(null);
+    setDeleteDialogVisible(false);
+  };
+
+  // Confirm and handle category deletion
+  const confirmDelete = () => {
+    // Call unified handleDelete function
+    handleDelete(selectedRowData, selectedTypes);
+
+    // Hide the delete dialog
+    hideDeleteDialog();
+  };
+
+  // Delete
+  const handleDelete = async (rowData, selectedCategories) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user.token;
+
+    try {
+      let identifiersToDelete;
+
+      if (selectedCategories && selectedCategories.length > 0) {
+        // Delete multiple categories
+        identifiersToDelete = selectedCategories.map(
+          (category) => category._id
+        );
+      } else if (rowData) {
+        // Delete a single category
+        identifiersToDelete = [rowData._id];
+      } else {
+        console.error("Invalid arguments for handleDelete function.");
+        return;
+      }
+
+      const response = await axios.delete(`${apiUrlCategory}/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          ids: identifiersToDelete,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Categories deleted successfully:", identifiersToDelete);
+        setDeleted(!deleted);
+      } else {
+        console.error(
+          "Failed to delete categories. Server returned:",
+          response.status,
+          response.data
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting categories:", error.message);
+    }
+  };
+
+  // Function to generate options for type ID dropdown
   const typeIdOptions = formData.typeId.map((type, index) => ({
-    label: type,
-    value: type,
+    label: type.name,
+    // value: type._id,
   }));
 
   return (
@@ -163,7 +284,8 @@ const CategoriesCrud = () => {
         left={() =>
           leftToolbarTemplate(
             () => openNew(setSubmitted, setNewDialogVisible, setFormData),
-            selectedTypes
+            selectedTypes,
+            () => openDeleteDialog(selectedTypes)
           )
         }
         right={() => rightToolbarTemplate(exportCSV, selectedTypes, dt)}
@@ -183,11 +305,13 @@ const CategoriesCrud = () => {
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
           selectionMode="checkbox"
         >
-          {dataCategorieTableColumns(setFormData, setEditDialogVisible).map(
-            (col, index) => (
-              <Column key={index} {...col} />
-            )
-          )}
+          {dataCategorieTableColumns(
+            setFormData,
+            setEditDialogVisible,
+            openDeleteDialog
+          ).map((col, index) => (
+            <Column key={index} {...col} />
+          ))}
         </DataTable>
       ) : (
         <SkeletonDataTable />
@@ -201,12 +325,28 @@ const CategoriesCrud = () => {
         header="Add Categories"
         modal
         className="p-fluid"
-        // footer={typeDialogFooter(
-        //   () => hideDialog(setSubmitted, setNewDialogVisible),
-        //   () => saveType(setSubmitted, setNewDialogVisible)
-        // )}
-        onHide={() => hideDialog(setSubmitted, setNewDialogVisible)}
+        footer={typeDialogFooter(
+          () =>
+            hideDialog(
+              setSubmitted,
+              setNewDialogVisible,
+              "new",
+              formData,
+              setFormData
+            ),
+          handleSubmit
+        )}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setNewDialogVisible,
+            "new",
+            formData,
+            setFormData
+          )
+        }
       >
+        {/* Image */}
         <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
           <input
             type="file"
@@ -230,7 +370,7 @@ const CategoriesCrud = () => {
             >
               <img
                 src="./public/200x200.png"
-                className="w-40 h-40 m-auto rounded-full shadow"
+                className="w-40 h-40 m-auto shadow"
                 alt="Profile"
               />
             </div>
@@ -239,7 +379,7 @@ const CategoriesCrud = () => {
               style={{ display: imagePreview ? "block" : "none" }}
             >
               <span
-                className="block w-40 h-40 rounded-full m-auto shadow"
+                className="block w-40 h-40 m-auto shadow"
                 style={{
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
@@ -250,7 +390,7 @@ const CategoriesCrud = () => {
             </div>
             <button
               type="button"
-              className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 mt-2 ml-3"
+              className="inline-flex mt-4  items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 "
               onClick={() => imageRef.current.click()}
             >
               Select New Image
@@ -258,6 +398,7 @@ const CategoriesCrud = () => {
           </div>
         </div>
 
+        {/* Name */}
         <div className="field mb-4">
           <label htmlFor="name" className="font-bold text-[#5A6A85]">
             Name
@@ -267,35 +408,28 @@ const CategoriesCrud = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
-          {submitted && !formData.name && (
+          {/* {submitted && !formData.name && (
             <small className="p-error">Name is required.</small>
-          )}
+          )} */}
         </div>
 
-        <div className="field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
+        {/* typeId */}
+        <div className="p-field mb-4">
+          <label htmlFor="typeId" className="font-bold text-[#5A6A85]">
             Type ID
           </label>
-          <InputText
-            id="name"
+          <MultiSelect
+            id="typeId"
+            name="typeId"
             value={formData.typeId}
-            onChange={(e) =>
-              setFormData({ ...formData, typeId: [e.target.value] })
-            }
+            onChange={(e) => setFormData({ ...formData, typeId: e.value })}
+            options={typeOptions}
+            optionLabel="name" // Assuming 'name' is the property you want to display
+            placeholder="Select Type ID"
           />
           {submitted && !formData.typeId && (
-            <small className="p-error">typeId is required.</small>
+            <small className="p-error">Type ID is required.</small>
           )}
-        </div>
-
-        <div className="text-center mt-4">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
         </div>
       </Dialog>
 
@@ -307,30 +441,76 @@ const CategoriesCrud = () => {
         header="Add Type"
         modal
         className="p-fluid"
-        // footer={typeDialogFooter(
-        //   () => hideDialog(setSubmitted, setEditDialogVisible),
-        //   () => saveType(setSubmitted, setEditDialogVisible)
-        // )}
-        onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
+        footer={typeDialogFooter(
+          () =>
+            hideDialog(
+              setSubmitted,
+              setEditDialogVisible,
+              "edit",
+              formData,
+              setFormData
+            ),
+          () => editType(formData)
+        )}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setEditDialogVisible,
+            "edit",
+            formData,
+            setFormData
+          )
+        }
       >
         {/* Image */}
-        <div className="flex items-center gap-2 mb-4">
-          <div>
-            <img
-              src={formData.image}
-              alt="Uploaded Image"
-              className="h-16 w-16 rounded-full shadow-lg"
-            />
-          </div>
-          <div>
-            <FileUpload
-              mode="basic"
-              accept="image/*"
-              chooseLabel="Change Image"
-              auto
-              customUpload
-              // uploadHandler={onFileUpload}
-            />
+        <div className="col-span-6 ml-2 sm:col-span-4 md:mr-3">
+          <input
+            type="file"
+            accept="image/jpeg, image/png, image/gif"
+            className="hidden"
+            ref={imageRef}
+            onChange={(e) => handleFileChange(e, setImagePreview, setImageName)}
+          />
+
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2 text-center"
+            htmlFor="image"
+          >
+            Type Image <span className="text-red-600"> </span>
+          </label>
+
+          <div className="text-center">
+            <div
+              className="mt-2"
+              style={{ display: !imagePreview ? "block" : "none" }}
+            >
+              <img
+                src={`http://localhost:3000/api/${formData.image}`}
+                className="w-40 h-40 m-auto shadow"
+                alt="Profile"
+              />
+            </div>
+            <div
+              className="mt-2"
+              style={{ display: imagePreview ? "block" : "none" }}
+            >
+              <span
+                className="block w-40 h-40 m-auto shadow"
+                style={{
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center center",
+                  backgroundImage: `url(${imagePreview})`,
+                }}
+              />
+            </div>
+            <button
+              type="button"
+              className="inline-flex mt-4  items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 "
+              onClick={() => imageRef.current.click()}
+            >
+              Select New Image
+            </button>
           </div>
         </div>
 
@@ -367,20 +547,25 @@ const CategoriesCrud = () => {
           <label htmlFor="name" className="font-bold text-[#5A6A85]">
             Type Id
           </label>
-          <Dropdown
+          <MultiSelect
             id="typeId"
             name="typeId"
-            value={formData.typeId}
-            onChange={(e) =>
-              setFormData({ ...formData, typeId: [e.target.value] })
-            }
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.value)}
             options={typeIdOptions}
+            optionLabel="label" // Assuming 'label' is the property you want to display
             placeholder="Select Type Id"
           />
         </div>
 
         <DateCDU formData={formData} setFormData={setFormData} />
       </Dialog>
+
+      <DeleteDialog
+        visible={deleteDialogVisible}
+        onHide={hideDeleteDialog}
+        confirmDelete={confirmDelete}
+      />
     </div>
   );
 };

@@ -41,38 +41,10 @@ export const openNew = (setSubmitted, setNewDialogVisible) => {
   // });
 };
 
-// export const hideDialog = (
-//   setSubmitted,
-//   setNewDialogVisible,
-//   setEditDialogVisible
-// ) => {
-//   setSubmitted(false);
-//   setNewDialogVisible(false);
-//   setEditDialogVisible(false);
-// };
-
-// export const saveType = (
-//   setSubmitted,
-//   setNewDialogVisible,
-//   setEditDialogVisible
-// ) => {
-//   setSubmitted(true);
-//   setNewDialogVisible(false);
-//   setEditDialogVisible(false);
-// };
-
-export const hideDialog = (
-  setSubmitted,
-  setNewDialogVisible,
-  setEditDialogVisible
-) => {
+export const hideDialog = (setSubmitted, setVisible, dialogType) => {
+  console.log(`Closing ${dialogType} dialog`);
   setSubmitted(false);
-  if (setNewDialogVisible) {
-    setNewDialogVisible(false);
-  }
-  if (setEditDialogVisible) {
-    setEditDialogVisible(false);
-  }
+  setVisible(false);
 };
 
 export const saveType = (handleSubmit) => {
@@ -80,20 +52,26 @@ export const saveType = (handleSubmit) => {
 };
 
 // -------------------------NEW + DELETE-------------------------
-export const leftToolbarTemplate = (openNew, selectedTypes, onDelete) => (
+export const leftToolbarTemplate = (
+  openNew,
+  selectedTypes,
+  openDeleteDialog
+) => (
   <div className="flex flex-wrap gap-2">
     <Button
+      className="bg-light-gold border-light-gold"
       label="New"
       icon="pi pi-plus"
       severity="success"
       onClick={() => openNew()}
     />
     <Button
+      className="bg-light-gold border-light-gold"
       label="Delete"
       icon="pi pi-trash"
       severity="danger"
       disabled={!selectedTypes || !selectedTypes.length}
-      onClick={() => onDelete()}
+      onClick={() => openDeleteDialog(selectedTypes)}
     />
   </div>
 );
@@ -103,7 +81,7 @@ export const rightToolbarTemplate = (exportCSV, selectedTypes, dt) => (
   <Button
     label="Export"
     icon="pi pi-upload"
-    className="p-button-help"
+    className="bg-light-gold border-light-gold"
     onClick={() => exportCSV(selectedTypes, dt)}
   />
 );
@@ -117,15 +95,21 @@ export const exportCSV = (selectedTypes, dt) => {
 };
 
 // -------------------------FOOTER Dialog-------------------------
-export const typeDialogFooter = (hideDialog, handleSubmit) => (
+export const typeDialogFooter = (hideDialog, handleSubmit, dialogType) => (
   <>
     <Button
+      className="bg-light-gold border-light-gold"
       label="Cancel"
       icon="pi pi-times"
-      outlined
-      onClick={() => hideDialog()}
+      // outlined
+      onClick={() => hideDialog(dialogType)}
     />
-    <Button label="Save" icon="pi pi-check" onClick={handleSubmit} />
+    <Button
+      className="bg-light-gold border-light-gold"
+      label="Save"
+      icon="pi pi-check"
+      onClick={handleSubmit}
+    />
   </>
 );
 
@@ -153,7 +137,7 @@ export const imageBodyTemplate = (rowData) => (
 export const actionBodyTemplate = (
   setFormData,
   setEditDialogVisible,
-  handleDelete,
+  openDeleteDialog,
   rowData
 ) => (
   <>
@@ -169,7 +153,7 @@ export const actionBodyTemplate = (
       rounded
       outlined
       severity="danger"
-      onClick={() => handleDelete(rowData)}
+      onClick={() => openDeleteDialog(rowData)}
     />
   </>
 );
@@ -184,9 +168,9 @@ export const typeIdBodyTemplate = (rowData) => {
   const { typeId } = rowData;
 
   if (Array.isArray(typeId)) {
-    const options = typeId.map((type, index) => ({
-      label: type,
-      value: type,
+    const options = typeId.map((type) => ({
+      label: type.name, // Assuming that 'name' is the property you want to display
+      value: type._id, // Assuming that '_id' is the property you want to use as the value
     }));
 
     const defaultLabel = "Type ID";
@@ -194,7 +178,7 @@ export const typeIdBodyTemplate = (rowData) => {
     return <Dropdown options={options} placeholder={defaultLabel} />;
   }
 
-  return <span>{typeId}</span>;
+  return <span>{typeId.name}</span>; // Assuming that 'name' is the property you want to display
 };
 
 // -------------------------SUBCATEGORIES-------------------------
@@ -203,8 +187,8 @@ export const categoryIdBodyTemplate = (rowData) => {
 
   if (Array.isArray(categorieId)) {
     const options = categorieId.map((category, index) => ({
-      label: category,
-      value: category,
+      label: category.name,
+      value: category._id,
     }));
 
     const defaultLabel = "Category ID";
@@ -212,7 +196,7 @@ export const categoryIdBodyTemplate = (rowData) => {
     return <Dropdown options={options} placeholder={defaultLabel} />;
   }
 
-  return <span>{categorieId}</span>;
+  return <span>{categorieId.name}</span>;
 };
 
 // -------------------------PERMISSION-------------------------
