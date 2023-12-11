@@ -281,8 +281,11 @@ export default function OrdersCustumers(Props) {
                 <div>
                   {rowData.order_items.map((item, index) => (
                     <div key={index}>
+                      <hr />
                       <span> Product Ref:</span> {item.product_id.ref} <br />
                       <span> Quantity:</span> {item.quantity}
+                      <hr />
+
                     </div>
                   ))}
                 </div>

@@ -1,4 +1,4 @@
-import  { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Layout from "../../layouts/layouts";
 import { Button } from "primereact/button";
 import { useForm, Controller } from "react-hook-form";
@@ -37,7 +37,6 @@ export default function InfoCustomer() {
   let defaultValues = {
     first_name: additionalData.first_name,
     last_name: additionalData.last_name,
-    username: additionalData.username,
     email: additionalData.email,
   };
   const form = useForm({ defaultValues });
@@ -58,7 +57,6 @@ export default function InfoCustomer() {
 
     formData.append("first_name", formRef.current.first_name.value);
     formData.append("last_name", formRef.current.last_name.value);
-    formData.append("username", formRef.current.username.value);
     formData.append("email", formRef.current.email.value);
 
     // Check and log form data
@@ -82,7 +80,6 @@ export default function InfoCustomer() {
       form.reset({
         first_name: response.data.first_name,
         last_name: response.data.last_name,
-        username: response.data.username,
         email: response.data.email,
       });
       toast.current.show({
@@ -92,7 +89,6 @@ export default function InfoCustomer() {
       });
       // setLoading(false);
     }
-
   };
 
   return (
@@ -183,7 +179,7 @@ export default function InfoCustomer() {
                       />
                     </div>
 
-                    <div className="">
+                    {/* <div className="">
                       <Controller
                         name="username"
                         control={form.control}
@@ -204,7 +200,7 @@ export default function InfoCustomer() {
                           </div>
                         )}
                       />
-                    </div>
+                    </div> */}
                     <div className="">
                       <Controller
                         name="email"

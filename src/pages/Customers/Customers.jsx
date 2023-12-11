@@ -50,13 +50,7 @@ export default function Customers() {
       customers.filter((user) => {
         const firstName = user.first_name.toLowerCase();
         const lastName = user.last_name.toLowerCase();
-        const username = user.username.toLowerCase();
-
-        return (
-          firstName.includes(searchTerm) ||
-          lastName.includes(searchTerm) ||
-          username.includes(searchTerm)
-        );
+        return firstName.includes(searchTerm) || lastName.includes(searchTerm);
       })
     );
   };
@@ -85,8 +79,8 @@ export default function Customers() {
   const toast = useRef(null);
   const handleDeleteUser = async (row) => {
     confirmDialog({
-      message: `Do you want to delete ${row.username}?`,
-      header: `Delete ${row.username} Confirmation`,
+      message: `Do you want to delete ${row.firstName + row.lastName}?`,
+      header: `Delete ${row.firstName + row.lastName} Confirmation`,
       icon: "pi pi-info-circle",
       acceptClassName: "bg-light-gold border-0",
       rejectClassName: "text-light-gold bg-transparent border-0",
@@ -173,8 +167,8 @@ export default function Customers() {
   };
   const deleteAt = (rowData) => (
     <Tag
-      value={rowData.valid_account ? "Active" : "Inactive"}
-      severity={getSeverity(rowData.valid_account)}
+      value={rowData.deleteAt ? "Active" : "Inactive"}
+      severity={getSeverity(rowData.deleteAt)}
     />
   );
 
@@ -223,12 +217,12 @@ export default function Customers() {
                 style={{ width: "25%" }}
                 body={<Skeleton />}
               ></Column>
-              <Column
+              {/* <Column
                 field="name"
                 header="Username"
                 style={{ width: "25%" }}
                 body={<Skeleton />}
-              ></Column>
+              ></Column> */}
               <Column
                 field="category"
                 header="email"
@@ -273,7 +267,6 @@ export default function Customers() {
               sortable
               body={(row) => fullname(row)}
             />
-            <Column field={"username"} header="Username" sortable />
             <Column field={"email"} header="email" sortable />
             <Column
               field={"valid_account"}
