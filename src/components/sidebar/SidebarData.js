@@ -7,7 +7,7 @@ export const SidebarData = [
   },
   {
     title: 'Filters',
-    link: '/categories-subcategories',
+    link: '/filters',
     icon: "pi pi-lock flex justify-center",
     // items: [{title:'Roles and Permissions', link:'/Roles-Permissions'}, {title:'Actions Log', link:'/Actions-Log'}],
     items: [],
@@ -16,7 +16,8 @@ export const SidebarData = [
     title: 'Roles',
     link: '/roles',
     icon: "pi pi-shopping-bag  flex justify-center",
-    items: [{title:'Roles List', link:'/roles'}],
+    // items: [{title:'Roles List', link:'/roles'}],
+    items: [],
   },
   {
     title: 'Customers',
