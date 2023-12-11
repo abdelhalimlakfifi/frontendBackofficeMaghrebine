@@ -18,7 +18,7 @@ import EditUser from "./pages/Users/EditUser";
 
 
 
-import Categories from './pages/CategoriesAndSubCategories/Categories'
+// import Categories from './pages/CategoriesAndSubCategories/Categories'
 import ProductStore from './pages/products/ProductStore';
 import ProductList from './pages/products/ProductList'
 
