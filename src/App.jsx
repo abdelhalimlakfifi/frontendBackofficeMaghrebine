@@ -22,6 +22,8 @@ import EditUser from "./pages/Users/EditUser";
 import ProductStore from './pages/products/ProductStore';
 import ProductList from './pages/products/ProductList'
 
+import Customers from "./pages/Customers/Customers";
+import InfoCustomer from "./pages/Customers/InfoCustomer";
 
 function App() {
     return (
@@ -90,7 +92,22 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
-
+          <Route
+            path="/customers"
+            element={
+              // <ProtectedRoute>
+              <Customers />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/infoCustomer"
+            element={
+              <ProtectedRoute>
+                <InfoCustomer />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/categories-subcategories"
             element={
@@ -99,6 +116,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="/roles" element={<Roles />} />
                     <Route 
                         path="/add-user"
                         element={
