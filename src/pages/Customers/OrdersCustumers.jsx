@@ -244,7 +244,7 @@ export default function OrdersCustumers(Props) {
                 body={<Skeleton />}
               ></Column>
               <Column
-                field="quantity"
+                field="Role"
                 header="Role"
                 style={{ width: "25%" }}
                 body={<Skeleton />}
@@ -252,6 +252,12 @@ export default function OrdersCustumers(Props) {
               <Column
                 field="deleted"
                 header="deleted"
+                style={{ width: "25%" }}
+                body={<Skeleton />}
+              ></Column>
+              <Column
+                field="Reference"
+                header="Reference"
                 style={{ width: "25%" }}
                 body={<Skeleton />}
               ></Column>
@@ -285,7 +291,6 @@ export default function OrdersCustumers(Props) {
                       <span> Product Ref:</span> {item.product_id.ref} <br />
                       <span> Quantity:</span> {item.quantity}
                       <hr />
-
                     </div>
                   ))}
                 </div>
@@ -300,6 +305,7 @@ export default function OrdersCustumers(Props) {
             />
             <Column field="createdAt" header="Created At" sortable />
             <Column field="updatedAt" header="Updated At" sortable />
+            <Column field="ref" header="Reference" sortable />
             <Column
               field="status"
               body={(data) => statusBodyTemplate(data)}
