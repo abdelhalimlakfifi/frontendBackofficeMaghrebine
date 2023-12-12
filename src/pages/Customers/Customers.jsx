@@ -79,8 +79,8 @@ export default function Customers() {
   const toast = useRef(null);
   const handleDeleteUser = async (row) => {
     confirmDialog({
-      message: `Do you want to delete ${row.firstName + row.lastName}?`,
-      header: `Delete ${row.firstName + row.lastName} Confirmation`,
+      message: `Do you want to delete ${row.first_name + " " + row.last_name}?`,
+      header: `Delete ${row.first_name + row.last_name} Confirmation`,
       icon: "pi pi-info-circle",
       acceptClassName: "bg-light-gold border-0",
       rejectClassName: "text-light-gold bg-transparent border-0",
@@ -165,12 +165,14 @@ export default function Customers() {
       ></Tag>
     );
   };
-  const deleteAt = (rowData) => (
-    <Tag
-      value={rowData.deleteAt ? "Active" : "Inactive"}
-      severity={getSeverity(rowData.deleteAt)}
-    />
-  );
+  const deleteAt = (rowData) => {
+    return (
+      <Tag
+        value={rowData.deletedBy ? "Active" : "Inactive"}
+        severity={getSeverity(rowData.deletedBy)}
+      ></Tag>
+    );
+  };
 
   const fullname = (row) => {
     // console.log(row.profile_picture);
