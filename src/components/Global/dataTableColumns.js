@@ -179,7 +179,11 @@ export const dataSubCategorieTableColumns = (
 ];
 
 // Roles
-export const dataRoleTableColumns = (setFormData, setEditDialogVisible) => [
+export const dataRoleTableColumns = (
+  setFormData,
+  setEditDialogVisible,
+  openDeleteDialog
+) => [
   { selectionMode: "multiple", exportable: false },
   {
     field: "role",
@@ -199,10 +203,24 @@ export const dataRoleTableColumns = (setFormData, setEditDialogVisible) => [
     header: "Created By",
     sortable: true,
     style: { minWidth: "8rem" },
+    body: (rowData) => {
+      if (rowData.createdBy) {
+        const { first_name, last_name } = rowData.createdBy;
+        return `${first_name} ${last_name}`;
+      } else {
+        return "not available";
+      }
+    },
+    exportable: true,
   },
   {
     body: (rowData) =>
-      actionBodyTemplate(setFormData, setEditDialogVisible, rowData),
+      actionBodyTemplate(
+        setFormData,
+        setEditDialogVisible,
+        openDeleteDialog,
+        rowData
+      ),
     exportable: false,
     style: { minWidth: "12rem" },
   },

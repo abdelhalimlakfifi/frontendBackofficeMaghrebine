@@ -388,7 +388,7 @@ const TypesCrud = () => {
           />
         </div>
 
-        {/* typeId */}
+        {/* Active */}
         <div className="field mb-4 flex">
           <label
             htmlFor="active"

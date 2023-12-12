@@ -1,47 +1,44 @@
 // TypesTable.jsx
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 
 import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
 
-// Image
-import { FileUpload } from "primereact/fileupload";
-import { InputSwitch } from "primereact/inputswitch";
+// Configuration Dotenv
+const apiUrlRole = import.meta.env.VITE_ROLES_URL;
 
-// UpdateAt CreatedAt DeletedAt
-import DateCDU from "../../components/Global/DateCDU";
+// Skeleton
+import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
 
 // Data Column
 import { dataRoleTableColumns } from "../../components/Global/dataTableColumns";
 
-// Skeleton
-import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
+//  CreatedAt DeletedAt UpdateAt
+import DateCDU from "../../components/Global/DateCDU";
+
+// Delete Dialog
+import DeleteDialog from "../../components/Global/DeleteDialog";
 
 // TableUtils.jsx
 import {
   openNew,
   hideDialog,
-  saveType,
   typeDialogFooter,
   leftToolbarTemplate,
   rightToolbarTemplate,
   exportCSV,
-  // handleFileChange,
-  // onDelete
-  // chooseOptions,
-  // uploadOptions,
-  // cancelOptions,
-  // handleImageChange,
-  // onFileUpload,
 } from "../../components/Global/TableUtils";
 
-const RolesCrud = () => {
+import { get } from "../../utils/request";
+import { MultiSelect } from "primereact/multiselect";
+
+const TypesCrud = () => {
   const [showDataTable, setShowDataTable] = useState(false);
 
   const toast = useRef(null);
@@ -49,14 +46,18 @@ const RolesCrud = () => {
 
   const [data, setData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState(null);
 
   const [newDialogVisible, setNewDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
 
+  const [selectedPermissions, setSelectedPermissions] = useState(null);
+  const [permessionOptions, setPermessionOptions] = useState([]);
+
   const [formData, setFormData] = useState({
     role: "",
-    permessions: [],
+    permissions: [],
     createdBy: "",
     updatedBy: "",
     deletedBy: "",
@@ -65,10 +66,12 @@ const RolesCrud = () => {
     updatedAt: null,
   });
 
+  const navigate = useNavigate();
+
   const clearForm = () => {
     setFormData({
       role: "",
-      permessions: [],
+      permissions: [],
       createdBy: "",
       updatedBy: "",
       deletedBy: "",
@@ -77,99 +80,160 @@ const RolesCrud = () => {
       updatedAt: null,
     });
   };
+  // Toast Notification
+  const showNotification = (severity, summary, detail) => {
+    toast.current.show({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
+  };
 
+  // GET
   useEffect(() => {
+    const unauthorizedCallback = () => {
+      // This function will be called if the request is unauthorized (status code 401)
+      alert("Unauthorized access! Redirecting to login.");
+      // You can also use react-router's useNavigate here
+      navigate("/login");
+    };
+
     const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/roles");
-        setData(response.data);
-        setShowDataTable(true);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      const token = JSON.parse(localStorage.getItem("user")).token;
+
+      const data = await get(`${apiUrlRole}`, token, unauthorizedCallback);
+      setData(data);
+      setShowDataTable(true);
     };
 
     fetchData();
-  }, [submitted]);
+  }, [submitted, deleted]);
 
   // POST
   const handleSubmit = async () => {
     try {
-      if (!formData.role || !formData.permessions) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user.token;
+
+      const { role } = formData;
+
+      if (!formData.role) {
         toast.current.show({
           severity: "error",
           summary: "Validation Error",
-          detail: "all Fields are required.",
-          life: 3000,
+          detail: "Please enter Name, Image, and select Active status.",
         });
         return;
       }
 
-      // Generate a unique id for Server Json
-      const id = uuidv4();
-      // for my data
-      const _id = uuidv4();
+      const formDataToSend = {
+        role,
+        // permissions: permession.map((permissions) => permissions._id),
+      };
 
-      const newFormData = { id, _id, ...formData };
+      const response = await axios.post(`${apiUrlRole}/store`, formDataToSend, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      const response = await axios.post(
-        "http://localhost:3000/roles",
-        newFormData
+      const responseData = response.data || {};
+
+      if (responseData.message === "Type restored successfully") {
+        showNotification("warn", "Warning", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else if (responseData.message === "Type already exists") {
+        showNotification("error", "Error", responseData.message);
+      } else if (responseData.message === "Type saved successfully") {
+        showNotification("success", "Success", responseData.message);
+        clearForm();
+        setSubmitted(true);
+        setNewDialogVisible(false);
+      } else {
+        showNotification("warn", "Warning", responseData.message);
+      }
+    } catch (error) {
+      console.error("Error adding category:", error);
+      showNotification(
+        "error",
+        "Error",
+        "An unexpected error occurred while adding the category."
       );
-
-      console.log("Response:", response.data);
-      clearForm();
-      setSubmitted(true);
-      setNewDialogVisible(false);
-
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Type added successfully.",
-        life: 3000,
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
-
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An error occurred while submitting the form.",
-        life: 3000,
-      });
     }
   };
 
-  // DELETE Should fix it
-  const handleDelete = async () => {
+  // ------------------------------to fix
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+
+  const openDeleteDialog = (rowData) => {
+    console.log(rowData);
+    setSelectedRowData(rowData);
+    setDeleteDialogVisible(true);
+  };
+
+  const hideDeleteDialog = () => {
+    setSelectedRowData(null);
+    setDeleteDialogVisible(false);
+  };
+
+  // Confirm and handle category deletion
+  const confirmDelete = () => {
+    // Call unified handleDelete function
+    handleDelete(selectedRowData, selectedTypes);
+    hideDeleteDialog();
+  };
+
+  // Delete
+  const handleDelete = async (rowData, selectedTypes) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user.token;
+
     try {
-      console.log(selectedTypes);
-      // Extract the array of IDs from selectedTypes
-      const idsToDelete = selectedTypes.map((type) => type.id);
-      console.log(idsToDelete);
+      let identifiersToDelete;
 
-      await axios.delete(`http://localhost:3000/roles/${idsToDelete}`);
+      if (selectedTypes && selectedTypes.length > 0) {
+        // Delete multiple categories
+        identifiersToDelete = selectedTypes.map((type) => type._id);
+      } else if (rowData) {
+        // Delete a single category
+        identifiersToDelete = [rowData._id];
+      } else {
+        console.error("Invalid arguments for handleDelete function.");
+        return;
+      }
 
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Types deleted successfully.",
-        life: 3000,
+      const response = await axios.delete(`${apiUrlRole}/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          ids: identifiersToDelete,
+        },
       });
 
-      setSubmitted(true);
-      setSelectedTypes(null);
+      if (response.status === 200) {
+        console.log("Types deleted successfully:", identifiersToDelete);
+        setDeleted(!deleted);
+      } else {
+        console.error(
+          "Failed to delete Types. Server returned:",
+          response.status,
+          response.data
+        );
+      }
     } catch (error) {
-      console.error("Error deleting types:", error);
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An error occurred while deleting types.",
-        life: 3000,
-      });
+      console.error("Error deleting Types:", error.message);
     }
   };
 
+  // Function to generate options for permission  dropdown
+  const permissionsOptions = formData.permissions.map((permission, index) => ({
+    label: permission.label,
+    // value: type._id,
+  }));
   return (
     <>
       <Toast ref={toast}></Toast>
@@ -179,7 +243,7 @@ const RolesCrud = () => {
           leftToolbarTemplate(
             () => openNew(setSubmitted, setNewDialogVisible, setFormData),
             selectedTypes,
-            handleDelete
+            () => openDeleteDialog(selectedTypes)
           )
         }
         right={() => rightToolbarTemplate(exportCSV, selectedTypes, dt)}
@@ -195,19 +259,22 @@ const RolesCrud = () => {
           rows={10}
           rowsPerPageOptions={[5, 10]}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} types"
           selectionMode="checkbox"
         >
-          {dataRoleTableColumns(setFormData, setEditDialogVisible).map(
-            (col, index) => (
-              <Column key={index} {...col} />
-            )
-          )}
+          {dataRoleTableColumns(
+            setFormData,
+            setEditDialogVisible,
+            openDeleteDialog
+          ).map((col, index) => (
+            <Column key={index} {...col} />
+          ))}
         </DataTable>
       ) : (
         <SkeletonDataTable />
       )}
 
+      {/* Dialog For NEW BTN */}
       <Dialog
         visible={newDialogVisible}
         style={{ width: "32rem" }}
@@ -215,12 +282,28 @@ const RolesCrud = () => {
         header="Add Type"
         modal
         className="p-fluid"
-        // footer={typeDialogFooter(
-        //   () => hideDialog(setSubmitted, setNewDialogVisible),
-        //   () => saveType(setSubmitted, setNewDialogVisible)
-        // )}
-        onHide={() => hideDialog(setSubmitted, setNewDialogVisible)}
+        footer={typeDialogFooter(
+          () =>
+            hideDialog(
+              setSubmitted,
+              setNewDialogVisible,
+              "new",
+              formData,
+              setFormData
+            ),
+          handleSubmit
+        )}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setNewDialogVisible,
+            "new",
+            formData,
+            setFormData
+          )
+        }
       >
+        {/* Name */}
         <div className="field mb-4">
           <label htmlFor="role" className="font-bold text-[#5A6A85]">
             Role
@@ -230,38 +313,26 @@ const RolesCrud = () => {
             value={formData.role}
             onChange={(e) => setFormData({ ...formData, role: e.target.value })}
           />
-          {submitted && !formData.role && (
-            <small className="p-error">Role is required.</small>
-          )}
         </div>
 
-        <div className="field mb-4">
-          <label htmlFor="permessions" className="font-bold text-[#5A6A85]">
-            Permession
+        {/* permession */}
+        <div className="p-field mb-4">
+          <label htmlFor="permissions" className="font-bold text-[#5A6A85]">
+            Type ID
           </label>
-          <InputText
-            id="permessions"
-            value={formData.permessions}
-            onChange={(e) =>
-              setFormData({ ...formData, permessions: [e.target.value] })
-            }
+          <MultiSelect
+            id="permissions"
+            name="permissions"
+            value={formData.permissions}
+            onChange={(e) => setFormData({ ...formData, permissions: e.value })}
+            options={permessionOptions}
+            optionLabel="name" // Assuming 'name' is the property you want to display
+            placeholder="Select Type ID"
           />
-          {submitted && !formData.permessions && (
-            <small className="p-error">Permession is required.</small>
-          )}
-        </div>
-
-        <div className="text-center mt-4">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
         </div>
       </Dialog>
 
+      {/* Dialog For EDIT BTN */}
       <Dialog
         visible={editDialogVisible}
         style={{ width: "50rem" }}
@@ -270,64 +341,64 @@ const RolesCrud = () => {
         modal
         className="p-fluid"
         footer={typeDialogFooter(
-          () => hideDialog(setSubmitted, setEditDialogVisible),
-          () => saveType(setSubmitted, setEditDialogVisible)
+          () =>
+            hideDialog(
+              setSubmitted,
+              setEditDialogVisible,
+              "edit",
+              formData,
+              setFormData
+            ),
+          () => editType(formData)
         )}
-        onHide={() => hideDialog(setSubmitted, setEditDialogVisible)}
+        onHide={() =>
+          hideDialog(
+            setSubmitted,
+            setEditDialogVisible,
+            "edit",
+            formData,
+            setFormData
+          )
+        }
       >
-        {/* Image */}
-        <div className="flex items-center gap-2 mb-4">
-          <div>
-            <img
-              src={formData.image}
-              alt="Uploaded Image"
-              className="h-16 w-16 rounded-full shadow-lg"
-            />
-          </div>
-          <div>
-            <FileUpload
-              mode="basic"
-              accept="image/*"
-              chooseLabel="Change Image"
-              auto
-              customUpload
-              // uploadHandler={onFileUpload}
-            />
-          </div>
-        </div>
-
         {/* Name */}
-        <div className="p-field mb-4">
-          <label htmlFor="name" className="font-bold text-[#5A6A85]">
-            Name
+        <div className="field mb-4">
+          <label htmlFor="role" className="font-bold text-[#5A6A85]">
+            Role
           </label>
           <InputText
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            id="role"
+            value={formData.role}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
           />
         </div>
 
-        {/* Active Switch */}
+        {/* Permissions */}
         <div className="p-field mb-4">
-          <label htmlFor="active" className="font-bold text-[#5A6A85]">
-            Active
+          <label htmlFor="permissions" className="font-bold text-[#5A6A85]">
+            Permissions
           </label>
-          <div>
-            <InputSwitch
-              id="active"
-              name="active"
-              checked={formData.active}
-              onChange={(e) => setFormData({ ...formData, active: e.value })}
-            />
-          </div>
+          <MultiSelect
+            id="permissions"
+            name="permissions"
+            value={selectedPermissions}
+            onChange={(e) => setSelectedPermissions(e.value)}
+            options={permissionsOptions}
+            optionLabel="label" // Assuming 'label' is the property you want to display
+            placeholder="Select Type Id"
+          />
         </div>
 
         <DateCDU formData={formData} setFormData={setFormData} />
       </Dialog>
+
+      <DeleteDialog
+        visible={deleteDialogVisible}
+        onHide={hideDeleteDialog}
+        confirmDelete={confirmDelete}
+      />
     </>
   );
 };
 
-export default RolesCrud;
+export default TypesCrud;

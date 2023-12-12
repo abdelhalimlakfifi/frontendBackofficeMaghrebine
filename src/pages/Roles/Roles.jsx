@@ -10,8 +10,8 @@ export default function Roles() {
         <TabPanel header="Types">
           <RolesCrud />
         </TabPanel>
-        <TabPanel header="Categories"></TabPanel>
-        <TabPanel header="Sub-Categories"></TabPanel>
+        {/* <TabPanel header="Categories"></TabPanel>
+        <TabPanel header="Sub-Categories"></TabPanel> */}
       </TabView>
     </Layout>
   );

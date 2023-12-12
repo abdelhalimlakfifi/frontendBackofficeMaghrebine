@@ -109,7 +109,7 @@ function App() {
             }
           />
           <Route
-            path="/categories-subcategories"
+            path="/filters"
             element={
               <ProtectedRoute>
                 <CategoriesAndSubCategories />
@@ -136,7 +136,7 @@ function App() {
                     />
                     {/* users */}
                     <Route
-                        path="/categories-subcategories"
+                        path="/filters"
                         element={
                             <ProtectedRoute>
                                 <CategoriesAndSubCategories />
