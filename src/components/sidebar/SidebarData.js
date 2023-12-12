@@ -1,7 +1,7 @@
 export const SidebarData = [
   {
     title: 'Dashboard',
-    link: '/dashboard',
+    link: '/',
     icon: "pi pi-home flex justify-center",
     items: [],
   },
