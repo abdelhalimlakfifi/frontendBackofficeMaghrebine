@@ -12,7 +12,7 @@ import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 
 // Configuration Dotenv
-const apiUrl = import.meta.env.VITE_TYPE_URL; 
+const apiUrl = 'http://localhost:3000/api/type'; 
 
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";

@@ -12,9 +12,9 @@ import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 
 // Configuration Dotenv
-const apiUrlSubCategory = import.meta.env.VITE_SUBCATEGORY_URL;
-const apiUrlCategory = import.meta.env.VITE_CATEGORY_URL;
-const apiUrlType = import.meta.env.VITE_TYPE_URL;
+const apiUrlSubCategory = 'http://localhost:3000/api/subcategorie';
+const apiUrlCategory = 'http://localhost:3000/api/categorie';
+const apiUrlType = 'http://localhost:3000/api/type';
 
 // Skeleton
 import SkeletonDataTable from "../../components/Global/SkeletonDataTable";
