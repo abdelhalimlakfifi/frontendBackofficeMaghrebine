@@ -7,7 +7,7 @@ export default function Roles() {
   return (
     <Layout>
       <TabView className="px-20 py-8 text-xs ">
-        <TabPanel header="Types">
+        <TabPanel header="Roles">
           <RolesCrud />
         </TabPanel>
         {/* <TabPanel header="Categories"></TabPanel>

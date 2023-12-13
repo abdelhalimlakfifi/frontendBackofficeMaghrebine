@@ -123,7 +123,7 @@ const CategoriesCrud = () => {
           console.log(categoryData)
         // Fetch type options
         const typeData = await get(`${apiUrlType}`, token);
-
+          console.log(token);
         // Set the fetched data in state
         setData(categoryData);
         setTypeOptions(typeData);
