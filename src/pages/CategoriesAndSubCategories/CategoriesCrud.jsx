@@ -416,7 +416,7 @@ const CategoriesCrud = () => {
         {/* typeId */}
         <div className="p-field mb-4">
           <label htmlFor="typeId" className="font-bold text-[#5A6A85]">
-            Type ID
+            Type
           </label>
           <MultiSelect
             id="typeId"
@@ -425,7 +425,7 @@ const CategoriesCrud = () => {
             onChange={(e) => setFormData({ ...formData, typeId: e.value })}
             options={typeOptions}
             optionLabel="name" // Assuming 'name' is the property you want to display
-            placeholder="Select Type ID"
+            placeholder="Select Type"
           />
           {submitted && !formData.typeId && (
             <small className="p-error">Type ID is required.</small>
